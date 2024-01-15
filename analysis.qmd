@@ -29,10 +29,11 @@ names(my_dat) <- file_sources
 Manche Studien kommen doppelt vor, weil sie mit verschiedenen Tests eingehen. D.h. wir könnten jetzt Ein Studien-Cluster generieren. 
 
 ```{r}
+## Beim einlesen von dat_1 ist irgendwas schief gegangen. 
 model_1 <- rma.mv(yi = es,
                   V = se_es,
                   slab = Study,
-                  data = my_dat[[1]],
+                  data = my_dat[[2]],
                   random = ~1|Study/es, #Nesting the effect size within the Studys
                   test = "t", 
                   method = "REML"
