@@ -1,0 +1,20 @@
+Study,Test,drug,drugType,N,es,se_es,es.id
+Bosker et al. (2010),SST,mdma,mdma,16,0.6652,0.363214285714286,id.1
+Kuypers et al. (2007),SST,mdma,mdma,14,-0.3009,0.380051020408163,id.2
+Ramaekers & Kuypers (2006),SST,mdma,mdma,18,-0.4942,0.338367346938776,id.3
+Ramaekers & Kuypers (2006),GnG,mdma,mdma,18,0.6276,0.341428571428571,id.4
+Spronk et al. (2014),Ranker,mdma,mdma,14,0.0222,0.377959183673469,id.5
+Stough et al. (2012),TMT-B,mdma,mdma,61,-0.3457,0.182448979591837,id.6
+van Wel et al. (2012),MFF,mdma,mdma,17,-0.087,0.343163265306123,id.7
+van Wel et al. (2012),SST,mdma,mdma,17,-0.7431,0.354642857142857,id.8
+van Wel et al. (2012),CR,mdma,mdma,17,-0.3089,0.345051020408163,id.9
+Vollenweider et al. (1998),Stroop,mdma,mdma,13,-0.2904,0.394285714285714,id.10
+Duke & Keeler (1968),TMT-B,psilocybin,psychedelic,8,-1.1151,0.5374,id.11
+Mallaroni et al. (2023),TOL,2cb,psychedelic,22,-1.12,0.321428571428571,id.12
+Mallaroni et al. (2023),DSST,2cb,psychedelic,22,-0.98,0.5025,id.13
+Mallaroni et al. (2023),TOL,psilocybin,psychedelic,22,-1.8,0.362244897959184,id.14
+Mallaroni et al. (2023),DSST,psilocybin,psychedelic,22,-1.45,0.737244897959184,id.15
+Pokorny et al. (2019),WCST,lsd,psychedelic,25,-0.3494,0.285,id.16
+Pokorny et al. (2019),CGT,lsd,psychedelic,25,-0.4138,0.285816326530612,id.17
+Quednow et al. (2012),Stroop,psilocybin,psychedelic,16,-3.5541,0.5678,id.18
+Schmidt et al. (2018),GnG,lsd,psychedelic,18,-0.5589,0.3398,id.19

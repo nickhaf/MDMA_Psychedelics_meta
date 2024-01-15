@@ -1,0 +1,41 @@
+---
+title: "MDMA/Psychadelics multi-level meta analysis"
+---
+
+```{r load packages}
+library(tidyverse)
+library(here)
+library(metafor)
+```
+
+
+```{r load data}
+
+file_sources <- list.files(
+  path = here::here("data"),
+  pattern = "*.csv"
+)
+
+my_dat <- lapply(paste0(here::here("data"),"/", file_sources), read.csv)
+my_dat <- lapply(my_dat, function(x){
+  x %>%
+    mutate(var_es = se_es^2) %>%
+    mutate()
+})
+names(my_dat) <- file_sources
+```
+
+# Analysis
+Manche Studien kommen doppelt vor, weil sie mit verschiedenen Tests eingehen. D.h. wir könnten jetzt Ein Studien-Cluster generieren. 
+
+```{r}
+model_1 <- rma.mv(yi = es,
+                  V = se_es,
+                  slab = Study,
+                  data = my_dat[[1]],
+                  random = ~1|Study/es, #Nesting the effect size within the Studys
+                  test = "t", 
+                  method = "REML"
+                  )
+```
+
