@@ -6,6 +6,7 @@ title: "MDMA/Psychadelics multi-level meta analysis"
 library(tidyverse)
 library(here)
 library(metafor)
+library(dmetar)
 ```
 
 
@@ -20,7 +21,7 @@ my_dat <- lapply(paste0(here::here("data"),"/", file_sources), read.csv)
 my_dat <- lapply(my_dat, function(x){
   x %>%
     mutate(var_es = se_es^2) %>%
-    mutate()
+    mutate(es_sample = sample(seq(-3, 3, length.out = 1000), size = nrow(.)), replace = FALSE)
 })
 names(my_dat) <- file_sources
 ```
@@ -30,13 +31,39 @@ Manche Studien kommen doppelt vor, weil sie mit verschiedenen Tests eingehen. D.
 
 ```{r}
 ## Beim einlesen von dat_1 ist irgendwas schief gegangen. 
-model_1 <- rma.mv(yi = es,
-                  V = se_es,
+model_1 <- rma.mv(yi = es_sample, # austauschen, aktuell gesampelt
+                  V = var_es, 
                   slab = Study,
                   data = my_dat[[2]],
-                  random = ~1|Study/es, #Nesting the effect size within the Studys
+                  random = ~1|Study/es.id, #Nesting the effect size within the Studys
                   test = "t", 
                   method = "REML"
                   )
+
+summary(model_1)
 ```
+
+sigma^2.1 contains the level 3 between-cluster variance, which is the between-study heterogeneity variance. 
+sigma^2.2 shows the variance within clusters (level 2).
+estimate is our estimated pooled effect. How to interpret? I would need more information about the es. 
+But how much heterogeneity variance is captured by each level of our model?
+$I^2$ quantifies the amount of variation not attributable to sampling error. In three level models, it is split into a part attributable to true effect size differences within clusters (level 2) and between cluster variation (level 3). 
+We have 2 $I^2$ quantifying the percentage of total variation associated with either level 2 or level 3. 
+
+```{r}
+i2 <- var.comp(model_1)
+```
+We get the percentages of variance explained by 
+1) sampling error variance
+2) heterogeneity variance within clusters
+3) Between study heterogeneity percentage of total variation of the effect sizes. 
+
+We can compare the three level model to a two level model: 
+
+
+
+Currently we assume that within one study, effect size estimates are independent. -> maybe look at robust variance estimation 
+
+
+
 
