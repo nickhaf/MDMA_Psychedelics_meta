@@ -251,6 +251,28 @@ if (window.hljs) {
 
 
 
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
 
 
 
@@ -354,35 +376,20 @@ analysis</h1>
 </div>
 
 
-<pre class="r"><code>library(tidyverse)
-library(here)
-library(metafor)
-library(dmetar)
-library(psych)
-library(knitr)</code></pre>
-<pre class="r"><code>file_sources &lt;- list.files(
-  path = here::here(&quot;data&quot;),
-  pattern = &quot;*.csv&quot;
-)
-
-my_dat &lt;- lapply(paste0(here::here(&quot;data&quot;),&quot;/&quot;, file_sources), read.csv)
-my_dat &lt;- lapply(my_dat, function(x){
-  x %&gt;%
-    mutate(var_es = se_es^2)
-})
-names(my_dat) &lt;- file_sources</code></pre>
-<div id="overview" class="section level1">
-<h1>Overview</h1>
-<pre class="r"><code>summary_tables &lt;- lapply(my_dat, function(x){
-  describe(x[, c(&quot;N&quot;, &quot;es&quot;, &quot;se_es&quot;)], skew = FALSE)
-})</code></pre>
-</div>
+<p>The analysis follows the chapter <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/multilevel-ma.html#multilevel-R">Fitting
+Three-Level Meta-Analysis Models in R</a> from the book <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/">Doing
+Meta-Analysis in R</a>, <span class="citation">Harrer et al.
+(2021)</span>. We used R version 4.3.2 <span class="citation">(R Core
+Team 2023)</span> and the following R packages: dmetar v. 0.1.0 <span class="citation">(Harrer et al. 2019)</span>, here v. 1.0.1 <span class="citation">(Müller 2020)</span>, knitr v. 1.45 <span class="citation">(Xie 2014, 2015, 2023)</span>, metafor v. 4.4.0 <span class="citation">(Viechtbauer 2010)</span>, psych v. 2.3.12 <span class="citation">(William Revelle 2023)</span>, renv v. 1.0.3 <span class="citation">(Ushey and Wickham 2023)</span>, rmarkdown v. 2.25
+<span class="citation">(Xie, Allaire, and Grolemund 2018; Xie, Dervieux,
+and Riederer 2020; Allaire et al. 2023)</span>, tidyverse v. 2.0.0 <span class="citation">(Wickham et al. 2019)</span>.</p>
 <div id="analysis" class="section level1">
 <h1>Analysis</h1>
 <p>Because some studies provide multiple values we use a three-level
 Meta-Analysis Model. The nested random effect gets assigned to the
 grouping variable “study”. This means we allow the random intercept to
-vary across different studys.</p>
+vary across different studys. Test statistics and confidence intervals
+for the fixed effects use a t-distribution.</p>
 <pre class="r"><code># Fit the model
 models &lt;- lapply(my_dat, function(df){
   rma.mv(yi = es,
@@ -390,6 +397,7 @@ models &lt;- lapply(my_dat, function(df){
                   data = df, # data set
                   random = ~1|Study/es.id, #Nesting the effect size within the Studys
                   test = &quot;t&quot;, # similar to Knapp-Hartung method, recommended
+                  dfs = &quot;contain&quot;,
                   method = &quot;REML&quot; # Restricted maximum-likelihood, recommended
                   )
 })
@@ -401,6 +409,7 @@ models_2 &lt;- lapply(my_dat, function(df){
                   data = df, # data set
                   random = ~1|Study/es.id, #Nesting the effect size within the Studys
                   test = &quot;t&quot;, # similar to Knapp-Hartung method, recommended
+                  dfs = &quot;contain&quot;,
                   method = &quot;REML&quot;, # Restricted maximum-likelihood, recommended
                   sigma2 = c(0, NA)         
          )
@@ -411,9 +420,6 @@ models_2_summary &lt;- lapply(models_2, summary)
 i2 &lt;- lapply(models, var.comp)</code></pre>
 <div id="model-comparison" class="section level2">
 <h2>Model comparison</h2>
-<pre class="r"><code>for(i in 1:length(models)){
-  print(anova(models[[i]], models_2[[i]]))
-}</code></pre>
 <pre><code>## 
 ##         df     AIC     BIC    AICc   logLik    LRT   pval       QE 
 ## Full     3 61.3342 63.6520 63.3342 -27.6671               119.8678 
@@ -433,16 +439,17 @@ i2 &lt;- lapply(models, var.comp)</code></pre>
 ##         df     AIC     BIC    AICc  logLik    LRT   pval       QE 
 ## Full     3 22.0428 20.8711 46.0428 -8.0214               101.8893 
 ## Reduced  2 20.7778 19.9967 26.7778 -8.3889 0.7350 0.3913 101.8893</code></pre>
-<p>Nested model doesn’t perfom better, so the effects within studies are
-largely homogneous. However, we know the effects are not independent, so
-we can keep the three-level model.</p>
+<p>The nested model doesn’t perfom better, so the effects within studies
+are largely homogneous. However, we know the effects are not
+independent, so we can keep the three-level model.</p>
 </div>
 </div>
 <div id="results" class="section level1">
 <h1>Results</h1>
 <div id="attention" class="section level2">
 <h2>Attention</h2>
-<pre class="r"><code>kable(summary_tables[[&quot;20240115_MABerlin_attention.csv&quot;]])</code></pre>
+<div id="descriptives" class="section level3">
+<h3>Descriptives</h3>
 <table>
 <colgroup>
 <col width="8%" />
@@ -504,7 +511,9 @@ we can keep the three-level model.</p>
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>models_summary[[&quot;20240115_MABerlin_attention.csv&quot;]] </code></pre>
+</div>
+<div id="model" class="section level3">
+<h3>Model</h3>
 <pre><code>## 
 ## Multivariate Meta-Analysis Model (k = 17; method: REML)
 ## 
@@ -522,21 +531,25 @@ we can keep the three-level model.</p>
 ## 
 ## Model Results:
 ## 
-## estimate      se     tval  df    pval    ci.lb    ci.ub     
-##  -1.3986  0.4704  -2.9734  16  0.0090  -2.3957  -0.4015  ** 
+## estimate      se     tval  df    pval    ci.lb    ci.ub    
+##  -1.3986  0.4704  -2.9734   9  0.0156  -2.4627  -0.3346  * 
 ## 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<pre class="r"><code>i2[[&quot;20240115_MABerlin_attention.csv&quot;]] </code></pre>
+</div>
+<div id="i2" class="section level3">
+<h3>I^2</h3>
 <pre><code>##         % of total variance    I2
 ## Level 1            4.275128   ---
 ## Level 2           21.924154 21.92
 ## Level 3           73.800718  73.8
 ## Total I2: 95.72%</code></pre>
 </div>
+</div>
 <div id="executive" class="section level2">
 <h2>Executive</h2>
-<pre class="r"><code>kable(summary_tables[[&quot;20240115_MABerlin_executive.csv&quot;]])</code></pre>
+<div id="descriptives-1" class="section level3">
+<h3>Descriptives</h3>
 <table style="width:100%;">
 <colgroup>
 <col width="7%" />
@@ -598,7 +611,9 @@ we can keep the three-level model.</p>
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>models_summary[[&quot;20240115_MABerlin_executive.csv&quot;]]</code></pre>
+</div>
+<div id="model-1" class="section level3">
+<h3>Model</h3>
 <pre><code>## 
 ## Multivariate Meta-Analysis Model (k = 19; method: REML)
 ## 
@@ -616,21 +631,25 @@ we can keep the three-level model.</p>
 ## 
 ## Model Results:
 ## 
-## estimate      se     tval  df    pval    ci.lb    ci.ub    
-##  -0.5716  0.2612  -2.1885  18  0.0421  -1.1204  -0.0229  * 
+## estimate      se     tval  df    pval    ci.lb   ci.ub    
+##  -0.5716  0.2612  -2.1885  11  0.0511  -1.1465  0.0033  . 
 ## 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<pre class="r"><code>i2[[&quot;20240115_MABerlin_executive.csv&quot;]]</code></pre>
+</div>
+<div id="i2-1" class="section level3">
+<h3>I^2</h3>
 <pre><code>##         % of total variance    I2
 ## Level 1           14.238957   ---
 ## Level 2            8.978287  8.98
 ## Level 3           76.782756 76.78
 ## Total I2: 85.76%</code></pre>
 </div>
+</div>
 <div id="memory" class="section level2">
 <h2>Memory</h2>
-<pre class="r"><code>kable(summary_tables[[&quot;20240115_MABerlin_memory.csv&quot;]])</code></pre>
+<div id="descriptives-2" class="section level3">
+<h3>Descriptives</h3>
 <table>
 <colgroup>
 <col width="7%" />
@@ -692,7 +711,9 @@ we can keep the three-level model.</p>
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>models_summary[[&quot;20240115_MABerlin_memory.csv&quot;]]</code></pre>
+</div>
+<div id="model-2" class="section level3">
+<h3>Model</h3>
 <pre><code>## 
 ## Multivariate Meta-Analysis Model (k = 28; method: REML)
 ## 
@@ -711,20 +732,24 @@ we can keep the three-level model.</p>
 ## Model Results:
 ## 
 ## estimate      se     tval  df    pval    ci.lb    ci.ub      
-##  -0.9979  0.2087  -4.7809  27  &lt;.0001  -1.4261  -0.5696  *** 
+##  -0.9979  0.2087  -4.7809  15  0.0002  -1.4427  -0.5530  *** 
 ## 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<pre class="r"><code>i2[[&quot;20240115_MABerlin_memory.csv&quot;]]</code></pre>
+</div>
+<div id="i2-2" class="section level3">
+<h3>I^2</h3>
 <pre><code>##         % of total variance    I2
 ## Level 1        1.011912e+01   ---
 ## Level 2        8.988088e+01 89.88
 ## Level 3        9.134206e-07     0
 ## Total I2: 89.88%</code></pre>
 </div>
+</div>
 <div id="microdosing" class="section level2">
 <h2>Microdosing</h2>
-<pre class="r"><code>kable(summary_tables[[&quot;20240115_MABerlin_microdosing.csv&quot;]])</code></pre>
+<div id="descriptives-3" class="section level3">
+<h3>Descriptives</h3>
 <table style="width:100%;">
 <colgroup>
 <col width="7%" />
@@ -786,7 +811,9 @@ we can keep the three-level model.</p>
 </tr>
 </tbody>
 </table>
-<pre class="r"><code>models_summary[[&quot;20240115_MABerlin_microdosing.csv&quot;]]</code></pre>
+</div>
+<div id="model-3" class="section level3">
+<h3>Model</h3>
 <pre><code>## 
 ## Multivariate Meta-Analysis Model (k = 6; method: REML)
 ## 
@@ -805,16 +832,19 @@ we can keep the three-level model.</p>
 ## Model Results:
 ## 
 ## estimate      se    tval  df    pval    ci.lb   ci.ub    
-##   0.3657  0.6680  0.5474   5  0.6076  -1.3515  2.0828    
+##   0.3657  0.6680  0.5474   2  0.6390  -2.5085  3.2398    
 ## 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<pre class="r"><code>i2[[&quot;20240115_MABerlin_microdosing.csv&quot;]]</code></pre>
+</div>
+<div id="i2-3" class="section level3">
+<h3>I^2</h3>
 <pre><code>##         % of total variance    I2
 ## Level 1            4.120053   ---
 ## Level 2           53.457661 53.46
 ## Level 3           42.422286 42.42
 ## Total I2: 95.88%</code></pre>
+</div>
 </div>
 <div id="interpretation" class="section level2">
 <h2>Interpretation</h2>
@@ -826,21 +856,93 @@ we can keep the three-level model.</p>
 </ul></li>
 <li><code>Model Results</code>
 <ul>
-<li><code>estimate</code> is our estimated pooled effect. But how much
-heterogeneity variance is captured by each level of our model? <span class="math inline">\(I^2\)</span> quantifies the amount of variation
-not attributable to sampling error. In three level models, it is split
-into a part attributable to true effect size differences within clusters
-(level 2) and between cluster variation (level 3). We have 2 <span class="math inline">\(I^2\)</span> values per model quantifying the
-percentage of total variation associated with either level 2 or level
-3.</li>
+<li><code>estimate</code> is our estimated pooled effect.</li>
 </ul></li>
 </ul>
+<p>But how much heterogeneity variance is captured by each level of our
+model? <span class="math inline">\(I^2\)</span> quantifies the amount of
+variation not attributable to sampling error. In three level models, it
+is split into a part attributable to true effect size differences within
+clusters (level 2) and between cluster variation (level 3). We have 2
+<span class="math inline">\(I^2\)</span> values per model quantifying
+the percentage of total variation associated with either level 2 or
+level 3.</p>
 <p>We get the percentages of variance explained by 1) sampling error
 variance 2) heterogeneity variance within clusters 3) Between study
 heterogeneity percentage of total variation of the effect sizes.</p>
-<p>We can compare the three level model to a two level model:</p>
-<p>Currently we assume that within one study, effect size estimates are
-independent. -&gt; maybe look at robust variance estimation</p>
+</div>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-rmarkdown2023" class="csl-entry">
+Allaire, JJ, Yihui Xie, Christophe Dervieux, Jonathan McPherson, Javier
+Luraschi, Kevin Ushey, Aron Atkins, et al. 2023. <em><span class="nocase">rmarkdown</span>: Dynamic Documents for r</em>. <a href="https://github.com/rstudio/rmarkdown">https://github.com/rstudio/rmarkdown</a>.
+</div>
+<div id="ref-harrer2021doing" class="csl-entry">
+Harrer, Mathias, Pim Cuijpers, Furukawa Toshi A, and David D Ebert.
+2021. <em>Doing Meta-Analysis with <span>R</span>: A Hands-on
+Guide</em>. 1st ed. Boca Raton, FL; London: Chapman &amp; Hall/CRC
+Press.
+</div>
+<div id="ref-dmetar" class="csl-entry">
+Harrer, Mathias, Pim Cuijpers, Toshi Furukawa, and David Daniel Ebert.
+2019. <em><span class="nocase">dmetar</span>: Companion r Package for
+the Guide <span>“<span class="nocase">Doing Meta-Analysis in
+R</span>”</span></em>. <a href="http://dmetar.protectlab.org/">http://dmetar.protectlab.org/</a>.
+</div>
+<div id="ref-here" class="csl-entry">
+Müller, Kirill. 2020. <em><span class="nocase">here</span>: A Simpler
+Way to Find Your Files</em>. <a href="https://CRAN.R-project.org/package=here">https://CRAN.R-project.org/package=here</a>.
+</div>
+<div id="ref-base" class="csl-entry">
+R Core Team. 2023. <em><span>R</span>: A Language and Environment for
+Statistical Computing</em>. Vienna, Austria: R Foundation for
+Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
+</div>
+<div id="ref-renv" class="csl-entry">
+Ushey, Kevin, and Hadley Wickham. 2023. <em><span class="nocase">renv</span>: Project Environments</em>. <a href="https://CRAN.R-project.org/package=renv">https://CRAN.R-project.org/package=renv</a>.
+</div>
+<div id="ref-metafor" class="csl-entry">
+Viechtbauer, Wolfgang. 2010. <span>“Conducting Meta-Analyses in
+<span>R</span> with the <span class="nocase">metafor</span>
+Package.”</span> <em>Journal of Statistical Software</em> 36 (3): 1–48.
+<a href="https://doi.org/10.18637/jss.v036.i03">https://doi.org/10.18637/jss.v036.i03</a>.
+</div>
+<div id="ref-tidyverse" class="csl-entry">
+Wickham, Hadley, Mara Averick, Jennifer Bryan, Winston Chang, Lucy
+D’Agostino McGowan, Romain François, Garrett Grolemund, et al. 2019.
+<span>“Welcome to the <span class="nocase">tidyverse</span>.”</span>
+<em>Journal of Open Source Software</em> 4 (43): 1686. <a href="https://doi.org/10.21105/joss.01686">https://doi.org/10.21105/joss.01686</a>.
+</div>
+<div id="ref-psych" class="csl-entry">
+William Revelle. 2023. <em><span class="nocase">psych</span>: Procedures
+for Psychological, Psychometric, and Personality Research</em>.
+Evanston, Illinois: Northwestern University. <a href="https://CRAN.R-project.org/package=psych">https://CRAN.R-project.org/package=psych</a>.
+</div>
+<div id="ref-knitr2014" class="csl-entry">
+Xie, Yihui. 2014. <span>“<span class="nocase">knitr</span>: A
+Comprehensive Tool for Reproducible Research in <span>R</span>.”</span>
+In <em>Implementing Reproducible Computational Research</em>, edited by
+Victoria Stodden, Friedrich Leisch, and Roger D. Peng. Chapman;
+Hall/CRC.
+</div>
+<div id="ref-knitr2015" class="csl-entry">
+———. 2015. <em>Dynamic Documents with <span>R</span> and Knitr</em>. 2nd
+ed. Boca Raton, Florida: Chapman; Hall/CRC. <a href="https://yihui.org/knitr/">https://yihui.org/knitr/</a>.
+</div>
+<div id="ref-knitr2023" class="csl-entry">
+———. 2023. <em><span class="nocase">knitr</span>: A General-Purpose
+Package for Dynamic Report Generation in r</em>. <a href="https://yihui.org/knitr/">https://yihui.org/knitr/</a>.
+</div>
+<div id="ref-rmarkdown2018" class="csl-entry">
+Xie, Yihui, J. J. Allaire, and Garrett Grolemund. 2018. <em>R Markdown:
+The Definitive Guide</em>. Boca Raton, Florida: Chapman; Hall/CRC. <a href="https://bookdown.org/yihui/rmarkdown">https://bookdown.org/yihui/rmarkdown</a>.
+</div>
+<div id="ref-rmarkdown2020" class="csl-entry">
+Xie, Yihui, Christophe Dervieux, and Emily Riederer. 2020. <em>R
+Markdown Cookbook</em>. Boca Raton, Florida: Chapman; Hall/CRC. <a href="https://bookdown.org/yihui/rmarkdown-cookbook">https://bookdown.org/yihui/rmarkdown-cookbook</a>.
+</div>
 </div>
 </div>
 
