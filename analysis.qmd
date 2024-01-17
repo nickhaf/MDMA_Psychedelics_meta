@@ -27,6 +27,8 @@ library(knitr)
 library(grateful)
 ```
 
+CAUTION: I added the moderator variable last minute and didn't have a chance to check everything properly. 
+
 # Introduction
 The analysis follows the chapter [Fitting Three-Level Meta-Analysis Models in R](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/multilevel-ma.html#multilevel-R) from the book [Doing Meta-Analysis in R](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/), @harrer2021doing. 
 ```{r}
@@ -65,19 +67,7 @@ Test statistics and confidence intervals for the fixed effects use a t-distribut
 
 ```{r}
 # Fit the model
-models <- lapply(my_dat, function(df){
-  rma.mv(yi = es,
-                  V = var_es, # Squared standard error of the effect size
-                  data = df, # data set
-                  random = ~1|Study/es.id, #Nesting the effect size within the Studys
-                  test = "t", # similar to Knapp-Hartung method, recommended
-                  dfs = "contain",
-                  method = "REML" # Restricted maximum-likelihood, recommended
-                  )
-})
-
-## Model with level 3 variance set to zero, so we assume all effect sizes to be independent
-models_2 <- lapply(my_dat, function(df){
+models_cognitive <- lapply(my_dat[1:3], function(df){
   rma.mv(yi = es,
                   V = var_es, # Squared standard error of the effect size
                   data = df, # data set
@@ -85,13 +75,54 @@ models_2 <- lapply(my_dat, function(df){
                   test = "t", # similar to Knapp-Hartung method, recommended
                   dfs = "contain",
                   method = "REML", # Restricted maximum-likelihood, recommended
-                  sigma2 = c(0, NA)         
+                  mods = ~ drugType # Subgroup analysis, adds regression weight of the predictor variable drug type to the model       
          )
 })
 
-models_summary <- lapply(models, summary)
-models_2_summary <- lapply(models_2, summary)
-i2 <- lapply(models, var.comp)
+
+## Without moderator for the last data set:
+models_cognitive[[4]] <- rma.mv(yi = es,
+                  V = var_es, # Squared standard error of the effect size
+                  data = my_dat[[4]], # data set
+                  random = ~1|Study/es.id, #Nesting the effect size within the Studys
+                  test = "t", # similar to Knapp-Hartung method, recommended
+                  dfs = "contain",
+                  method = "REML" # Restricted maximum-likelihood, recommended
+         )
+
+
+## Model with level 3 variance set to zero, so we assume all effect sizes to be independent
+models_cognitive_2 <- lapply(my_dat[1:3], function(df){
+  rma.mv(yi = es,
+                  V = var_es, # Squared standard error of the effect size
+                  data = df, # data set
+                  random = ~1|Study/es.id, #Nesting the effect size within the Studys
+                  test = "t", # similar to Knapp-Hartung method, recommended
+                  dfs = "contain",
+                  method = "REML", # Restricted maximum-likelihood, recommended
+                  mods = ~ drugType, # Subgroup analysis, adds regression weight of the predictor variable drug type to the model 
+                  sigma2 = c(0, NA)
+         )
+})
+
+
+## Without moderator for the last data set:
+models_cognitive_2[[4]] <- rma.mv(yi = es,
+                  V = var_es, # Squared standard error of the effect size
+                  data = my_dat[[4]], # data set
+                  random = ~1|Study/es.id, #Nesting the effect size within the Studys
+                  test = "t", # similar to Knapp-Hartung method, recommended
+                  dfs = "contain",
+                  method = "REML", # Restricted maximum-likelihood, recommended
+                  sigma2 = c(0, NA)
+                  )
+
+names(models_cognitive) <- file_sources
+names(models_cognitive_2) <- file_sources
+
+models_summary <- lapply(models_cognitive, summary)
+models_2_summary <- lapply(models_cognitive_2, summary)
+i2 <- lapply(models_cognitive, var.comp)
 ```
 
 
@@ -99,8 +130,8 @@ i2 <- lapply(models, var.comp)
 ```{r}
 #| echo: false
 
-for(i in 1:length(models)){
-  print(anova(models[[i]], models_2[[i]]))
+for(i in 1:length(models_cognitive)){
+  print(anova(models_cognitive[[i]], models_cognitive_2[[i]]))
 }
 ```
 The nested model doesn't perfom better, so the effects within studies are largely homogneous. However, we know the effects are not independent, so we can keep the three-level model. 
@@ -200,8 +231,10 @@ i2[["20240115_MABerlin_microdosing.csv"]]
 - `Variance Components`:
     * sigma^2.1 contains the level 3 between-cluster variance.
     * sigma^2.2 shows the variance within clusters (level 2).
+- `Test of Moderators`: Indicates differences between the subgroups mdma & psychadelics.  
 - `Model Results`
     * `estimate` is our estimated pooled effect. 
+    * CAUTION: In case of the analyses with moderator we have an `intercept`, which is the effect size if the drug is mdma. The effect of the psychedlics group can be obtained by adding their estimate value to the intercept. See [here](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/multilevel-ma.html#three-level-subgroup) for interpretation example.  
 - `$I^2$`: 
     * $I^2$ quantifies the amount of variation not attributable to sampling error. In three level models, it is split into a part attributable to true effect size differences within clusters (level 2) and between cluster variation (level 3). 
 We have 2 $I^2$ values per model quantifying the percentage of total variation associated with either level 2 or level 3. 
