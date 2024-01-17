@@ -1,7 +1,8 @@
 ---
 title: "MDMA/Psychadelics multi-level meta analysis"
-format: 
-  html
+author: Nicklas Hafiz
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+format: html
 bibliography:
   - grateful-refs.bib
   - references.bib
@@ -21,6 +22,7 @@ library(knitr)
 library(grateful)
 ```
 
+## Introduction
 The analysis follows the chapter [Fitting Three-Level Meta-Analysis Models in R](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/multilevel-ma.html#multilevel-R) from the book [Doing Meta-Analysis in R](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/), @harrer2021doing. 
 ```{r}
 #| echo: false
@@ -52,7 +54,7 @@ summary_tables <- lapply(my_dat, function(x){
 })
 ```
 
-# Analysis
+## Analysis
 Because some studies provide multiple values we use a three-level Meta-Analysis Model. The nested random effect gets assigned to the grouping variable "study". This means we allow the random intercept to vary across different studys. 
 Test statistics and confidence intervals for the fixed effects use a t-distribution.  
 
@@ -88,7 +90,7 @@ i2 <- lapply(models, var.comp)
 ```
 
 
-## Model comparison
+### Model comparison
 ```{r}
 #| echo: false
 
@@ -98,91 +100,91 @@ for(i in 1:length(models)){
 ```
 The nested model doesn't perfom better, so the effects within studies are largely homogneous. However, we know the effects are not independent, so we can keep the three-level model. 
 
-# Results
-## Attention
+## Results
+### Attention
 
-### Descriptives
+#### Descriptives
 ```{r}
 #| echo: false
 
 kable(summary_tables[["20240115_MABerlin_attention.csv"]])
 ```
 
-### Model
+#### Model
 ```{r}
 #| echo: false
 
 models_summary[["20240115_MABerlin_attention.csv"]] 
 ```
 
-### I^2
+#### I^2
 ```{r}
 #| echo: false
 
 i2[["20240115_MABerlin_attention.csv"]] 
 ```
 
-## Executive
-### Descriptives
+### Executive
+#### Descriptives
 ```{r}
 #| echo: false
 
 kable(summary_tables[["20240115_MABerlin_executive.csv"]])
 ```
 
-### Model
+#### Model
 ```{r}
 #| echo: false
 
 models_summary[["20240115_MABerlin_executive.csv"]]
 ```
 
-### I^2
+#### I^2
 ```{r}
 #| echo: false
 
 i2[["20240115_MABerlin_executive.csv"]]
 ```
 
-## Memory
-### Descriptives
+### Memory
+#### Descriptives
 ```{r}
 #| echo: false
 
 kable(summary_tables[["20240115_MABerlin_memory.csv"]])
 ```
 
-### Model
+#### Model
 ```{r}
 #| echo: false
 
 models_summary[["20240115_MABerlin_memory.csv"]]
 ```
 
-### I^2
+#### I^2
 ```{r}
 #| echo: false
 
 i2[["20240115_MABerlin_memory.csv"]]
 ```
 
-## Microdosing
+### Microdosing
 
-### Descriptives
+#### Descriptives
 ```{r}
 #| echo: false
 
 kable(summary_tables[["20240115_MABerlin_microdosing.csv"]])
 ```
 
-### Model
+#### Model
 ```{r}
 #| echo: false
 
 models_summary[["20240115_MABerlin_microdosing.csv"]]
 ```
 
-### I^2
+#### I^2
 ```{r}
 #| echo: false
 
@@ -190,7 +192,7 @@ i2[["20240115_MABerlin_microdosing.csv"]]
 ```
 
 
-## Interpretation
+### Interpretation
 
 - `Variance Components`:
     * sigma^2.1 contains the level 3 between-cluster variance.
@@ -201,4 +203,4 @@ i2[["20240115_MABerlin_microdosing.csv"]]
     * $I^2$ quantifies the amount of variation not attributable to sampling error. In three level models, it is split into a part attributable to true effect size differences within clusters (level 2) and between cluster variation (level 3). 
 We have 2 $I^2$ values per model quantifying the percentage of total variation associated with either level 2 or level 3. 
 
-# References
+## References

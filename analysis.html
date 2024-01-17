@@ -9,6 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Nicklas Hafiz" />
 
 
 <title>MDMA/Psychadelics multi-level meta analysis</title>
@@ -372,10 +373,14 @@ display: none;
 
 <h1 class="title toc-ignore">MDMA/Psychadelics multi-level meta
 analysis</h1>
+<h4 class="author">Nicklas Hafiz</h4>
+<h4 class="date">17 Januar, 2024</h4>
 
 </div>
 
 
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
 <p>The analysis follows the chapter <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/multilevel-ma.html#multilevel-R">Fitting
 Three-Level Meta-Analysis Models in R</a> from the book <a href="https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/">Doing
 Meta-Analysis in R</a>, <span class="citation">Harrer et al.
@@ -383,8 +388,9 @@ Meta-Analysis in R</a>, <span class="citation">Harrer et al.
 Team 2023)</span> and the following R packages: dmetar v. 0.1.0 <span class="citation">(Harrer et al. 2019)</span>, here v. 1.0.1 <span class="citation">(Müller 2020)</span>, knitr v. 1.45 <span class="citation">(Xie 2014, 2015, 2023)</span>, metafor v. 4.4.0 <span class="citation">(Viechtbauer 2010)</span>, psych v. 2.3.12 <span class="citation">(William Revelle 2023)</span>, renv v. 1.0.3 <span class="citation">(Ushey and Wickham 2023)</span>, rmarkdown v. 2.25
 <span class="citation">(Xie, Allaire, and Grolemund 2018; Xie, Dervieux,
 and Riederer 2020; Allaire et al. 2023)</span>, tidyverse v. 2.0.0 <span class="citation">(Wickham et al. 2019)</span>.</p>
-<div id="analysis" class="section level1">
-<h1>Analysis</h1>
+</div>
+<div id="analysis" class="section level2">
+<h2>Analysis</h2>
 <p>Because some studies provide multiple values we use a three-level
 Meta-Analysis Model. The nested random effect gets assigned to the
 grouping variable “study”. This means we allow the random intercept to
@@ -418,8 +424,8 @@ models_2 &lt;- lapply(my_dat, function(df){
 models_summary &lt;- lapply(models, summary)
 models_2_summary &lt;- lapply(models_2, summary)
 i2 &lt;- lapply(models, var.comp)</code></pre>
-<div id="model-comparison" class="section level2">
-<h2>Model comparison</h2>
+<div id="model-comparison" class="section level3">
+<h3>Model comparison</h3>
 <pre><code>## 
 ##         df     AIC     BIC    AICc   logLik    LRT   pval       QE 
 ## Full     3 61.3342 63.6520 63.3342 -27.6671               119.8678 
@@ -444,12 +450,12 @@ are largely homogneous. However, we know the effects are not
 independent, so we can keep the three-level model.</p>
 </div>
 </div>
-<div id="results" class="section level1">
-<h1>Results</h1>
-<div id="attention" class="section level2">
-<h2>Attention</h2>
-<div id="descriptives" class="section level3">
-<h3>Descriptives</h3>
+<div id="results" class="section level2">
+<h2>Results</h2>
+<div id="attention" class="section level3">
+<h3>Attention</h3>
+<div id="descriptives" class="section level4">
+<h4>Descriptives</h4>
 <table>
 <colgroup>
 <col width="8%" />
@@ -512,8 +518,8 @@ independent, so we can keep the three-level model.</p>
 </tbody>
 </table>
 </div>
-<div id="model" class="section level3">
-<h3>Model</h3>
+<div id="model" class="section level4">
+<h4>Model</h4>
 <pre><code>## 
 ## Multivariate Meta-Analysis Model (k = 17; method: REML)
 ## 
@@ -537,8 +543,8 @@ independent, so we can keep the three-level model.</p>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
-<div id="i2" class="section level3">
-<h3>I^2</h3>
+<div id="i2" class="section level4">
+<h4>I^2</h4>
 <pre><code>##         % of total variance    I2
 ## Level 1            4.275128   ---
 ## Level 2           21.924154 21.92
@@ -546,10 +552,10 @@ independent, so we can keep the three-level model.</p>
 ## Total I2: 95.72%</code></pre>
 </div>
 </div>
-<div id="executive" class="section level2">
-<h2>Executive</h2>
-<div id="descriptives-1" class="section level3">
-<h3>Descriptives</h3>
+<div id="executive" class="section level3">
+<h3>Executive</h3>
+<div id="descriptives-1" class="section level4">
+<h4>Descriptives</h4>
 <table style="width:100%;">
 <colgroup>
 <col width="7%" />
@@ -612,8 +618,8 @@ independent, so we can keep the three-level model.</p>
 </tbody>
 </table>
 </div>
-<div id="model-1" class="section level3">
-<h3>Model</h3>
+<div id="model-1" class="section level4">
+<h4>Model</h4>
 <pre><code>## 
 ## Multivariate Meta-Analysis Model (k = 19; method: REML)
 ## 
@@ -637,8 +643,8 @@ independent, so we can keep the three-level model.</p>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
-<div id="i2-1" class="section level3">
-<h3>I^2</h3>
+<div id="i2-1" class="section level4">
+<h4>I^2</h4>
 <pre><code>##         % of total variance    I2
 ## Level 1           14.238957   ---
 ## Level 2            8.978287  8.98
@@ -646,10 +652,10 @@ independent, so we can keep the three-level model.</p>
 ## Total I2: 85.76%</code></pre>
 </div>
 </div>
-<div id="memory" class="section level2">
-<h2>Memory</h2>
-<div id="descriptives-2" class="section level3">
-<h3>Descriptives</h3>
+<div id="memory" class="section level3">
+<h3>Memory</h3>
+<div id="descriptives-2" class="section level4">
+<h4>Descriptives</h4>
 <table>
 <colgroup>
 <col width="7%" />
@@ -712,8 +718,8 @@ independent, so we can keep the three-level model.</p>
 </tbody>
 </table>
 </div>
-<div id="model-2" class="section level3">
-<h3>Model</h3>
+<div id="model-2" class="section level4">
+<h4>Model</h4>
 <pre><code>## 
 ## Multivariate Meta-Analysis Model (k = 28; method: REML)
 ## 
@@ -737,8 +743,8 @@ independent, so we can keep the three-level model.</p>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
-<div id="i2-2" class="section level3">
-<h3>I^2</h3>
+<div id="i2-2" class="section level4">
+<h4>I^2</h4>
 <pre><code>##         % of total variance    I2
 ## Level 1        1.011912e+01   ---
 ## Level 2        8.988088e+01 89.88
@@ -746,10 +752,10 @@ independent, so we can keep the three-level model.</p>
 ## Total I2: 89.88%</code></pre>
 </div>
 </div>
-<div id="microdosing" class="section level2">
-<h2>Microdosing</h2>
-<div id="descriptives-3" class="section level3">
-<h3>Descriptives</h3>
+<div id="microdosing" class="section level3">
+<h3>Microdosing</h3>
+<div id="descriptives-3" class="section level4">
+<h4>Descriptives</h4>
 <table style="width:100%;">
 <colgroup>
 <col width="7%" />
@@ -812,8 +818,8 @@ independent, so we can keep the three-level model.</p>
 </tbody>
 </table>
 </div>
-<div id="model-3" class="section level3">
-<h3>Model</h3>
+<div id="model-3" class="section level4">
+<h4>Model</h4>
 <pre><code>## 
 ## Multivariate Meta-Analysis Model (k = 6; method: REML)
 ## 
@@ -837,8 +843,8 @@ independent, so we can keep the three-level model.</p>
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
-<div id="i2-3" class="section level3">
-<h3>I^2</h3>
+<div id="i2-3" class="section level4">
+<h4>I^2</h4>
 <pre><code>##         % of total variance    I2
 ## Level 1            4.120053   ---
 ## Level 2           53.457661 53.46
@@ -846,8 +852,8 @@ independent, so we can keep the three-level model.</p>
 ## Total I2: 95.88%</code></pre>
 </div>
 </div>
-<div id="interpretation" class="section level2">
-<h2>Interpretation</h2>
+<div id="interpretation" class="section level3">
+<h3>Interpretation</h3>
 <ul>
 <li><code>Variance Components</code>:
 <ul>
@@ -871,8 +877,8 @@ level 3.</li>
 </ul>
 </div>
 </div>
-<div id="references" class="section level1 unnumbered">
-<h1 class="unnumbered">References</h1>
+<div id="references" class="section level2 unnumbered">
+<h2 class="unnumbered">References</h2>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-rmarkdown2023" class="csl-entry">
 Allaire, JJ, Yihui Xie, Christophe Dervieux, Jonathan McPherson, Javier
