@@ -1,12 +1,24 @@
 ---
 title: "MDMA/Psychadelics multi-level meta analysis"
+format: 
+  html: 
+    toc: true
+execute: 
+  echo: false
 ---
+The analysis follows the chapter [Fitting Three-Level Meta-Analysis Models in R](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/multilevel-ma.html#multilevel-R) from the book [Doing Meta-Analysis in R](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/).
+
 
 ```{r load packages}
+#| warning: false
+#| message: false
+
 library(tidyverse)
 library(here)
 library(metafor)
 library(dmetar)
+library(psych)
+library(knitr)
 ```
 
 
@@ -20,49 +32,134 @@ file_sources <- list.files(
 my_dat <- lapply(paste0(here::here("data"),"/", file_sources), read.csv)
 my_dat <- lapply(my_dat, function(x){
   x %>%
-    mutate(var_es = se_es^2) %>%
-    mutate(es_sample = sample(seq(-3, 3, length.out = 1000), size = nrow(.)), replace = FALSE)
+    mutate(var_es = se_es^2)
 })
 names(my_dat) <- file_sources
 ```
 
-# Analysis
-Manche Studien kommen doppelt vor, weil sie mit verschiedenen Tests eingehen. D.h. wir könnten jetzt Ein Studien-Cluster generieren. 
 
-```{r}
-## Beim einlesen von dat_1 ist irgendwas schief gegangen. 
-model_1 <- rma.mv(yi = es_sample, # austauschen, aktuell gesampelt
-                  V = var_es, 
-                  slab = Study,
-                  data = my_dat[[2]],
-                  random = ~1|Study/es.id, #Nesting the effect size within the Studys
-                  test = "t", 
-                  method = "REML"
-                  )
-
-summary(model_1)
+# Overview
+```{r results='asis'}
+summary_tables <- lapply(my_dat, function(x){
+  describe(x[, c("N", "es", "se_es")], skew = FALSE)
+})
 ```
 
-sigma^2.1 contains the level 3 between-cluster variance, which is the between-study heterogeneity variance. 
-sigma^2.2 shows the variance within clusters (level 2).
-estimate is our estimated pooled effect. How to interpret? I would need more information about the es. 
+# Analysis
+Because some studies provide multiple values we use a three-level Meta-Analysis Model. The nested random effect gets assigned to the grouping variable "study". This means we allow the random intercept to vary across different studys. 
+
+```{r}
+# Fit the model
+models <- lapply(my_dat, function(df){
+  rma.mv(yi = es,
+                  V = var_es, # Squared standard error of the effect size
+                  data = df, # data set
+                  random = ~1|Study/es.id, #Nesting the effect size within the Studys
+                  test = "t", # similar to Knapp-Hartung method, recommended
+                  method = "REML" # Restricted maximum-likelihood, recommended
+                  )
+})
+
+## Model with level 3 variance set to zero, so we assume all effect sizes to be independent
+models_2 <- lapply(my_dat, function(df){
+  rma.mv(yi = es,
+                  V = var_es, # Squared standard error of the effect size
+                  data = df, # data set
+                  random = ~1|Study/es.id, #Nesting the effect size within the Studys
+                  test = "t", # similar to Knapp-Hartung method, recommended
+                  method = "REML", # Restricted maximum-likelihood, recommended
+                  sigma2 = c(0, NA)         
+         )
+})
+
+models_summary <- lapply(models, summary)
+models_2_summary <- lapply(models_2, summary)
+i2 <- lapply(models, var.comp)
+```
+
+
+## Model comparison
+```{r}
+for(i in 1:length(models)){
+  print(anova(models[[i]], models_2[[i]]))
+}
+```
+Nested model doesn't perfom better, so the effects within studies are largely homogneous. However, we know the effects are not independent, so we can keep the three-level model. 
+
+# Results
+## Attention
+
+```{r}
+kable(summary_tables[["20240115_MABerlin_attention.csv"]])
+```
+
+```{r}
+models_summary[["20240115_MABerlin_attention.csv"]] 
+```
+
+```{r}
+i2[["20240115_MABerlin_attention.csv"]] 
+```
+
+## Executive
+```{r}
+kable(summary_tables[["20240115_MABerlin_executive.csv"]])
+```
+
+```{r}
+models_summary[["20240115_MABerlin_executive.csv"]]
+```
+
+```{r}
+i2[["20240115_MABerlin_executive.csv"]]
+```
+
+## Memory
+```{r}
+kable(summary_tables[["20240115_MABerlin_memory.csv"]])
+```
+
+```{r}
+models_summary[["20240115_MABerlin_memory.csv"]]
+```
+
+```{r}
+i2[["20240115_MABerlin_memory.csv"]]
+```
+
+## Microdosing
+
+```{r}
+kable(summary_tables[["20240115_MABerlin_microdosing.csv"]])
+```
+
+```{r}
+models_summary[["20240115_MABerlin_microdosing.csv"]]
+```
+
+```{r}
+i2[["20240115_MABerlin_microdosing.csv"]]
+```
+
+
+## Interpretation
+
+- `Variance Components`:
+    * sigma^2.1 contains the level 3 between-cluster variance.
+    * sigma^2.2 shows the variance within clusters (level 2).
+- `Model Results`
+    * `estimate` is our estimated pooled effect. 
 But how much heterogeneity variance is captured by each level of our model?
 $I^2$ quantifies the amount of variation not attributable to sampling error. In three level models, it is split into a part attributable to true effect size differences within clusters (level 2) and between cluster variation (level 3). 
-We have 2 $I^2$ quantifying the percentage of total variation associated with either level 2 or level 3. 
+We have 2 $I^2$ values per model quantifying the percentage of total variation associated with either level 2 or level 3. 
 
-```{r}
-i2 <- var.comp(model_1)
-```
 We get the percentages of variance explained by 
 1) sampling error variance
 2) heterogeneity variance within clusters
 3) Between study heterogeneity percentage of total variation of the effect sizes. 
 
-We can compare the three level model to a two level model: 
 
-
-
-Currently we assume that within one study, effect size estimates are independent. -> maybe look at robust variance estimation 
+Currently we assume that within one study, effect size estimates are independent. Should we also look at robust variance estimation?
 
 
 
