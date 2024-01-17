@@ -1,10 +1,7 @@
 ---
 title: "MDMA/Psychadelics multi-level meta analysis"
 format: 
-  html: 
-    toc: true
-execute: 
-  echo: false
+  html
 bibliography:
   - grateful-refs.bib
   - references.bib
@@ -200,15 +197,8 @@ i2[["20240115_MABerlin_microdosing.csv"]]
     * sigma^2.2 shows the variance within clusters (level 2).
 - `Model Results`
     * `estimate` is our estimated pooled effect. 
-    
-    
-But how much heterogeneity variance is captured by each level of our model?
-$I^2$ quantifies the amount of variation not attributable to sampling error. In three level models, it is split into a part attributable to true effect size differences within clusters (level 2) and between cluster variation (level 3). 
+- `$I^2$`: 
+    * $I^2$ quantifies the amount of variation not attributable to sampling error. In three level models, it is split into a part attributable to true effect size differences within clusters (level 2) and between cluster variation (level 3). 
 We have 2 $I^2$ values per model quantifying the percentage of total variation associated with either level 2 or level 3. 
-
-We get the percentages of variance explained by 
-1) sampling error variance
-2) heterogeneity variance within clusters
-3) Between study heterogeneity percentage of total variation of the effect sizes. 
 
 # References
