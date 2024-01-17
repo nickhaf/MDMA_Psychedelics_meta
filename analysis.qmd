@@ -152,7 +152,7 @@ kable(summary_tables[["20240115_MABerlin_attention.csv"]])
 models_summary[["20240115_MABerlin_attention.csv"]] 
 ```
 
-### I^2
+### $I^2$
 ```{r}
 #| echo: false
 
@@ -174,7 +174,7 @@ kable(summary_tables[["20240115_MABerlin_executive.csv"]])
 models_summary[["20240115_MABerlin_executive.csv"]]
 ```
 
-### I^2
+### $I^2$
 ```{r}
 #| echo: false
 
@@ -196,7 +196,7 @@ kable(summary_tables[["20240115_MABerlin_memory.csv"]])
 models_summary[["20240115_MABerlin_memory.csv"]]
 ```
 
-### I^2
+### $I^2$
 ```{r}
 #| echo: false
 
@@ -218,7 +218,7 @@ kable(summary_tables[["20240115_MABerlin_microdosing.csv"]])
 models_summary[["20240115_MABerlin_microdosing.csv"]]
 ```
 
-### I^2
+### $I^2$
 ```{r}
 #| echo: false
 
