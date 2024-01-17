@@ -23,7 +23,6 @@ library(here)
 library(metafor)
 library(dmetar)
 library(psych)
-library(knitr)
 library(grateful)
 ```
 
