@@ -18,6 +18,12 @@ bibliography:
 #| message: false
 #| echo: false
 
+file_sources <- list.files(
+  path = here::here("R"),
+  pattern = "*.R"
+)
+
+sapply(here::here("R", file_sources), source)
 ```
 
 CAUTION: I added the moderator variable last minute and didn't have a chance to check everything properly. 
