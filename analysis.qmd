@@ -60,16 +60,22 @@ Test statistics and confidence intervals for the fixed effects use a t-distribut
 
 ```{r}
 # Fit the model
-models <- lapply(my_dat, function(df){
+
+fit_rma.mv <- function(dat_list, ...){
+  fitted_models <- lapply(dat_list, function(df){
   rma.mv(yi = es,
                   V = var_es, # Squared standard error of the effect size
                   data = df, # data set
                   random = ~1|Study/es.id, #Nesting the effect size within the Studys
                   test = "t", # similar to Knapp-Hartung method, recommended
                   dfs = "contain",
-                  method = "REML" # Restricted maximum-likelihood, recommended
-                  )
+                  method = "REML", # Restricted maximum-likelihood, recommended
+                  ...)
 })
+  return(fitted_models)
+}
+
+models <- fit_rma.mv(my_dat)
 
 ## Model with level 3 variance set to zero, so we assume all effect sizes to be independent
 models_2 <- lapply(my_dat, function(df){
@@ -189,6 +195,21 @@ models_summary[["20240115_MABerlin_microdosing.csv"]]
 #| echo: false
 
 i2[["20240115_MABerlin_microdosing.csv"]]
+```
+
+## Sensitivity analyses
+```{r}
+
+lapply(my_dat, function(df){
+  sensitivity_cols <- colnames(df)[grep("sensitivity", colnames(df))]
+  
+  sensitivity_models <- lapply(sensitivity_cols, function(col){
+    fit_rma.mv(df, subset = col)  
+  })
+  
+  return(sensitivity_models)
+})
+
 ```
 
 

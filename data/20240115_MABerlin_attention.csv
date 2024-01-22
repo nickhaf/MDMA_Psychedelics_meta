@@ -1,18 +1,18 @@
-Study,Test,drug,drugType,N,es,se_es,es.id
-Bosker et al. (2010),DAT,mdma,mdma,16,-1.4716,0.411632653061224,id.1
-Bosker et al. (2010),PVT,mdma,mdma,16,-1.1118,0.39234693877551,id.2
-de Sousa Fernandes Perna et al. (2014),DAT,mdma,mdma,15,-0.9228,0.384081632653061,id.3
-de Sousa Fernandes Perna et al. (2014),CTT,mdma,mdma,15,-0.9623,0.385714285714286,id.4
-Kuypers & Samyn & Ramaekers (2006),OMEDA,mdma,mdma,18,-0.0235,0.6728,id.5
-Kuypers et al. (2007),DAT,mdma,mdma,14,-2.2043,0.479132653061225,id.6
-Kuypers et al. (2007),MCT,mdma,mdma,14,0.9253,0.39765306122449,id.7
-Stough et al. (2012),RT,mdma,mdma,61,-0.0108,0.181071428571429,id.8
-Stough et al. (2012),DV,mdma,mdma,61,-0.0602,0.181122448979592,id.9
-Stough et al. (2012),CRT,mdma,mdma,61,0.1625,0.181377551020408,id.10
-Stough et al. (2012),TMT-A,mdma,mdma,61,-0.3457,0.182448979591837,id.11
-Carter et al. (2005),OT,psilocybin,psychedelic,8,-1.3661,0.5553,id.12
-Daumann et al. (2008),COVAT,dmt,psychedelic,14,-4.1216,0.668,id.13
-Duke & Keeler (1968),TMT-A,psilocybin,psychedelic,8,-1.4541,0.5622,id.14
-Hasler et al. (2004),FAIR,psilocybin,psychedelic,8,-5.8665,1.1513,id.15
-Mallaroni et al. (2023),PVT,2cb,psychedelic,22,-0.61,0.2984,id.16
-Mallaroni et al. (2023),PVT,psilocybin,psychedelic,22,-0.81,0.3086,id.17
+Study,Test,drug,drugType,N,es,se_es,es.id,sensitivity_speed,sensitivity_accuracy,sensitivity_highestWeight,sensitivity_psilocybin,sensitivity_highQuality
+Bosker et al. (2010),DAT,mdma,mdma,16,-1.4716,0.411632653061224,id.1,1,0,1,0,1
+Bosker et al. (2010),PVT,mdma,mdma,16,-1.1118,0.39234693877551,id.2,1,0,1,0,1
+de Sousa Fernandes Perna et al. (2014),DAT,mdma,mdma,15,-0.9228,0.384081632653061,id.3,1,0,1,0,1
+de Sousa Fernandes Perna et al. (2014),CTT,mdma,mdma,15,-0.9623,0.385714285714286,id.4,1,0,1,0,1
+Kuypers & Samyn & Ramaekers (2006),OMEDA,mdma,mdma,18,-0.0235,0.6728,id.5,0,1,1,0,1
+Kuypers et al. (2007),DAT,mdma,mdma,14,-2.2043,0.479132653061225,id.6,0,1,1,0,0
+Kuypers et al. (2007),MCT,mdma,mdma,14,0.9253,0.39765306122449,id.7,0,1,1,0,0
+Stough et al. (2012),RT,mdma,mdma,61,-0.0108,0.181071428571429,id.8,0,0,0,0,1
+Stough et al. (2012),DV,mdma,mdma,61,-0.0602,0.181122448979592,id.9,0,0,0,0,1
+Stough et al. (2012),CRT,mdma,mdma,61,0.1625,0.181377551020408,id.10,0,0,0,0,1
+Stough et al. (2012),TMT-A,mdma,mdma,61,-0.3457,0.182448979591837,id.11,0,0,0,0,1
+Carter et al. (2005),OT,psilocybin,psychedelic,8,-1.3661,0.5553,id.12,0,1,1,1,1
+Daumann et al. (2008),COVAT,dmt,psychedelic,14,-4.1216,0.668,id.13,1,0,1,0,0
+Duke & Keeler (1968),TMT-A,psilocybin,psychedelic,8,-1.4541,0.5622,id.14,1,0,1,1,0
+Hasler et al. (2004),FAIR,psilocybin,psychedelic,8,-5.8665,1.1513,id.15,0,1,1,1,1
+Mallaroni et al. (2023),PVT,2cb,psychedelic,22,-0.61,0.2984,id.16,1,0,0,0,1
+Mallaroni et al. (2023),PVT,psilocybin,psychedelic,22,-0.81,0.3086,id.17,1,0,0,1,1
