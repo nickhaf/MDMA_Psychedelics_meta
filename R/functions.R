@@ -5,16 +5,22 @@ fit_rma.mv <- function(df, ...){
          random = ~1|Study/es.id, #Nesting the effect size within the Studys
          test = "t", # similar to Knapp-Hartung method, recommended
          dfs = "contain",
-         method = "REML" # Restricted maximum-likelihood, recommended
-  )
+         method = "REML", # Restricted maximum-likelihood, recommended
+         ...
+         )
 }
 
 
-fit_sensitivity <- function(df){
+fit_sensitivity <- function(df, ...){
   sensitivity_cols <- colnames(df)[grep("sensitivity", colnames(df))]
 
-  fitted_models <- lapply(sensitivity_cols, function(col){
-    fit_rma.mv(df, subset = as.logical(df[, col]))
+  fitted_models <- lapply(sensitivity_cols, function(subset_col){
+
+    subset_model <- fit_rma.mv(df,
+               subset = as.logical(df[, subset_col]),
+               ...
+               )
+    return(subset_model)
   })
 
   names(fitted_models) <- sensitivity_cols
@@ -22,3 +28,4 @@ fit_sensitivity <- function(df){
   return(fitted_models)
 
 }
+

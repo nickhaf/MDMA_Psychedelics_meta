@@ -17,12 +17,3 @@ my_dat <- lapply(my_dat, function(x){
 })
 names(my_dat) <- file_sources
 
-
-
-# Overview ----------------------------------------------------------------
-summary_tables <- lapply(my_dat[1:3], function(x){
-  describeBy(x[, c("N", "es", "se_es")], skew = FALSE, group = x$drugType)
-})
-
-summary_tables[[4]] <- describe(my_dat[[4]][, c("N", "es", "se_es")], skew = FALSE)
-names(summary_tables) <- file_sources
