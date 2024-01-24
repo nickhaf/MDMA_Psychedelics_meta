@@ -11,6 +11,7 @@ fit_rma.mv <- function(df, ...){
 }
 
 fit_sensitivity <- function(df, ...){
+
   sensitivity_cols <- colnames(df)[grep("sensitivity", colnames(df))]
 
   fitted_models <- lapply(sensitivity_cols, function(subset_col){

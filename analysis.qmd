@@ -53,7 +53,27 @@ Test statistics and confidence intervals for the fixed effects use a t-distribut
 ```{r}
 ## Model with level 3 variance set to zero, so we assume all effect sizes to be independent.
 ## DrugType as moderator variable.
-models <- lapply(my_dat[1:3], fit_rma.mv, mods = ~ drugType)
+models <- lapply(my_dat[1:3], fit_rma.mv, mods = ~ drugType-1) # -1leave out the intercept. How to interpret? See https://bookdown.org/pingapang9/linear_models_bookdown/chap-categorical.html#the-logic-of-the-f-statistic
+models[[1]]
+
+models_test <- lapply(my_dat[1:3], fit_rma.mv, mods = ~ drugType) 
+models_test[[1]]
+
+## This essentially the same, put with different parametrization.
+## However, now we don't have the difference between both. But possible by:
+anova(models[[1]], X = rbind(c(1, -1), c(1, 1)))
+## same as second term in : 
+models_test[[1]]
+
+
+## Try out posthoc test
+# https://www.metafor-project.org/doku.php/tips:models_with_or_without_intercept
+# https://www.metafor-project.org/doku.php/tips:multiple_factors_interactions
+# https://www.metafor-project.org/doku.php/tips:testing_factors_lincoms
+# https://stats.stackexchange.com/questions/324885/easy-post-hoc-tests-when-meta-analyzing-with-the-metafor-package-in-r
+
+library(multcomp)
+glht(models[[1]], linfct=rbind())
 
 
 ## Without moderator for the last data set:
@@ -213,11 +233,6 @@ sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_highestWei
 #### Psilocybin
 ```{r}
 sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_psilocybin"]
-```
-
-#### LSD
-```{r}
-sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_lsd"]
 ```
 
 #### High Quality
