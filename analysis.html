@@ -374,7 +374,7 @@ display: none;
 <h1 class="title toc-ignore">MDMA/Psychadelics multi-level meta
 analysis</h1>
 <h4 class="author">Nicklas Hafiz</h4>
-<h4 class="date">23 Januar, 2024</h4>
+<h4 class="date">24 Januar, 2024</h4>
 
 </div>
 
@@ -458,21 +458,25 @@ independent, so we can keep the three-level model.</p>
 ## Multivariate Meta-Analysis Model (k = 17; method: REML)
 ## 
 ##   logLik  Deviance       AIC       BIC      AICc   
-## -27.6671   55.3342   61.3342   63.6520   63.3342   
+## -24.1839   48.3678   56.3678   59.2000   60.3678   
 ## 
 ## Variance Components:
 ## 
 ##             estim    sqrt  nlvls  fixed       factor 
-## sigma^2.1  1.6296  1.2766     10     no        Study 
-## sigma^2.2  0.4841  0.6958     17     no  Study/es.id 
+## sigma^2.1  1.0464  1.0230     10     no        Study 
+## sigma^2.2  0.4710  0.6863     17     no  Study/es.id 
 ## 
-## Test for Heterogeneity:
-## Q(df = 16) = 119.8678, p-val &lt; .0001
+## Test for Residual Heterogeneity:
+## QE(df = 15) = 95.2297, p-val &lt; .0001
+## 
+## Test of Moderators (coefficient 2):
+## F(df1 = 1, df2 = 8) = 4.5007, p-val = 0.0667
 ## 
 ## Model Results:
 ## 
-## estimate      se     tval  df    pval    ci.lb    ci.ub    
-##  -1.3986  0.4704  -2.9734   9  0.0156  -2.4627  -0.3346  * 
+##                      estimate      se     tval  df    pval    ci.lb   ci.ub    
+## intrcpt               -0.5932  0.5302  -1.1190   8  0.2956  -1.8158  0.6293    
+## drugTypepsychedelic   -1.7110  0.8065  -2.1215   8  0.0667  -3.5709  0.1488  . 
 ## 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
@@ -480,10 +484,10 @@ independent, so we can keep the three-level model.</p>
 <div id="i2" class="section level4">
 <h4><span class="math inline">\(I^2\)</span></h4>
 <pre><code>##         % of total variance    I2
-## Level 1            4.275128   ---
-## Level 2           21.924154 21.92
-## Level 3           73.800718  73.8
-## Total I2: 95.72%</code></pre>
+## Level 1            5.856657   ---
+## Level 2           29.220284 29.22
+## Level 3           64.923059 64.92
+## Total I2: 94.14%</code></pre>
 </div>
 </div>
 <div id="executive" class="section level3">
@@ -510,21 +514,25 @@ independent, so we can keep the three-level model.</p>
 ## Multivariate Meta-Analysis Model (k = 19; method: REML)
 ## 
 ##   logLik  Deviance       AIC       BIC      AICc   
-## -21.4815   42.9630   48.9630   51.6341   50.6773   
+## -17.4770   34.9541   42.9541   46.2869   46.2874   
 ## 
 ## Variance Components:
 ## 
 ##             estim    sqrt  nlvls  fixed       factor 
-## sigma^2.1  0.6445  0.8028     12     no        Study 
-## sigma^2.2  0.0754  0.2745     19     no  Study/es.id 
+## sigma^2.1  0.3126  0.5591     12     no        Study 
+## sigma^2.2  0.0768  0.2772     19     no  Study/es.id 
 ## 
-## Test for Heterogeneity:
-## Q(df = 18) = 76.3219, p-val &lt; .0001
+## Test for Residual Heterogeneity:
+## QE(df = 17) = 52.5513, p-val &lt; .0001
+## 
+## Test of Moderators (coefficient 2):
+## F(df1 = 1, df2 = 10) = 7.6039, p-val = 0.0202
 ## 
 ## Model Results:
 ## 
-## estimate      se     tval  df    pval    ci.lb   ci.ub    
-##  -0.5716  0.2612  -2.1885  11  0.0511  -1.1465  0.0033  . 
+##                      estimate      se     tval  df    pval    ci.lb    ci.ub    
+## intrcpt               -0.0957  0.2585  -0.3702  10  0.7190  -0.6718   0.4804    
+## drugTypepsychedelic   -1.1247  0.4079  -2.7575  10  0.0202  -2.0335  -0.2159  * 
 ## 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
@@ -532,10 +540,10 @@ independent, so we can keep the three-level model.</p>
 <div id="i2-1" class="section level4">
 <h4><span class="math inline">\(I^2\)</span></h4>
 <pre><code>##         % of total variance    I2
-## Level 1           14.238957   ---
-## Level 2            8.978287  8.98
-## Level 3           76.782756 76.78
-## Total I2: 85.76%</code></pre>
+## Level 1            23.48408   ---
+## Level 2            15.09965  15.1
+## Level 3            61.41627 61.42
+## Total I2: 76.52%</code></pre>
 </div>
 </div>
 <div id="memory" class="section level3">
@@ -562,21 +570,28 @@ independent, so we can keep the three-level model.</p>
 ## Multivariate Meta-Analysis Model (k = 28; method: REML)
 ## 
 ##   logLik  Deviance       AIC       BIC      AICc   
-## -41.3954   82.7908   88.7908   92.6784   89.8343   
+## -40.2633   80.5266   88.5266   93.5589   90.4313   
 ## 
 ## Variance Components:
 ## 
 ##             estim    sqrt  nlvls  fixed       factor 
-## sigma^2.1  0.0000  0.0001     16     no        Study 
-## sigma^2.2  1.0658  1.0324     28     no  Study/es.id 
+## sigma^2.1  0.0171  0.1308     16     no        Study 
+## sigma^2.2  1.0900  1.0440     28     no  Study/es.id 
 ## 
-## Test for Heterogeneity:
-## Q(df = 27) = 231.6211, p-val &lt; .0001
+## Test for Residual Heterogeneity:
+## QE(df = 26) = 231.0240, p-val &lt; .0001
+## 
+## Test of Moderators (coefficient 2):
+## F(df1 = 1, df2 = 14) = 0.2312, p-val = 0.6381
 ## 
 ## Model Results:
 ## 
-## estimate      se     tval  df    pval    ci.lb    ci.ub      
-##  -0.9979  0.2087  -4.7809  15  0.0002  -1.4427  -0.5530  *** 
+##                      estimate      se     tval  df    pval    ci.lb    ci.ub 
+## intrcpt               -1.0568  0.2432  -4.3459  14  0.0007  -1.5783  -0.5352 
+## drugTypepsychedelic    0.2479  0.5156   0.4808  14  0.6381  -0.8579   1.3537 
+##                          
+## intrcpt              *** 
+## drugTypepsychedelic      
 ## 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
@@ -584,10 +599,10 @@ independent, so we can keep the three-level model.</p>
 <div id="i2-2" class="section level4">
 <h4><span class="math inline">\(I^2\)</span></h4>
 <pre><code>##         % of total variance    I2
-## Level 1        1.011912e+01   ---
-## Level 2        8.988088e+01 89.88
-## Level 3        9.134206e-07     0
-## Total I2: 89.88%</code></pre>
+## Level 1            9.778865   ---
+## Level 2           88.827826 88.83
+## Level 3            1.393309  1.39
+## Total I2: 90.22%</code></pre>
 </div>
 </div>
 <div id="microdosing" class="section level3">
@@ -637,8 +652,39 @@ independent, so we can keep the three-level model.</p>
 </div>
 <div id="sensitivity-analyses" class="section level1">
 <h1>Sensitivity analyses</h1>
-<pre class="r"><code>sensitivity_analyses &lt;- lapply(my_dat[1:3], fit_sensitivity, mods = ~ drugType)
-sensitivity_summary &lt;- lapply(sensitivity_analyses, function(domain){
+<pre class="r"><code># Nonconvergence for this analysis, see: http://www.metafor-project.org/doku.php/tips:convergence_problems_rma_mv
+my_dat[[3]] &lt;- my_dat[[3]] %&gt;% select(-sensitivity_lsd)
+
+sensitivity_analyses &lt;- lapply(my_dat, function(df){
+ 
+  sensitivity_cols &lt;- colnames(df)[grep(&quot;sensitivity&quot;, colnames(df))]
+
+  fitted_models &lt;- lapply(sensitivity_cols, function(subset_col){
+
+    subset_model &lt;- rma.mv(yi = es,
+         V = var_es, # Squared standard error of the effect size
+         data = df, # data set
+         random = ~1|Study/es.id, #Nesting the effect size within the Studys
+         test = &quot;t&quot;, # similar to Knapp-Hartung method, recommended
+         dfs = &quot;contain&quot;,
+         method = &quot;REML&quot;, # Restricted maximum-likelihood, recommended
+         subset = as.logical(df[, subset_col]),
+         verbose = FALSE)
+    
+    
+    return(subset_model)
+ 
+   
+  })
+  
+  names(fitted_models) &lt;- sensitivity_cols
+  
+  return(fitted_models)
+  })
+
+
+
+  sensitivity_summary &lt;- lapply(sensitivity_analyses, function(domain){
   lapply(domain, summary)
 })</code></pre>
 <div id="results-1" class="section level2">
@@ -650,24 +696,24 @@ sensitivity_summary &lt;- lapply(sensitivity_analyses, function(domain){
 <pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_attention.csv&quot;]][&quot;sensitivity_speed&quot;]</code></pre>
 <pre><code>## $sensitivity_speed
 ## 
-## Multivariate Meta-Analysis Model (k = 17; method: REML)
+## Multivariate Meta-Analysis Model (k = 8; method: REML)
 ## 
 ##   logLik  Deviance       AIC       BIC      AICc   
-## -27.6671   55.3342   61.3342   63.6520   63.3342   
+##  -7.5985   15.1970   21.1970   21.0347   29.1970   
 ## 
 ## Variance Components:
 ## 
 ##             estim    sqrt  nlvls  fixed       factor 
-## sigma^2.1  1.6296  1.2766     10     no        Study 
-## sigma^2.2  0.4841  0.6958     17     no  Study/es.id 
+## sigma^2.1  1.3763  1.1732      5     no        Study 
+## sigma^2.2  0.0000  0.0000      8     no  Study/es.id 
 ## 
 ## Test for Heterogeneity:
-## Q(df = 16) = 119.8678, p-val &lt; .0001
+## Q(df = 7) = 25.5882, p-val = 0.0006
 ## 
 ## Model Results:
 ## 
 ## estimate      se     tval  df    pval    ci.lb    ci.ub    
-##  -1.3986  0.4704  -2.9734   9  0.0156  -2.4627  -0.3346  * 
+##  -1.5995  0.5574  -2.8695   4  0.0455  -3.1471  -0.0519  * 
 ## 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
@@ -677,24 +723,24 @@ sensitivity_summary &lt;- lapply(sensitivity_analyses, function(domain){
 <pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_attention.csv&quot;]][&quot;sensitivity_accuracy&quot;]</code></pre>
 <pre><code>## $sensitivity_accuracy
 ## 
-## Multivariate Meta-Analysis Model (k = 17; method: REML)
+## Multivariate Meta-Analysis Model (k = 5; method: REML)
 ## 
 ##   logLik  Deviance       AIC       BIC      AICc   
-## -27.6671   55.3342   61.3342   63.6520   63.3342   
+##  -9.3960   18.7919   24.7919   22.9508   48.7919   
 ## 
 ## Variance Components:
 ## 
 ##             estim    sqrt  nlvls  fixed       factor 
-## sigma^2.1  1.6296  1.2766     10     no        Study 
-## sigma^2.2  0.4841  0.6958     17     no  Study/es.id 
+## sigma^2.1  0.0000  0.0003      4     no        Study 
+## sigma^2.2  5.5228  2.3501      5     no  Study/es.id 
 ## 
 ## Test for Heterogeneity:
-## Q(df = 16) = 119.8678, p-val &lt; .0001
+## Q(df = 4) = 49.1091, p-val &lt; .0001
 ## 
 ## Model Results:
 ## 
-## estimate      se     tval  df    pval    ci.lb    ci.ub    
-##  -1.3986  0.4704  -2.9734   9  0.0156  -2.4627  -0.3346  * 
+## estimate      se     tval  df    pval    ci.lb   ci.ub    
+##  -1.5756  1.0945  -1.4395   3  0.2456  -5.0588  1.9077    
 ## 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
@@ -704,24 +750,24 @@ sensitivity_summary &lt;- lapply(sensitivity_analyses, function(domain){
 <pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_attention.csv&quot;]][&quot;sensitivity_highestWeight&quot;]</code></pre>
 <pre><code>## $sensitivity_highestWeight
 ## 
-## Multivariate Meta-Analysis Model (k = 17; method: REML)
+## Multivariate Meta-Analysis Model (k = 11; method: REML)
 ## 
 ##   logLik  Deviance       AIC       BIC      AICc   
-## -27.6671   55.3342   61.3342   63.6520   63.3342   
+## -19.7606   39.5212   45.5212   46.4290   49.5212   
 ## 
 ## Variance Components:
 ## 
 ##             estim    sqrt  nlvls  fixed       factor 
-## sigma^2.1  1.6296  1.2766     10     no        Study 
-## sigma^2.2  0.4841  0.6958     17     no  Study/es.id 
+## sigma^2.1  0.0000  0.0002      8     no        Study 
+## sigma^2.2  2.3272  1.5255     11     no  Study/es.id 
 ## 
 ## Test for Heterogeneity:
-## Q(df = 16) = 119.8678, p-val &lt; .0001
+## Q(df = 10) = 73.1027, p-val &lt; .0001
 ## 
 ## Model Results:
 ## 
 ## estimate      se     tval  df    pval    ci.lb    ci.ub    
-##  -1.3986  0.4704  -2.9734   9  0.0156  -2.4627  -0.3346  * 
+##  -1.5536  0.4905  -3.1675   7  0.0158  -2.7134  -0.3938  * 
 ## 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
@@ -731,51 +777,400 @@ sensitivity_summary &lt;- lapply(sensitivity_analyses, function(domain){
 <pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_attention.csv&quot;]][&quot;sensitivity_psilocybin&quot;]</code></pre>
 <pre><code>## $sensitivity_psilocybin
 ## 
-## Multivariate Meta-Analysis Model (k = 17; method: REML)
+## Multivariate Meta-Analysis Model (k = 4; method: REML)
 ## 
 ##   logLik  Deviance       AIC       BIC      AICc   
-## -27.6671   55.3342   61.3342   63.6520   63.3342   
+##  -6.6538   13.3076   19.3076   16.6035   43.3076   
 ## 
 ## Variance Components:
 ## 
 ##             estim    sqrt  nlvls  fixed       factor 
-## sigma^2.1  1.6296  1.2766     10     no        Study 
-## sigma^2.2  0.4841  0.6958     17     no  Study/es.id 
+## sigma^2.1  1.9374  1.3919      4     no        Study 
+## sigma^2.2  1.9374  1.3919      4     no  Study/es.id 
 ## 
 ## Test for Heterogeneity:
-## Q(df = 16) = 119.8678, p-val &lt; .0001
+## Q(df = 3) = 18.2863, p-val = 0.0004
 ## 
 ## Model Results:
 ## 
-## estimate      se     tval  df    pval    ci.lb    ci.ub    
-##  -1.3986  0.4704  -2.9734   9  0.0156  -2.4627  -0.3346  * 
+## estimate      se     tval  df    pval    ci.lb   ci.ub    
+##  -2.1757  1.0415  -2.0890   3  0.1279  -5.4903  1.1389    
 ## 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="lsd" class="section level4">
+<h4>LSD</h4>
+<pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_attention.csv&quot;]][&quot;sensitivity_lsd&quot;]</code></pre>
+<pre><code>## $&lt;NA&gt;
+## NULL</code></pre>
 </div>
 <div id="high-quality" class="section level4">
 <h4>High Quality</h4>
 <pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_attention.csv&quot;]][&quot;sensitivity_highQuality&quot;]</code></pre>
 <pre><code>## $sensitivity_highQuality
 ## 
-## Multivariate Meta-Analysis Model (k = 17; method: REML)
+## Multivariate Meta-Analysis Model (k = 13; method: REML)
 ## 
 ##   logLik  Deviance       AIC       BIC      AICc   
-## -27.6671   55.3342   61.3342   63.6520   63.3342   
+## -13.0459   26.0919   32.0919   33.5466   35.0919   
 ## 
 ## Variance Components:
 ## 
 ##             estim    sqrt  nlvls  fixed       factor 
-## sigma^2.1  1.6296  1.2766     10     no        Study 
-## sigma^2.2  0.4841  0.6958     17     no  Study/es.id 
+## sigma^2.1  1.9518  1.3971      7     no        Study 
+## sigma^2.2  0.0033  0.0574     13     no  Study/es.id 
 ## 
 ## Test for Heterogeneity:
-## Q(df = 16) = 119.8678, p-val &lt; .0001
+## Q(df = 12) = 59.5120, p-val &lt; .0001
 ## 
 ## Model Results:
 ## 
-## estimate      se     tval  df    pval    ci.lb    ci.ub    
-##  -1.3986  0.4704  -2.9734   9  0.0156  -2.4627  -0.3346  * 
+## estimate      se     tval  df    pval    ci.lb   ci.ub    
+##  -1.2299  0.5628  -2.1853   6  0.0715  -2.6071  0.1473  . 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+<div id="executive-1" class="section level3">
+<h3>Executive</h3>
+<div id="speed-1" class="section level4">
+<h4>Speed</h4>
+<pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_executive.csv&quot;]][&quot;sensitivity_speed&quot;]</code></pre>
+<pre><code>## $sensitivity_speed
+## 
+## Multivariate Meta-Analysis Model (k = 9; method: REML)
+## 
+##   logLik  Deviance       AIC       BIC      AICc   
+##  -8.8583   17.7166   23.7166   23.9549   29.7166   
+## 
+## Variance Components:
+## 
+##             estim    sqrt  nlvls  fixed       factor 
+## sigma^2.1  1.3777  1.1738      5     no        Study 
+## sigma^2.2  0.0000  0.0000      9     no  Study/es.id 
+## 
+## Test for Heterogeneity:
+## Q(df = 8) = 43.8813, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate      se     tval  df    pval    ci.lb   ci.ub    
+##  -1.2770  0.5500  -2.3217   4  0.0810  -2.8040  0.2501  . 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="accuracy-1" class="section level4">
+<h4>Accuracy</h4>
+<pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_executive.csv&quot;]][&quot;sensitivity_accuracy&quot;]</code></pre>
+<pre><code>## $sensitivity_accuracy
+## 
+## Multivariate Meta-Analysis Model (k = 16; method: REML)
+## 
+##   logLik  Deviance       AIC       BIC      AICc   
+## -12.6975   25.3949   31.3949   33.5191   33.5768   
+## 
+## Variance Components:
+## 
+##             estim    sqrt  nlvls  fixed       factor 
+## sigma^2.1  0.2085  0.4566      9     no        Study 
+## sigma^2.2  0.0488  0.2208     16     no  Study/es.id 
+## 
+## Test for Heterogeneity:
+## Q(df = 15) = 44.5123, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate      se     tval  df    pval    ci.lb   ci.ub    
+##  -0.3233  0.1914  -1.6888   8  0.1297  -0.7648  0.1182    
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="highest-weight-1" class="section level4">
+<h4>Highest Weight</h4>
+<pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_executive.csv&quot;]][&quot;sensitivity_highestWeight&quot;]</code></pre>
+<pre><code>## $sensitivity_highestWeight
+## 
+## Multivariate Meta-Analysis Model (k = 16; method: REML)
+## 
+##   logLik  Deviance       AIC       BIC      AICc   
+## -19.3213   38.6426   44.6426   46.7668   46.8245   
+## 
+## Variance Components:
+## 
+##             estim    sqrt  nlvls  fixed       factor 
+## sigma^2.1  0.8556  0.9250     10     no        Study 
+## sigma^2.2  0.1186  0.3444     16     no  Study/es.id 
+## 
+## Test for Heterogeneity:
+## Q(df = 15) = 75.2179, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate      se     tval  df    pval    ci.lb   ci.ub    
+##  -0.6303  0.3292  -1.9146   9  0.0878  -1.3750  0.1144  . 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="psilocybin-1" class="section level4">
+<h4>Psilocybin</h4>
+<pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_executive.csv&quot;]][&quot;sensitivity_psilocybin&quot;]</code></pre>
+<pre><code>## $sensitivity_psilocybin
+## 
+## Multivariate Meta-Analysis Model (k = 4; method: REML)
+## 
+##   logLik  Deviance       AIC       BIC      AICc   
+##  -3.9415    7.8831   13.8831   11.1789   37.8831   
+## 
+## Variance Components:
+## 
+##             estim    sqrt  nlvls  fixed       factor 
+## sigma^2.1  1.2416  1.1143      3     no        Study 
+## sigma^2.2  0.0000  0.0000      4     no  Study/es.id 
+## 
+## Test for Heterogeneity:
+## Q(df = 3) = 11.0263, p-val = 0.0116
+## 
+## Model Results:
+## 
+## estimate      se     tval  df    pval    ci.lb   ci.ub    
+##  -2.1064  0.7010  -3.0049   2  0.0952  -5.1225  0.9097  . 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="lsd-1" class="section level4">
+<h4>LSD</h4>
+<pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_executive.csv&quot;]][&quot;sensitivity_lsd&quot;]</code></pre>
+<pre><code>## $sensitivity_lsd
+## 
+## Multivariate Meta-Analysis Model (k = 3; method: REML)
+## 
+##   logLik  Deviance       AIC       BIC      AICc   
+##   0.4336   -0.8671    5.1329    1.2123   29.1329   
+## 
+## Variance Components:
+## 
+##             estim    sqrt  nlvls  fixed       factor 
+## sigma^2.1  0.0000  0.0000      2     no        Study 
+## sigma^2.2  0.0000  0.0000      3     no  Study/es.id 
+## 
+## Test for Heterogeneity:
+## Q(df = 2) = 0.2269, p-val = 0.8927
+## 
+## Model Results:
+## 
+## estimate      se     tval  df    pval    ci.lb   ci.ub    
+##  -0.4278  0.1735  -2.4653   1  0.2453  -2.6325  1.7770    
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="high-quality-1" class="section level4">
+<h4>High Quality</h4>
+<pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_executive.csv&quot;]][&quot;sensitivity_highQuality&quot;]</code></pre>
+<pre><code>## $sensitivity_highQuality
+## 
+## Multivariate Meta-Analysis Model (k = 15; method: REML)
+## 
+##   logLik  Deviance       AIC       BIC      AICc   
+## -17.2263   34.4525   40.4525   42.3697   42.8525   
+## 
+## Variance Components:
+## 
+##             estim    sqrt  nlvls  fixed       factor 
+## sigma^2.1  1.1377  1.0666      8     no        Study 
+## sigma^2.2  0.0722  0.2687     15     no  Study/es.id 
+## 
+## Test for Heterogeneity:
+## Q(df = 14) = 72.8776, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate      se     tval  df    pval    ci.lb   ci.ub    
+##  -0.6428  0.4005  -1.6049   7  0.1525  -1.5900  0.3043    
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+<div id="memory-1" class="section level3">
+<h3>Memory</h3>
+<div id="speed-2" class="section level4">
+<h4>Speed</h4>
+<pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_executive.csv&quot;]][&quot;sensitivity_speed&quot;]</code></pre>
+<pre><code>## $sensitivity_speed
+## 
+## Multivariate Meta-Analysis Model (k = 9; method: REML)
+## 
+##   logLik  Deviance       AIC       BIC      AICc   
+##  -8.8583   17.7166   23.7166   23.9549   29.7166   
+## 
+## Variance Components:
+## 
+##             estim    sqrt  nlvls  fixed       factor 
+## sigma^2.1  1.3777  1.1738      5     no        Study 
+## sigma^2.2  0.0000  0.0000      9     no  Study/es.id 
+## 
+## Test for Heterogeneity:
+## Q(df = 8) = 43.8813, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate      se     tval  df    pval    ci.lb   ci.ub    
+##  -1.2770  0.5500  -2.3217   4  0.0810  -2.8040  0.2501  . 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="accuracy-2" class="section level4">
+<h4>Accuracy</h4>
+<pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_executive.csv&quot;]][&quot;sensitivity_accuracy&quot;]</code></pre>
+<pre><code>## $sensitivity_accuracy
+## 
+## Multivariate Meta-Analysis Model (k = 16; method: REML)
+## 
+##   logLik  Deviance       AIC       BIC      AICc   
+## -12.6975   25.3949   31.3949   33.5191   33.5768   
+## 
+## Variance Components:
+## 
+##             estim    sqrt  nlvls  fixed       factor 
+## sigma^2.1  0.2085  0.4566      9     no        Study 
+## sigma^2.2  0.0488  0.2208     16     no  Study/es.id 
+## 
+## Test for Heterogeneity:
+## Q(df = 15) = 44.5123, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate      se     tval  df    pval    ci.lb   ci.ub    
+##  -0.3233  0.1914  -1.6888   8  0.1297  -0.7648  0.1182    
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="highest-weight-2" class="section level4">
+<h4>Highest Weight</h4>
+<pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_executive.csv&quot;]][&quot;sensitivity_highestWeight&quot;]</code></pre>
+<pre><code>## $sensitivity_highestWeight
+## 
+## Multivariate Meta-Analysis Model (k = 16; method: REML)
+## 
+##   logLik  Deviance       AIC       BIC      AICc   
+## -19.3213   38.6426   44.6426   46.7668   46.8245   
+## 
+## Variance Components:
+## 
+##             estim    sqrt  nlvls  fixed       factor 
+## sigma^2.1  0.8556  0.9250     10     no        Study 
+## sigma^2.2  0.1186  0.3444     16     no  Study/es.id 
+## 
+## Test for Heterogeneity:
+## Q(df = 15) = 75.2179, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate      se     tval  df    pval    ci.lb   ci.ub    
+##  -0.6303  0.3292  -1.9146   9  0.0878  -1.3750  0.1144  . 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="psilocybin-2" class="section level4">
+<h4>Psilocybin</h4>
+<pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_executive.csv&quot;]][&quot;sensitivity_psilocybin&quot;]</code></pre>
+<pre><code>## $sensitivity_psilocybin
+## 
+## Multivariate Meta-Analysis Model (k = 4; method: REML)
+## 
+##   logLik  Deviance       AIC       BIC      AICc   
+##  -3.9415    7.8831   13.8831   11.1789   37.8831   
+## 
+## Variance Components:
+## 
+##             estim    sqrt  nlvls  fixed       factor 
+## sigma^2.1  1.2416  1.1143      3     no        Study 
+## sigma^2.2  0.0000  0.0000      4     no  Study/es.id 
+## 
+## Test for Heterogeneity:
+## Q(df = 3) = 11.0263, p-val = 0.0116
+## 
+## Model Results:
+## 
+## estimate      se     tval  df    pval    ci.lb   ci.ub    
+##  -2.1064  0.7010  -3.0049   2  0.0952  -5.1225  0.9097  . 
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="lsd-2" class="section level4">
+<h4>LSD</h4>
+<p>Did not converge.</p>
+<pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_executive.csv&quot;]][&quot;sensitivity_lsd&quot;]</code></pre>
+</div>
+<div id="high-quality-2" class="section level4">
+<h4>High Quality</h4>
+<pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_executive.csv&quot;]][&quot;sensitivity_highQuality&quot;]</code></pre>
+<pre><code>## $sensitivity_highQuality
+## 
+## Multivariate Meta-Analysis Model (k = 15; method: REML)
+## 
+##   logLik  Deviance       AIC       BIC      AICc   
+## -17.2263   34.4525   40.4525   42.3697   42.8525   
+## 
+## Variance Components:
+## 
+##             estim    sqrt  nlvls  fixed       factor 
+## sigma^2.1  1.1377  1.0666      8     no        Study 
+## sigma^2.2  0.0722  0.2687     15     no  Study/es.id 
+## 
+## Test for Heterogeneity:
+## Q(df = 14) = 72.8776, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate      se     tval  df    pval    ci.lb   ci.ub    
+##  -0.6428  0.4005  -1.6049   7  0.1525  -1.5900  0.3043    
+## 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+<div id="microdosing-1" class="section level3">
+<h3>Microdosing</h3>
+<div id="highest-weight-3" class="section level4">
+<h4>Highest Weight</h4>
+<pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_microdosing&quot;]][&quot;sensitivity_highestWeight&quot;]</code></pre>
+<pre><code>## NULL</code></pre>
+</div>
+<div id="psilocybin-3" class="section level4">
+<h4>Psilocybin</h4>
+<pre class="r"><code>sensitivity_summary[[&quot;20240115_MABerlin_microdosing.csv&quot;]][&quot;sensitivity_psilocybin&quot;]</code></pre>
+<pre><code>## $sensitivity_psilocybin
+## 
+## Multivariate Meta-Analysis Model (k = 5; method: REML)
+## 
+##   logLik  Deviance       AIC       BIC      AICc   
+##  -6.6481   13.2961   19.2961   17.4550   43.2961   
+## 
+## Variance Components:
+## 
+##             estim    sqrt  nlvls  fixed       factor 
+## sigma^2.1  1.6113  1.2694      2     no        Study 
+## sigma^2.2  1.0415  1.0205      5     no  Study/es.id 
+## 
+## Test for Heterogeneity:
+## Q(df = 4) = 101.8526, p-val &lt; .0001
+## 
+## Model Results:
+## 
+## estimate      se    tval  df    pval     ci.lb    ci.ub    
+##   0.4420  1.0178  0.4343   1  0.7392  -12.4908  13.3748    
 ## 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>

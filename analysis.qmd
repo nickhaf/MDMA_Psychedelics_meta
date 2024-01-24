@@ -177,11 +177,47 @@ i2[["20240115_MABerlin_microdosing.csv"]]
 
 # Sensitivity analyses
 ```{r}
-sensitivity_analyses <- lapply(my_dat[1:3], fit_sensitivity, mods = ~ drugType)
-sensitivity_summary <- lapply(sensitivity_analyses, function(domain){
+# Nonconvergence for this analysis, see: http://www.metafor-project.org/doku.php/tips:convergence_problems_rma_mv
+my_dat[[3]] <- my_dat[[3]] %>% select(-sensitivity_lsd)
+
+sensitivity_analyses <- lapply(my_dat, function(df){
+ 
+  sensitivity_cols <- colnames(df)[grep("sensitivity", colnames(df))]
+
+  fitted_models <- lapply(sensitivity_cols, function(subset_col){
+
+    subset_model <- rma.mv(yi = es,
+         V = var_es, # Squared standard error of the effect size
+         data = df, # data set
+         random = ~1|Study/es.id, #Nesting the effect size within the Studys
+         test = "t", # similar to Knapp-Hartung method, recommended
+         dfs = "contain",
+         method = "REML", # Restricted maximum-likelihood, recommended
+         subset = as.logical(df[, subset_col]),
+         verbose = FALSE)
+    
+    
+    return(subset_model)
+ 
+   
+  })
+  
+  names(fitted_models) <- sensitivity_cols
+  
+  return(fitted_models)
+  })
+
+
+
+  sensitivity_summary <- lapply(sensitivity_analyses, function(domain){
   lapply(domain, summary)
 })
+  
+  
+   
 ```
+
+
 
 
 ## Results
@@ -208,9 +244,90 @@ sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_highestWei
 sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_psilocybin"]
 ```
 
+#### LSD
+```{r}
+sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_lsd"]
+```
+
 #### High Quality
 ```{r}
 sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_highQuality"]
+```
+
+### Executive
+
+#### Speed
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_speed"]
+```
+
+#### Accuracy
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_accuracy"]
+```
+
+#### Highest Weight
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_highestWeight"]
+```
+
+#### Psilocybin
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_psilocybin"]
+```
+
+#### LSD
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_lsd"]
+```
+
+#### High Quality
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_highQuality"]
+```
+
+### Memory
+
+#### Speed
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_speed"]
+```
+
+#### Accuracy
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_accuracy"]
+```
+
+#### Highest Weight
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_highestWeight"]
+```
+
+#### Psilocybin
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_psilocybin"]
+```
+
+#### LSD
+Did not converge.
+```{r, eval = FALSE}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_lsd"]
+```
+
+#### High Quality
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_highQuality"]
+```
+
+### Microdosing
+#### Highest Weight
+```{r}
+sensitivity_summary[["20240115_MABerlin_microdosing"]]["sensitivity_highestWeight"]
+```
+
+#### Psilocybin
+```{r}
+sensitivity_summary[["20240115_MABerlin_microdosing.csv"]]["sensitivity_psilocybin"]
 ```
 
 
