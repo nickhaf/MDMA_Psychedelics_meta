@@ -22,8 +22,8 @@ file_sources <- list.files(
   path = here::here("R"),
   pattern = "*.R"
 )
-
-sapply(here::here("R", file_sources), source)
+source(here::here("R", file_sources[1]))
+source(here::here("R", file_sources[2]))
 ```
 
 CAUTION: I added the moderator variable last minute and didn't have a chance to check everything properly. 
@@ -176,48 +176,19 @@ i2[["20240115_MABerlin_microdosing.csv"]]
 ```
 
 # Sensitivity analyses
+In some cases reduntent predictors get dropped because there are not enogh cases with one of the predictors (e.g., sensitivity_psilocybin only inlcudes psychedelics).
+
 ```{r}
 # Nonconvergence for this analysis, see: http://www.metafor-project.org/doku.php/tips:convergence_problems_rma_mv
 my_dat[[3]] <- my_dat[[3]] %>% select(-sensitivity_lsd)
 
-sensitivity_analyses <- lapply(my_dat, function(df){
- 
-  sensitivity_cols <- colnames(df)[grep("sensitivity", colnames(df))]
+sensitivity_analyses <- lapply(my_dat[1:3], fit_sensitivity, mods = ~ drugType)
+sensitivity_analyses[[4]] <- fit_sensitivity(my_dat[[4]])
 
-  fitted_models <- lapply(sensitivity_cols, function(subset_col){
-
-    subset_model <- rma.mv(yi = es,
-         V = var_es, # Squared standard error of the effect size
-         data = df, # data set
-         random = ~1|Study/es.id, #Nesting the effect size within the Studys
-         test = "t", # similar to Knapp-Hartung method, recommended
-         dfs = "contain",
-         method = "REML", # Restricted maximum-likelihood, recommended
-         subset = as.logical(df[, subset_col]),
-         verbose = FALSE)
-    
-    
-    return(subset_model)
- 
-   
-  })
-  
-  names(fitted_models) <- sensitivity_cols
-  
-  return(fitted_models)
-  })
-
-
-
-  sensitivity_summary <- lapply(sensitivity_analyses, function(domain){
+sensitivity_summary <- lapply(sensitivity_analyses, function(domain){
   lapply(domain, summary)
 })
-  
-  
-   
 ```
-
-
 
 
 ## Results
