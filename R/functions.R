@@ -10,6 +10,22 @@ fit_rma.mv <- function(df, ...){
          )
 }
 
+fit_contrasts <- function(models){
+
+  lapply(models, function(model){
+
+    contrast <- anova(model, X = rbind(c(-1, 1)))
+
+    contrast_df <- as.data.frame(contrast)
+    ## KI
+    contrast_df$ci.lb <- contrast$Xb + qt(p = 0.025, df = contrast$ddf)*contrast$se
+    contrast_df$ci.ub <- contrast$Xb - qt(p = 0.025, df = contrast$ddf)*contrast$se
+
+    return(contrast_df)
+
+  })
+}
+
 fit_sensitivity <- function(df, ...){
 
   sensitivity_cols <- colnames(df)[grep("sensitivity", colnames(df))]

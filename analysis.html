@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Nicklas Hafiz">
-<meta name="dcterms.date" content="2024-01-24">
+<meta name="dcterms.date" content="2024-01-25">
 
 <title>MDMA/Psychadelics multi-level meta analysis</title>
 <style>
@@ -3160,6 +3160,7 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
   <li><a href="#main-analysis" id="toc-main-analysis" class="nav-link" data-scroll-target="#main-analysis">Main analysis</a>
   <ul class="collapse">
   <li><a href="#model-comparison" id="toc-model-comparison" class="nav-link" data-scroll-target="#model-comparison">Model comparison</a></li>
+  <li><a href="#i2" id="toc-i2" class="nav-link" data-scroll-target="#i2"><span class="math inline">\(I^2\)</span></a></li>
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
   <ul class="collapse">
   <li><a href="#attention" id="toc-attention" class="nav-link" data-scroll-target="#attention">Attention</a></li>
@@ -3204,7 +3205,7 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 24, 2024</p>
+      <p class="date">January 25, 2024</p>
     </div>
   </div>
   
@@ -3226,34 +3227,74 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 </section>
 <section id="main-analysis" class="level1">
 <h1>Main analysis</h1>
-<p>Because some studies provide multiple values we use a three-level Meta-Analysis Model. The nested random effect gets assigned to the grouping variable “study”. This means we allow the random intercept to vary across different studys. Test statistics and confidence intervals for the fixed effects use a t-distribution.</p>
+<p>Because some studies provide multiple values we use a three-level Meta-Analysis Model. The nested random effect gets assigned to the grouping variable “study”. This means we allow the random intercept to vary across different studys. To obtain the estimated effect sizes for our two <code>drugType</code> levels I removed the intercept, as described in the documentation of the <a href="https://www.metafor-project.org/doku.php/tips:models_with_or_without_intercept">metafor Package</a>. Test statistics and confidence intervals for the fixed effects use a t-distribution. The test of moderators checks the assumption that <span class="math inline">\(\mu_{mdma} = \mu_{psych} = 0\)</span>, so it tests for an overall effect of the variable <code>drugType</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Model with level 3 variance set to zero, so we assume all effect sizes to be independent.</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="do">## DrugType as moderator variable.</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">lapply</span>(my_dat[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], fit_rma.mv, <span class="at">mods =</span> <span class="sc">~</span> drugType)</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Without moderator for the last data set:</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>models[[<span class="dv">4</span>]] <span class="ot">&lt;-</span> <span class="fu">fit_rma.mv</span>(<span class="at">df =</span> my_dat[[<span class="dv">4</span>]])</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Model with level 3 variance set to zero, so we assume all effect sizes to be independent</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>models_2 <span class="ot">&lt;-</span> <span class="fu">lapply</span>(my_dat[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], fit_rma.mv, <span class="at">mods =</span> <span class="sc">~</span> drugType, <span class="at">sigma2 =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="cn">NA</span>))</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="do">## Without moderator for the last data set:</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>models_2[[<span class="dv">4</span>]] <span class="ot">&lt;-</span> <span class="fu">fit_rma.mv</span>( my_dat[[<span class="dv">4</span>]], <span class="at">sigma2 =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="cn">NA</span>))</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(models) <span class="ot">&lt;-</span> file_sources</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(models_2) <span class="ot">&lt;-</span> file_sources</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>models_summary <span class="ot">&lt;-</span> <span class="fu">lapply</span>(models, summary)</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>models_2_summary <span class="ot">&lt;-</span> <span class="fu">lapply</span>(models_2, summary)</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>i2 <span class="ot">&lt;-</span> <span class="fu">lapply</span>(models, var.comp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">lapply</span>(my_dat[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], fit_rma.mv, <span class="at">mods =</span> <span class="sc">~</span> drugType<span class="dv">-1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To compare both <code>drugType</code> levels I defined a contrasts, testing if <span class="math inline">\(\mu_{mdma} - \mu{psych} = 0\)</span> (Wald-Type Test), see <code>?anova.rma</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>drugType_contrasts <span class="ot">&lt;-</span> <span class="fu">fit_contrasts</span>(models[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This is the same test done in a model with intercept for the regression weight of <code>drugTypepsychedelic</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>models_with_intercept <span class="ot">&lt;-</span> <span class="fu">lapply</span>(my_dat[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], fit_rma.mv, <span class="at">mods =</span> <span class="sc">~</span> drugType) </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># compare:</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>drugType_contrasts[[<span class="dv">3</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                       hyp  estimate        se     tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 0.2478831 0.5155617 0.480802 14
+        pval      ci.lb    ci.ub
+1: 0.6380842 -0.8578867 1.353653</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>models_with_intercept[[<span class="dv">3</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Multivariate Meta-Analysis Model (k = 28; method: REML)
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  0.0171  0.1308     16     no        Study 
+sigma^2.2  1.0900  1.0440     28     no  Study/es.id 
+
+Test for Residual Heterogeneity:
+QE(df = 26) = 231.0240, p-val &lt; .0001
+
+Test of Moderators (coefficient 2):
+F(df1 = 1, df2 = 14) = 0.2312, p-val = 0.6381
+
+Model Results:
+
+                     estimate      se     tval  df    pval    ci.lb    ci.ub 
+intrcpt               -1.0568  0.2432  -4.3459  14  0.0007  -1.5783  -0.5352 
+drugTypepsychedelic    0.2479  0.5156   0.4808  14  0.6381  -0.8579   1.3537 
+                         
+intrcpt              *** 
+drugTypepsychedelic      
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+<p>Finally, we have one data set without the moderator variable:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Without moderator for the last data set:</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>models[[<span class="dv">4</span>]] <span class="ot">&lt;-</span> <span class="fu">fit_rma.mv</span>(<span class="at">df =</span> my_dat[[<span class="dv">4</span>]])</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Get the summaries of all 4 models: </span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>models_summary <span class="ot">&lt;-</span> <span class="fu">lapply</span>(models, summary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="model-comparison" class="level2">
 <h2 class="anchored" data-anchor-id="model-comparison">Model comparison</h2>
+<p>Now we can test if our more complex model (the one with the extra varaince level) performs better than the less complex model:</p>
 <p>The nested model doesn’t perfom better, so the effects within studies are largely homogneous. However, we know the effects are not independent, so we can keep the three-level model.</p>
+</section>
+<section id="i2" class="level2">
+<h2 class="anchored" data-anchor-id="i2"><span class="math inline">\(I^2\)</span></h2>
+<p>How much heterogeneity is due to differences within studies (level 2), and how much due to between study-differences (level 3)?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>i2 <span class="ot">&lt;-</span> <span class="fu">lapply</span>(models, var.comp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="results" class="level2">
 <h2 class="anchored" data-anchor-id="results">Results</h2>
@@ -3298,22 +3339,31 @@ sigma^2.2  0.4710  0.6863     17     no  Study/es.id
 Test for Residual Heterogeneity:
 QE(df = 15) = 95.2297, p-val &lt; .0001
 
-Test of Moderators (coefficient 2):
-F(df1 = 1, df2 = 8) = 4.5007, p-val = 0.0667
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 8) = 7.8132, p-val = 0.0131
 
 Model Results:
 
-                     estimate      se     tval  df    pval    ci.lb   ci.ub    
-intrcpt               -0.5932  0.5302  -1.1190   8  0.2956  -1.8158  0.6293    
-drugTypepsychedelic   -1.7110  0.8065  -2.1215   8  0.0667  -3.5709  0.1488  . 
+                     estimate      se     tval  df    pval    ci.lb    ci.ub 
+drugTypemdma          -0.5932  0.5302  -1.1190   8  0.2956  -1.8158   0.6293 
+drugTypepsychedelic   -2.3043  0.6078  -3.7913   8  0.0053  -3.7058  -0.9028 
+                        
+drugTypemdma            
+drugTypepsychedelic  ** 
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                       hyp  estimate        se      tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -1.711037 0.8065259 -2.121491  8
+         pval     ci.lb     ci.ub
+1: 0.06667027 -3.570889 0.1488145</code></pre>
+</div>
 </div>
 </section>
-<section id="i2" class="level4">
-<h4 class="anchored" data-anchor-id="i2"><span class="math inline">\(I^2\)</span></h4>
+<section id="i2-1" class="level4">
+<h4 class="anchored" data-anchor-id="i2-1"><span class="math inline">\(I^2\)</span></h4>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>        % of total variance    I2
@@ -3366,22 +3416,31 @@ sigma^2.2  0.0768  0.2772     19     no  Study/es.id
 Test for Residual Heterogeneity:
 QE(df = 17) = 52.5513, p-val &lt; .0001
 
-Test of Moderators (coefficient 2):
-F(df1 = 1, df2 = 10) = 7.6039, p-val = 0.0202
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 10) = 7.5524, p-val = 0.0100
 
 Model Results:
 
-                     estimate      se     tval  df    pval    ci.lb    ci.ub    
-intrcpt               -0.0957  0.2585  -0.3702  10  0.7190  -0.6718   0.4804    
-drugTypepsychedelic   -1.1247  0.4079  -2.7575  10  0.0202  -2.0335  -0.2159  * 
+                     estimate      se     tval  df    pval    ci.lb    ci.ub 
+drugTypemdma          -0.0957  0.2585  -0.3702  10  0.7190  -0.6718   0.4804 
+drugTypepsychedelic   -1.2204  0.3154  -3.8688  10  0.0031  -1.9233  -0.5175 
+                        
+drugTypemdma            
+drugTypepsychedelic  ** 
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                       hyp  estimate        se      tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -1.124694 0.4078643 -2.757519 10
+         pval     ci.lb      ci.ub
+1: 0.02021568 -2.033472 -0.2159154</code></pre>
+</div>
 </div>
 </section>
-<section id="i2-1" class="level4">
-<h4 class="anchored" data-anchor-id="i2-1"><span class="math inline">\(I^2\)</span></h4>
+<section id="i2-2" class="level4">
+<h4 class="anchored" data-anchor-id="i2-2"><span class="math inline">\(I^2\)</span></h4>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>        % of total variance    I2
@@ -3434,25 +3493,31 @@ sigma^2.2  1.0900  1.0440     28     no  Study/es.id
 Test for Residual Heterogeneity:
 QE(df = 26) = 231.0240, p-val &lt; .0001
 
-Test of Moderators (coefficient 2):
-F(df1 = 1, df2 = 14) = 0.2312, p-val = 0.6381
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 14) = 11.0264, p-val = 0.0013
 
 Model Results:
 
                      estimate      se     tval  df    pval    ci.lb    ci.ub 
-intrcpt               -1.0568  0.2432  -4.3459  14  0.0007  -1.5783  -0.5352 
-drugTypepsychedelic    0.2479  0.5156   0.4808  14  0.6381  -0.8579   1.3537 
+drugTypemdma          -1.0568  0.2432  -4.3459  14  0.0007  -1.5783  -0.5352 
+drugTypepsychedelic   -0.8089  0.4546  -1.7793  14  0.0969  -1.7839   0.1662 
                          
-intrcpt              *** 
-drugTypepsychedelic      
+drugTypemdma         *** 
+drugTypepsychedelic    . 
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                       hyp  estimate        se     tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 0.2478831 0.5155617 0.480802 14
+        pval      ci.lb    ci.ub
+1: 0.6380842 -0.8578867 1.353653</code></pre>
+</div>
 </div>
 </section>
-<section id="i2-2" class="level4">
-<h4 class="anchored" data-anchor-id="i2-2"><span class="math inline">\(I^2\)</span></h4>
+<section id="i2-3" class="level4">
+<h4 class="anchored" data-anchor-id="i2-3"><span class="math inline">\(I^2\)</span></h4>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>        % of total variance    I2
@@ -3481,33 +3546,12 @@ se_es    3 6  0.28 0.03  0.25  0.32  0.07 0.01</code></pre>
 <h4 class="anchored" data-anchor-id="model-3">Model</h4>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>
-Multivariate Meta-Analysis Model (k = 6; method: REML)
-
-  logLik  Deviance       AIC       BIC      AICc   
- -8.0214   16.0428   22.0428   20.8711   46.0428   
-
-Variance Components:
-
-            estim    sqrt  nlvls  fixed       factor 
-sigma^2.1  0.7596  0.8715      3     no        Study 
-sigma^2.2  0.9572  0.9783      6     no  Study/es.id 
-
-Test for Heterogeneity:
-Q(df = 5) = 101.8893, p-val &lt; .0001
-
-Model Results:
-
-estimate      se    tval  df    pval    ci.lb   ci.ub    
-  0.3657  0.6680  0.5474   2  0.6390  -2.5085  3.2398    
-
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<pre><code>NULL</code></pre>
 </div>
 </div>
 </section>
-<section id="i2-3" class="level4">
-<h4 class="anchored" data-anchor-id="i2-3"><span class="math inline">\(I^2\)</span></h4>
+<section id="i2-4" class="level4">
+<h4 class="anchored" data-anchor-id="i2-4"><span class="math inline">\(I^2\)</span></h4>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>        % of total variance    I2
@@ -3525,10 +3569,10 @@ Total I2: 95.88% </code></pre>
 <h1>Sensitivity analyses</h1>
 <p>In some cases reduntent predictors get dropped because there are not enogh cases with one of the predictors (e.g., sensitivity_psilocybin only inlcudes psychedelics).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Nonconvergence for this analysis, see: http://www.metafor-project.org/doku.php/tips:convergence_problems_rma_mv</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>my_dat[[<span class="dv">3</span>]] <span class="ot">&lt;-</span> my_dat[[<span class="dv">3</span>]] <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>sensitivity_lsd)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>sensitivity_analyses <span class="ot">&lt;-</span> <span class="fu">lapply</span>(my_dat[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], fit_sensitivity, <span class="at">mods =</span> <span class="sc">~</span> drugType)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Nonconvergence for this analysis, see: http://www.metafor-project.org/doku.php/tips:convergence_problems_rma_mv</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>my_dat[[<span class="dv">3</span>]] <span class="ot">&lt;-</span> my_dat[[<span class="dv">3</span>]] <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>sensitivity_lsd)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>sensitivity_analyses <span class="ot">&lt;-</span> <span class="fu">lapply</span>(my_dat[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], fit_sensitivity, <span class="at">mods =</span> <span class="sc">~</span> drugType <span class="sc">-</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Redundant predictors dropped from the model.
 
@@ -3540,11 +3584,19 @@ Warning: Redundant predictors dropped from the model.
 
 Warning: Redundant predictors dropped from the model.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>sensitivity_analyses[[<span class="dv">4</span>]] <span class="ot">&lt;-</span> <span class="fu">fit_sensitivity</span>(my_dat[[<span class="dv">4</span>]])</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>sensitivity_summary <span class="ot">&lt;-</span> <span class="fu">lapply</span>(sensitivity_analyses, <span class="cf">function</span>(domain){</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(domain, summary)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sensitivity_contrasts <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>sensitivity_contrasts[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> <span class="fu">fit_contrasts</span>(sensitivity_analyses[[<span class="dv">1</span>]][<span class="fu">c</span>(<span class="st">&quot;sensitivity_speed&quot;</span>, <span class="st">&quot;sensitivity_accuracy&quot;</span>, <span class="st">&quot;sensitivity_highestWeight&quot;</span>, <span class="st">&quot;sensitivity_highQuality&quot;</span>)])</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>sensitivity_contrasts[[<span class="dv">2</span>]] <span class="ot">&lt;-</span> <span class="fu">fit_contrasts</span>(sensitivity_analyses[[<span class="dv">2</span>]][<span class="fu">c</span>(<span class="st">&quot;sensitivity_speed&quot;</span>, <span class="st">&quot;sensitivity_accuracy&quot;</span>, <span class="st">&quot;sensitivity_highestWeight&quot;</span>, <span class="st">&quot;sensitivity_highQuality&quot;</span>)])</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>sensitivity_contrasts[[<span class="dv">3</span>]] <span class="ot">&lt;-</span> <span class="fu">fit_contrasts</span>(sensitivity_analyses[[<span class="dv">3</span>]][<span class="fu">c</span>(<span class="st">&quot;sensitivity_accuracy&quot;</span>, <span class="st">&quot;sensitivity_highestWeight&quot;</span>, <span class="st">&quot;sensitivity_highQuality&quot;</span>)])</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(sensitivity_contrasts) <span class="ot">&lt;-</span> <span class="fu">names</span>(sensitivity_analyses[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>sensitivity_analyses[[<span class="dv">4</span>]] <span class="ot">&lt;-</span> <span class="fu">fit_sensitivity</span>(my_dat[[<span class="dv">4</span>]])</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(sensitivity_analyses) <span class="ot">&lt;-</span> <span class="fu">names</span>(my_dat)</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a>sensitivity_summary <span class="ot">&lt;-</span> <span class="fu">lapply</span>(sensitivity_analyses, <span class="cf">function</span>(domain){</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(domain, summary)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="results-1" class="level2">
 <h2 class="anchored" data-anchor-id="results-1">Results</h2>
@@ -3553,7 +3605,7 @@ Warning: Redundant predictors dropped from the model.</code></pre>
 <section id="speed" class="level4">
 <h4 class="anchored" data-anchor-id="speed">Speed</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_attention.csv&quot;</span>]][<span class="st">&quot;sensitivity_speed&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_attention.csv&quot;</span>]][<span class="st">&quot;sensitivity_speed&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_speed
 
@@ -3571,24 +3623,32 @@ sigma^2.2  0.0000  0.0000      8     no  Study/es.id
 Test for Residual Heterogeneity:
 QE(df = 6) = 25.5765, p-val = 0.0003
 
-Test of Moderators (coefficient 2):
-F(df1 = 1, df2 = 3) = 0.4854, p-val = 0.5361
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 3) = 3.6428, p-val = 0.1575
 
 Model Results:
 
                      estimate      se     tval  df    pval    ci.lb   ci.ub    
-intrcpt               -1.1125  0.9544  -1.1657   3  0.3280  -4.1496  1.9247    
-drugTypepsychedelic   -0.8750  1.2559  -0.6967   3  0.5361  -4.8718  3.1218    
+drugTypemdma          -1.1125  0.9544  -1.1657   3  0.3280  -4.1496  1.9247    
+drugTypepsychedelic   -1.9874  0.8164  -2.4345   3  0.0930  -4.5855  0.6106  . 
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>sensitivity_contrasts[[<span class="st">&quot;20240115_MABerlin_attention.csv&quot;</span>]][<span class="st">&quot;sensitivity_speed&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_speed
+                                       hyp   estimate       se       tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -0.8749798 1.255886 -0.6967029  3
+        pval     ci.lb    ci.ub
+1: 0.5361202 -4.871771 3.121811</code></pre>
 </div>
 </div>
 </section>
 <section id="accuracy" class="level4">
 <h4 class="anchored" data-anchor-id="accuracy">Accuracy</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_attention.csv&quot;</span>]][<span class="st">&quot;sensitivity_accuracy&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_attention.csv&quot;</span>]][<span class="st">&quot;sensitivity_accuracy&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_accuracy
 
@@ -3606,24 +3666,32 @@ sigma^2.2  4.3607  2.0882      5     no  Study/es.id
 Test for Residual Heterogeneity:
 QE(df = 3) = 37.8558, p-val &lt; .0001
 
-Test of Moderators (coefficient 2):
-F(df1 = 1, df2 = 2) = 2.1348, p-val = 0.2815
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 2) = 2.3089, p-val = 0.3022
 
 Model Results:
 
                      estimate      se     tval  df    pval     ci.lb   ci.ub    
-intrcpt               -0.4333  1.2433  -0.3485   2  0.7607   -5.7829  4.9162    
-drugTypepsychedelic   -2.9619  2.0272  -1.4611   2  0.2815  -11.6844  5.7605    
+drugTypemdma          -0.4333  1.2433  -0.3485   2  0.7607   -5.7829  4.9162    
+drugTypepsychedelic   -3.3953  1.6012  -2.1205   2  0.1681  -10.2847  3.4941    
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>sensitivity_contrasts[[<span class="st">&quot;20240115_MABerlin_attention.csv&quot;</span>]][<span class="st">&quot;sensitivity_accuracy&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_accuracy
+                                       hyp  estimate       se     tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -2.961936 2.027223 -1.46108  2
+        pval     ci.lb    ci.ub
+1: 0.2814629 -11.68437 5.760502</code></pre>
 </div>
 </div>
 </section>
 <section id="highest-weight" class="level4">
 <h4 class="anchored" data-anchor-id="highest-weight">Highest Weight</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_attention.csv&quot;</span>]][<span class="st">&quot;sensitivity_highestWeight&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_attention.csv&quot;</span>]][<span class="st">&quot;sensitivity_highestWeight&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_highestWeight
 
@@ -3641,24 +3709,35 @@ sigma^2.2  1.4912  1.2211     11     no  Study/es.id
 Test for Residual Heterogeneity:
 QE(df = 9) = 54.2723, p-val &lt; .0001
 
-Test of Moderators (coefficient 2):
-F(df1 = 1, df2 = 6) = 5.8044, p-val = 0.0526
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 6) = 9.8530, p-val = 0.0127
 
 Model Results:
 
-                     estimate      se     tval  df    pval    ci.lb   ci.ub    
-intrcpt               -0.8335  0.4920  -1.6943   6  0.1412  -2.0373  0.3703    
-drugTypepsychedelic   -2.0823  0.8643  -2.4092   6  0.0526  -4.1972  0.0326  . 
+                     estimate      se     tval  df    pval    ci.lb    ci.ub 
+drugTypemdma          -0.8335  0.4920  -1.6943   6  0.1412  -2.0373   0.3703 
+drugTypepsychedelic   -2.9158  0.7106  -4.1031   6  0.0063  -4.6547  -1.1769 
+                        
+drugTypemdma            
+drugTypepsychedelic  ** 
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>sensitivity_contrasts[[<span class="st">&quot;20240115_MABerlin_attention.csv&quot;</span>]][<span class="st">&quot;sensitivity_highestWeight&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highestWeight
+                                       hyp  estimate       se     tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -2.082302 0.864302 -2.40923  6
+         pval     ci.lb      ci.ub
+1: 0.05262907 -4.197173 0.03256891</code></pre>
 </div>
 </div>
 </section>
 <section id="psilocybin" class="level4">
 <h4 class="anchored" data-anchor-id="psilocybin">Psilocybin</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_attention.csv&quot;</span>]][<span class="st">&quot;sensitivity_psilocybin&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_attention.csv&quot;</span>]][<span class="st">&quot;sensitivity_psilocybin&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_psilocybin
 
@@ -3689,7 +3768,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <section id="high-quality" class="level4">
 <h4 class="anchored" data-anchor-id="high-quality">High Quality</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_attention.csv&quot;</span>]][<span class="st">&quot;sensitivity_highQuality&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_attention.csv&quot;</span>]][<span class="st">&quot;sensitivity_highQuality&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_highQuality
 
@@ -3707,17 +3786,25 @@ sigma^2.2  0.0032  0.0567     13     no  Study/es.id
 Test for Residual Heterogeneity:
 QE(df = 11) = 48.8065, p-val &lt; .0001
 
-Test of Moderators (coefficient 2):
-F(df1 = 1, df2 = 5) = 1.9677, p-val = 0.2196
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 5) = 3.4069, p-val = 0.1165
 
 Model Results:
 
                      estimate      se     tval  df    pval    ci.lb   ci.ub    
-intrcpt               -0.5958  0.7160  -0.8321   5  0.4432  -2.4363  1.2447    
-drugTypepsychedelic   -1.5992  1.1400  -1.4027   5  0.2196  -4.5298  1.3314    
+drugTypemdma          -0.5958  0.7160  -0.8321   5  0.4432  -2.4363  1.2447    
+drugTypepsychedelic   -2.1950  0.8872  -2.4742   5  0.0562  -4.4755  0.0855  . 
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>sensitivity_contrasts[[<span class="st">&quot;20240115_MABerlin_attention.csv&quot;</span>]][<span class="st">&quot;sensitivity_highQuality&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highQuality
+                                       hyp estimate       se      tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -1.59919 1.140041 -1.402747  5
+        pval    ci.lb    ci.ub
+1: 0.2196318 -4.52976 1.331379</code></pre>
 </div>
 </div>
 </section>
@@ -3727,7 +3814,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <section id="speed-1" class="level4">
 <h4 class="anchored" data-anchor-id="speed-1">Speed</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_speed&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_speed&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_speed
 
@@ -3745,24 +3832,32 @@ sigma^2.2  0.0000  0.0000      9     no  Study/es.id
 Test for Residual Heterogeneity:
 QE(df = 7) = 35.0644, p-val &lt; .0001
 
-Test of Moderators (coefficient 2):
-F(df1 = 1, df2 = 3) = 0.7031, p-val = 0.4633
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 3) = 2.7850, p-val = 0.2071
 
 Model Results:
 
                      estimate      se     tval  df    pval    ci.lb   ci.ub    
-intrcpt               -0.3457  1.2617  -0.2740   3  0.8019  -4.3609  3.6695    
-drugTypepsychedelic   -1.1924  1.4221  -0.8385   3  0.4633  -5.7182  3.3333    
+drugTypemdma          -0.3457  1.2617  -0.2740   3  0.8019  -4.3609  3.6695    
+drugTypepsychedelic   -1.5381  0.6562  -2.3441   3  0.1008  -3.6264  0.5501    
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>sensitivity_contrasts[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_speed&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_speed
+                                       hyp  estimate       se       tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -1.192437 1.422102 -0.8385032  3
+        pval     ci.lb    ci.ub
+1: 0.4632981 -5.718199 3.333325</code></pre>
 </div>
 </div>
 </section>
 <section id="accuracy-1" class="level4">
 <h4 class="anchored" data-anchor-id="accuracy-1">Accuracy</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_accuracy&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_accuracy&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_accuracy
 
@@ -3780,24 +3875,32 @@ sigma^2.2  0.0458  0.2139     16     no  Study/es.id
 Test for Residual Heterogeneity:
 QE(df = 14) = 28.9555, p-val = 0.0106
 
-Test of Moderators (coefficient 2):
-F(df1 = 1, df2 = 7) = 5.3831, p-val = 0.0534
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 7) = 5.1937, p-val = 0.0414
 
 Model Results:
 
-                     estimate      se     tval  df    pval    ci.lb   ci.ub    
-intrcpt               -0.0612  0.1977  -0.3093   7  0.7661  -0.5287  0.4064    
-drugTypepsychedelic   -0.7377  0.3180  -2.3202   7  0.0534  -1.4896  0.0141  . 
+                     estimate      se     tval  df    pval    ci.lb    ci.ub    
+drugTypemdma          -0.0612  0.1977  -0.3093   7  0.7661  -0.5287   0.4064    
+drugTypepsychedelic   -0.7989  0.2490  -3.2081   7  0.0149  -1.3877  -0.2100  * 
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>sensitivity_contrasts[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_accuracy&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_accuracy
+                                       hyp   estimate        se      tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -0.7377131 0.3179592 -2.320151  7
+         pval     ci.lb      ci.ub
+1: 0.05338262 -1.489567 0.01414083</code></pre>
 </div>
 </div>
 </section>
 <section id="highest-weight-1" class="level4">
 <h4 class="anchored" data-anchor-id="highest-weight-1">Highest Weight</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_highestWeight&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_highestWeight&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_highestWeight
 
@@ -3815,24 +3918,35 @@ sigma^2.2  0.1538  0.3921     16     no  Study/es.id
 Test for Residual Heterogeneity:
 QE(df = 14) = 37.8845, p-val = 0.0005
 
-Test of Moderators (coefficient 2):
-F(df1 = 1, df2 = 8) = 11.2490, p-val = 0.0100
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 8) = 9.7790, p-val = 0.0071
 
 Model Results:
 
-                     estimate      se     tval  df    pval    ci.lb    ci.ub    
-intrcpt               -0.0601  0.2595  -0.2316   8  0.8227  -0.6585   0.5383    
-drugTypepsychedelic   -1.4241  0.4246  -3.3540   8  0.0100  -2.4033  -0.4450  * 
+                     estimate      se     tval  df    pval    ci.lb    ci.ub 
+drugTypemdma          -0.0601  0.2595  -0.2316   8  0.8227  -0.6585   0.5383 
+drugTypepsychedelic   -1.4842  0.3361  -4.4164   8  0.0022  -2.2592  -0.7092 
+                        
+drugTypemdma            
+drugTypepsychedelic  ** 
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>sensitivity_contrasts[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_highestWeight&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highestWeight
+                                       hyp  estimate        se      tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -1.424119 0.4246084 -3.353957  8
+         pval     ci.lb      ci.ub
+1: 0.01002125 -2.403267 -0.4449698</code></pre>
 </div>
 </div>
 </section>
 <section id="psilocybin-1" class="level4">
 <h4 class="anchored" data-anchor-id="psilocybin-1">Psilocybin</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_psilocybin&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_psilocybin&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_psilocybin
 
@@ -3863,7 +3977,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <section id="lsd" class="level4">
 <h4 class="anchored" data-anchor-id="lsd">LSD</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_lsd&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_lsd&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_lsd
 
@@ -3894,7 +4008,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <section id="high-quality-1" class="level4">
 <h4 class="anchored" data-anchor-id="high-quality-1">High Quality</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_highQuality&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_highQuality&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_highQuality
 
@@ -3912,17 +4026,25 @@ sigma^2.2  0.0690  0.2628     15     no  Study/es.id
 Test for Residual Heterogeneity:
 QE(df = 13) = 50.5409, p-val &lt; .0001
 
-Test of Moderators (coefficient 2):
-F(df1 = 1, df2 = 6) = 5.2285, p-val = 0.0622
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 6) = 4.5594, p-val = 0.0625
 
 Model Results:
 
-                     estimate      se     tval  df    pval    ci.lb   ci.ub    
-intrcpt               -0.0703  0.3948  -0.1782   6  0.8644  -1.0363  0.8956    
-drugTypepsychedelic   -1.4862  0.6500  -2.2866   6  0.0622  -3.0767  0.1042  . 
+                     estimate      se     tval  df    pval    ci.lb    ci.ub    
+drugTypemdma          -0.0703  0.3948  -0.1782   6  0.8644  -1.0363   0.8956    
+drugTypepsychedelic   -1.5566  0.5164  -3.0145   6  0.0236  -2.8201  -0.2931  * 
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>sensitivity_contrasts[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_highQuality&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highQuality
+                                       hyp  estimate        se      tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -1.486233 0.6499794 -2.286585  6
+         pval     ci.lb    ci.ub
+1: 0.06223487 -3.076676 0.104209</code></pre>
 </div>
 </div>
 </section>
@@ -3932,32 +4054,28 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <section id="speed-2" class="level4">
 <h4 class="anchored" data-anchor-id="speed-2">Speed</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_speed&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_memory.csv&quot;</span>]][<span class="st">&quot;sensitivity_speed&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_speed
 
-Multivariate Meta-Analysis Model (k = 9; method: REML)
+Multivariate Meta-Analysis Model (k = 4; method: REML)
 
   logLik  Deviance       AIC       BIC      AICc   
- -7.3055   14.6110   22.6110   22.3946   42.6110   
+ -4.8771    9.7541   15.7541   13.0500   39.7541   
 
 Variance Components:
 
             estim    sqrt  nlvls  fixed       factor 
-sigma^2.1  1.5585  1.2484      5     no        Study 
-sigma^2.2  0.0000  0.0000      9     no  Study/es.id 
+sigma^2.1  1.0225  1.0112      2     no        Study 
+sigma^2.2  0.8216  0.9064      4     no  Study/es.id 
 
-Test for Residual Heterogeneity:
-QE(df = 7) = 35.0644, p-val &lt; .0001
-
-Test of Moderators (coefficient 2):
-F(df1 = 1, df2 = 3) = 0.7031, p-val = 0.4633
+Test for Heterogeneity:
+Q(df = 3) = 21.5494, p-val &lt; .0001
 
 Model Results:
 
-                     estimate      se     tval  df    pval    ci.lb   ci.ub    
-intrcpt               -0.3457  1.2617  -0.2740   3  0.8019  -4.3609  3.6695    
-drugTypepsychedelic   -1.1924  1.4221  -0.8385   3  0.4633  -5.7182  3.3333    
+estimate      se     tval  df    pval     ci.lb    ci.ub    
+ -1.4262  0.9003  -1.5841   1  0.3585  -12.8660  10.0135    
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
@@ -3967,98 +4085,120 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <section id="accuracy-2" class="level4">
 <h4 class="anchored" data-anchor-id="accuracy-2">Accuracy</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_accuracy&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_memory.csv&quot;</span>]][<span class="st">&quot;sensitivity_accuracy&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_accuracy
 
-Multivariate Meta-Analysis Model (k = 16; method: REML)
+Multivariate Meta-Analysis Model (k = 27; method: REML)
 
   logLik  Deviance       AIC       BIC      AICc   
--10.0020   20.0039   28.0039   30.5602   32.4484   
+-39.0183   78.0366   86.0366   90.9121   88.0366   
 
 Variance Components:
 
             estim    sqrt  nlvls  fixed       factor 
-sigma^2.1  0.1018  0.3191      9     no        Study 
-sigma^2.2  0.0458  0.2139     16     no  Study/es.id 
+sigma^2.1  0.0380  0.1950     15     no        Study 
+sigma^2.2  1.1032  1.0503     27     no  Study/es.id 
 
 Test for Residual Heterogeneity:
-QE(df = 14) = 28.9555, p-val = 0.0106
+QE(df = 25) = 228.4955, p-val &lt; .0001
 
-Test of Moderators (coefficient 2):
-F(df1 = 1, df2 = 7) = 5.3831, p-val = 0.0534
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 13) = 10.7508, p-val = 0.0018
 
 Model Results:
 
-                     estimate      se     tval  df    pval    ci.lb   ci.ub    
-intrcpt               -0.0612  0.1977  -0.3093   7  0.7661  -0.5287  0.4064    
-drugTypepsychedelic   -0.7377  0.3180  -2.3202   7  0.0534  -1.4896  0.0141  . 
+                     estimate      se     tval  df    pval    ci.lb    ci.ub 
+drugTypemdma          -1.1005  0.2562  -4.2952  13  0.0009  -1.6540  -0.5470 
+drugTypepsychedelic   -0.8073  0.4620  -1.7472  13  0.1042  -1.8054   0.1909 
+                         
+drugTypemdma         *** 
+drugTypepsychedelic      
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>sensitivity_contrasts[[<span class="st">&quot;20240115_MABerlin_memory.csv&quot;</span>]][<span class="st">&quot;sensitivity_accuracy&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_accuracy
+                                       hyp estimate        se      tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 0.293234 0.5283209 0.5550301 13
+        pval      ci.lb    ci.ub
+1: 0.5882974 -0.8481339 1.434602</code></pre>
 </div>
 </div>
 </section>
 <section id="highest-weight-2" class="level4">
 <h4 class="anchored" data-anchor-id="highest-weight-2">Highest Weight</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_highestWeight&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_memory.csv&quot;</span>]][<span class="st">&quot;sensitivity_highestWeight&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_highestWeight
 
-Multivariate Meta-Analysis Model (k = 16; method: REML)
+Multivariate Meta-Analysis Model (k = 25; method: REML)
 
   logLik  Deviance       AIC       BIC      AICc   
--14.7310   29.4620   37.4620   40.0182   41.9064   
+-36.7506   73.5012   81.5012   86.0432   83.7234   
 
 Variance Components:
 
             estim    sqrt  nlvls  fixed       factor 
-sigma^2.1  0.1898  0.4357     10     no        Study 
-sigma^2.2  0.1538  0.3921     16     no  Study/es.id 
+sigma^2.1  0.0360  0.1897     14     no        Study 
+sigma^2.2  1.2028  1.0967     25     no  Study/es.id 
 
 Test for Residual Heterogeneity:
-QE(df = 14) = 37.8845, p-val = 0.0005
+QE(df = 23) = 204.9906, p-val &lt; .0001
 
-Test of Moderators (coefficient 2):
-F(df1 = 1, df2 = 8) = 11.2490, p-val = 0.0100
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 12) = 10.0217, p-val = 0.0028
 
 Model Results:
 
-                     estimate      se     tval  df    pval    ci.lb    ci.ub    
-intrcpt               -0.0601  0.2595  -0.2316   8  0.8227  -0.6585   0.5383    
-drugTypepsychedelic   -1.4241  0.4246  -3.3540   8  0.0100  -2.4033  -0.4450  * 
+                     estimate      se     tval  df    pval    ci.lb    ci.ub 
+drugTypemdma          -1.1424  0.2726  -4.1913  12  0.0013  -1.7362  -0.5485 
+drugTypepsychedelic   -0.8295  0.5271  -1.5736  12  0.1416  -1.9780   0.3190 
+                        
+drugTypemdma         ** 
+drugTypepsychedelic     
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>sensitivity_contrasts[[<span class="st">&quot;20240115_MABerlin_memory.csv&quot;</span>]][<span class="st">&quot;sensitivity_highestWeight&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highestWeight
+                                       hyp  estimate       se    tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 0.3128743 0.593408 0.52725 12
+        pval      ci.lb    ci.ub
+1: 0.6076303 -0.9800506 1.605799</code></pre>
 </div>
 </div>
 </section>
 <section id="psilocybin-2" class="level4">
 <h4 class="anchored" data-anchor-id="psilocybin-2">Psilocybin</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_psilocybin&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_memory.csv&quot;</span>]][<span class="st">&quot;sensitivity_psilocybin&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_psilocybin
 
-Multivariate Meta-Analysis Model (k = 4; method: REML)
+Multivariate Meta-Analysis Model (k = 3; method: REML)
 
   logLik  Deviance       AIC       BIC      AICc   
- -3.9415    7.8831   13.8831   11.1789   37.8831   
+ -2.4270    4.8540   10.8540    6.9334   34.8540   
 
 Variance Components:
 
             estim    sqrt  nlvls  fixed       factor 
-sigma^2.1  1.2416  1.1143      3     no        Study 
-sigma^2.2  0.0000  0.0000      4     no  Study/es.id 
+sigma^2.1  0.2648  0.5146      3     no        Study 
+sigma^2.2  0.2648  0.5146      3     no  Study/es.id 
 
 Test for Heterogeneity:
-Q(df = 3) = 11.0263, p-val = 0.0116
+Q(df = 2) = 9.6852, p-val = 0.0079
 
 Model Results:
 
 estimate      se     tval  df    pval    ci.lb   ci.ub    
- -2.1064  0.7010  -3.0049   2  0.0952  -5.1225  0.9097  . 
+ -0.7259  0.4766  -1.5230   2  0.2672  -2.7765  1.3248    
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
@@ -4069,41 +4209,49 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <h4 class="anchored" data-anchor-id="lsd-1">LSD</h4>
 <p>Did not converge.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_lsd&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_memory.csv&quot;</span>]][<span class="st">&quot;sensitivity_lsd&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="high-quality-2" class="level4">
 <h4 class="anchored" data-anchor-id="high-quality-2">High Quality</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_executive.csv&quot;</span>]][<span class="st">&quot;sensitivity_highQuality&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_memory.csv&quot;</span>]][<span class="st">&quot;sensitivity_highQuality&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$sensitivity_highQuality
 
 Multivariate Meta-Analysis Model (k = 15; method: REML)
 
   logLik  Deviance       AIC       BIC      AICc   
--13.8144   27.6287   35.6287   37.8885   40.6287   
+-20.6012   41.2024   49.2024   51.4622   54.2024   
 
 Variance Components:
 
             estim    sqrt  nlvls  fixed       factor 
-sigma^2.1  0.6476  0.8047      8     no        Study 
-sigma^2.2  0.0690  0.2628     15     no  Study/es.id 
+sigma^2.1  0.0000  0.0001     10     no        Study 
+sigma^2.2  1.2260  1.1073     15     no  Study/es.id 
 
 Test for Residual Heterogeneity:
-QE(df = 13) = 50.5409, p-val &lt; .0001
+QE(df = 13) = 144.0556, p-val &lt; .0001
 
-Test of Moderators (coefficient 2):
-F(df1 = 1, df2 = 6) = 5.2285, p-val = 0.0622
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 8) = 4.9654, p-val = 0.0396
 
 Model Results:
 
-                     estimate      se     tval  df    pval    ci.lb   ci.ub    
-intrcpt               -0.0703  0.3948  -0.1782   6  0.8644  -1.0363  0.8956    
-drugTypepsychedelic   -1.4862  0.6500  -2.2866   6  0.0622  -3.0767  0.1042  . 
+                     estimate      se     tval  df    pval    ci.lb    ci.ub    
+drugTypemdma          -0.9167  0.3681  -2.4905   8  0.0375  -1.7655  -0.0679  * 
+drugTypepsychedelic   -1.0054  0.5207  -1.9309   8  0.0896  -2.2060   0.1953  . 
 
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>sensitivity_contrasts[[<span class="st">&quot;20240115_MABerlin_memory.csv&quot;</span>]][<span class="st">&quot;sensitivity_highQuality&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highQuality
+                                       hyp    estimate        se       tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -0.08867988 0.6376321 -0.1390769  8
+        pval     ci.lb    ci.ub
+1: 0.8928267 -1.559062 1.381702</code></pre>
 </div>
 </div>
 </section>
@@ -4113,7 +4261,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <section id="highest-weight-3" class="level4">
 <h4 class="anchored" data-anchor-id="highest-weight-3">Highest Weight</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_microdosing&quot;</span>]][<span class="st">&quot;sensitivity_highestWeight&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_microdosing&quot;</span>]][<span class="st">&quot;sensitivity_highestWeight&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>NULL</code></pre>
 </div>
@@ -4122,9 +4270,31 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <section id="psilocybin-3" class="level4">
 <h4 class="anchored" data-anchor-id="psilocybin-3">Psilocybin</h4>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_microdosing.csv&quot;</span>]][<span class="st">&quot;sensitivity_psilocybin&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>sensitivity_summary[[<span class="st">&quot;20240115_MABerlin_microdosing.csv&quot;</span>]][<span class="st">&quot;sensitivity_psilocybin&quot;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>NULL</code></pre>
+<pre><code>$sensitivity_psilocybin
+
+Multivariate Meta-Analysis Model (k = 5; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+ -6.6481   13.2961   19.2961   17.4550   43.2961   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  1.6113  1.2694      2     no        Study 
+sigma^2.2  1.0415  1.0205      5     no  Study/es.id 
+
+Test for Heterogeneity:
+Q(df = 4) = 101.8526, p-val &lt; .0001
+
+Model Results:
+
+estimate      se    tval  df    pval     ci.lb    ci.ub    
+  0.4420  1.0178  0.4343   1  0.7392  -12.4908  13.3748    
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
 </div>
 </section>

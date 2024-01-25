@@ -16,8 +16,3 @@ my_dat <- lapply(my_dat, function(x){
     mutate(var_es = se_es^2)
 })
 names(my_dat) <- file_sources
-
-my_dat[1:3] <- lapply(my_dat[1:3], function(x){
-  x %>%
-    mutate(drugType = factor(drugType, levels = c("mdma", "psychedelic")))
-})
