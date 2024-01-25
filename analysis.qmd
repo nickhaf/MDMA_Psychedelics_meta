@@ -5,7 +5,7 @@ date: "`r format(Sys.time(), '%d %B, %Y')`"
 format: 
   html:
     toc: true
-    toc-depth: 3
+    toc-depth: 4
     theme: sandstone
     embed-resources: true
 bibliography:
@@ -50,7 +50,7 @@ names(summary_tables) <- file_sources
 Because some studies provide multiple values we use a three-level Meta-Analysis Model. The nested random effect gets assigned to the grouping variable "study". This means we allow the random intercept to vary across different studys. 
 To obtain the estimated effect sizes for our two `drugType` levels I removed the intercept, as described in the documentation of the [metafor Package](https://www.metafor-project.org/doku.php/tips:models_with_or_without_intercept). 
 Test statistics and confidence intervals for the fixed effects use a t-distribution.
-The test of moderators checks the assumption that $\mu_{mdma} = \mu_{psych} = 0$, so it tests for an overall effect of the variable `drugType`. 
+The test of moderators checks the assumption that $\mu_{mdma} = \mu_{psych} = 0$, so we get a test for an overall effect of the variable `drugType`. 
 
 ```{r}
 models <- lapply(my_dat[1:3], fit_rma.mv, mods = ~ drugType-1) 
@@ -78,44 +78,15 @@ Finally, we have one data set without the moderator variable:
 ## Without moderator for the last data set:
 models[[4]] <- fit_rma.mv(df = my_dat[[4]])
 
+names(models) <- names(my_dat)
+
 ## Get the summaries of all 4 models: 
 models_summary <- lapply(models, summary)
 
 ```
 
-
-## Model comparison
-Now we can test if our more complex model (the one with the extra varaince level) performs better than the less complex model:
-
-```{r}
-#| echo: false
-
-## Model with level 3 variance set to zero, so we assume all effect sizes to be independent
-models_2 <- lapply(my_dat[1:3], fit_rma.mv, mods = ~ drugType, sigma2 = c(0, NA))
-
-## Without moderator for the last data set:
-models_2[[4]] <- fit_rma.mv( my_dat[[4]], sigma2 = c(0, NA))
-
-
-names(models) <- file_sources
-names(models_2) <- file_sources
-
-models_2_summary <- lapply(models_2, summary)
-```
-
-
-```{r, eval = FALSE}
-#| echo: false
-
-for(i in 1:length(models)){
-  print(anova(models[[i]], models_2[[i]]))
-}
-```
-The nested model doesn't perfom better, so the effects within studies are largely homogneous. However, we know the effects are not independent, so we can keep the three-level model. 
-
-
 ## $I^2$
-How much heterogeneity is due to differences within studies (level 2), and how much due to between study-differences (level 3)?
+How much heterogeneity is due to differences within studies (level 2), and how much due to between study-differences (level 3)? So are the effect sizes from the same study more similar than effect sizes from multiple studies?
 
 ```{r}
 i2 <- lapply(models, var.comp)
@@ -377,9 +348,16 @@ sensitivity_summary[["20240115_MABerlin_microdosing.csv"]]["sensitivity_psilocyb
 - `Test of Moderators`: Indicates differences between the subgroups mdma & psychadelics.  
 - `Model Results`
     * `estimate` is our estimated pooled effect. 
-    * CAUTION: In case of the analyses with moderator we have an `intercept`, which is the effect size if the drug is mdma. The effect of the psychedlics group can be obtained by adding their estimate value to the intercept. See [here](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/multilevel-ma.html#three-level-subgroup) for interpretation example.  
 - `$I^2$`: 
     * $I^2$ quantifies the amount of variation not attributable to sampling error. In three level models, it is split into a part attributable to true effect size differences within clusters (level 2) and between cluster variation (level 3). 
 We have 2 $I^2$ values per model quantifying the percentage of total variation associated with either level 2 or level 3. 
 
 # References
+
+
+
+```{r}
+
+```
+
+
