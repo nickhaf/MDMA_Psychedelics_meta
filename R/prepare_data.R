@@ -1,10 +1,3 @@
-library(dplyr)
-library(here)
-library(metafor)
-library(dmetar)
-library(psych)
-library(grateful)
-
 file_sources <- list.files(
   path = here::here("data"),
   pattern = "*.csv"
