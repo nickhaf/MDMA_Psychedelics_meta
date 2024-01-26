@@ -357,35 +357,40 @@ loadfonts(device = "win")
 
 linecolour <- "black"
 mdma_col <- "orange3"
-psych_col <- "forestgreen" 
+psych_col <- "forestgreen"
 
 
-prep_dat <- function(dat, background_stripes){
-my_dat[[1]] <- dat %>%
-  ## Wald-type CIs, often sufficient, as not the main gist.
-  mutate(ci_lb = es - 1.96 * se_es) %>%
-  mutate(ci_ub = es + 1.96 * se_es) %>%
-  mutate(es.id = as.numeric(as.factor(es.id)) + 3) %>% # the +3 makes some place so i can plot the total effect size there
-  dplyr::arrange(-es.id) %>%
-  mutate(background_colour = background_stripes) %>%
-  mutate(drugType = fct_recode(
-    drugType, 
-    "Psychedelic" = "psychedelic",  
-    "MDMA"  = "mdma")) %>%
-  dplyr::select(Study, Test, drugType, N, es, es.id, ci_lb, ci_ub, background_colour) %>%
-  mutate(N_label = as.character(N)) %>%
-  add_row(es.id = 2, drugType = "MDMA") %>%
-  add_row(es.id = 1, drugType = "Psychedelic") %>%
-  ## Column Headers
-  add_row(es.id = max(.$es.id) + 1, 
-          Study = "**Study**", 
-          Test = "**Test**",
-          N_label = "**N**", 
-          drugType = "MDMA") %>%
-  dplyr::arrange(-es.id)
+prep_dat <- function(dat, background_stripes) {
+  my_dat[[1]] <- dat %>%
+    ## Wald-type CIs, often sufficient, as not the main gist.
+    mutate(ci_lb = es - 1.96 * se_es) %>%
+    mutate(ci_ub = es + 1.96 * se_es) %>%
+    mutate(es.id = as.numeric(as.factor(es.id)) + 3) %>% # the +3 makes some place so i can plot the total effect size there
+    dplyr::arrange(-es.id) %>%
+    mutate(background_colour = background_stripes) %>%
+    mutate(drugType = fct_recode(
+      drugType,
+      "Psychedelic" = "psychedelic",
+      "MDMA" = "mdma"
+    )) %>%
+    dplyr::select(Study, Test, drugType, N, es, es.id, ci_lb, ci_ub, background_colour) %>%
+    mutate(N_label = as.character(N)) %>%
+    add_row(es.id = 2, drugType = "MDMA") %>%
+    add_row(es.id = 1, drugType = "Psychedelic") %>%
+    ## Column Headers
+    add_row(
+      es.id = max(.$es.id) + 1,
+      Study = "**Study**",
+      Test = "**Test**",
+      N_label = "**N**",
+      drugType = "MDMA"
+    ) %>%
+    dplyr::arrange(-es.id)
 }
 
 plot_dat_1 <- prep_dat(my_dat[[1]], background_stripes = c(rep(c("grey90", "white"), 8), "grey90"))
+plot_dat_2 <- prep_dat(my_dat[[2]], background_stripes = c(rep(c("grey90", "white"), 9), "grey90"))
+plot_dat_3 <- prep_dat(my_dat[[3]], background_stripes = rep(c("grey90", "white"), 14))
 
 diamond <- function(side_length, center_x, center_y) {
   base <- data.frame(
@@ -395,8 +400,40 @@ diamond <- function(side_length, center_x, center_y) {
   return(base)
 }
 
-plot_forestplot(plot_dat)
+range(c(
+  min(plot_dat_1$ci_lb, na.rm = TRUE), max(plot_dat_1$ci_ub, na.rm = TRUE),
+  min(plot_dat_2$ci_lb, na.rm = TRUE), max(plot_dat_2$ci_ub, na.rm = TRUE),
+  min(plot_dat_3$ci_lb, na.rm = TRUE), max(plot_dat_3$ci_ub, na.rm = TRUE)
+))
 
+plot_forestplot(plot_dat_1,
+  scale_min = -8.123048,
+  scale_max = 3.263000,
+  model_res = data.frame(
+    estimate = models[[1]]$beta,
+    ci_lb = models[[1]]$ci.lb,
+    ci_ub = models[[1]]$ci.ub,
+    drugType = c("MDMA", "Psychedelic")
+  )
+)
+plot_forestplot(plot_dat_2,
+  scale_min = -8.123048, scale_max = 3.263000,
+  model_res = data.frame(
+    estimate = models[[2]]$beta,
+    ci_lb = models[[2]]$ci.lb,
+    ci_ub = models[[2]]$ci.ub,
+    drugType = c("MDMA", "Psychedelic")
+  )
+)
+plot_forestplot(plot_dat_3,
+  scale_min = -8.123048, scale_max = 3.263000,
+  model_res = data.frame(
+    estimate = models[[3]]$beta,
+    ci_lb = models[[3]]$ci.lb,
+    ci_ub = models[[3]]$ci.ub,
+    drugType = c("MDMA", "Psychedelic")
+  )
+)
 ```
 
 # References

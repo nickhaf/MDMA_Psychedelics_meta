@@ -45,10 +45,10 @@ fit_sensitivity <- function(df, ...){
 
 }
 
-plot_forestplot <- function(plot_dat){
+plot_forestplot <- function(plot_dat, model_res, scale_min, scale_max){
 
-  x_min <- floor(min(plot_dat$ci_lb, na.rm = TRUE))
-  x_max <- ceiling(max(plot_dat$ci_ub, na.rm = TRUE))
+  x_min <- floor(scale_min)
+  x_max <- ceiling(scale_max)
 
 
   ggplot(
@@ -112,7 +112,8 @@ plot_forestplot <- function(plot_dat){
               size = 2.5,
               nudge_x =  0.45) +
     # Column text -----------------
-  geom_richtext(aes(label = Study, x = -22),
+  geom_richtext(aes(label = Study,
+                    x = (x_min - 13)),
                 colour = "black",
                 hjust = 0,
                 size = 3.5,
@@ -120,7 +121,8 @@ plot_forestplot <- function(plot_dat){
                 label.color = NA,
                 label.padding = grid::unit(rep(0, 4), "pt") # remove padding
   ) +
-    geom_richtext(aes(label = Test, x = -13),
+    geom_richtext(aes(label = Test,
+                      x = (x_min - 6)),
                   colour = "black",
                   hjust = 0.5,
                   size = 3.5,
@@ -129,7 +131,8 @@ plot_forestplot <- function(plot_dat){
                   label.padding = grid::unit(rep(0, 4), "pt") # remove padding
     ) +
     geom_richtext(
-      aes(label = N_label, x = -10),
+      aes(label = N_label,
+          x = (x_min - 3)),
       colour = "black",
       hjust = 0.5,
       size = 3.5,
@@ -155,35 +158,50 @@ plot_forestplot <- function(plot_dat){
     ## x axis line ---------
   annotate("segment", x = x_min, xend = x_max, y = 0, yend = 0) +
     # Meta Analysis results ------------
-  annotate("text", x = -12.5, y = 1.75, label = "Three-Level-Meta-Analysis- Model", size = 4, fontface = 2) +
+  annotate("text",
+           x = (x_min - 13),
+           y = 1.75,
+           label = "Three-Level-Meta-Analysis- Model",
+           size = 4,
+           fontface = 2,
+           hjust = 0) +
     geom_polygon(
-      data = diamond(
-        side_length = abs(models[[1]]$ci.lb-models[[1]]$ci.ub)[1],
-        center_x = models[[1]]$beta["drugTypemdma", ],
+      data =
+        as.data.frame(rbind(
+        diamond(
+        side_length = abs(model_res$ci_lb - model_res$ci_ub)[1],
+        center_x = model_res["drugTypemdma", "estimate" ],
         center_y = 2
       ),
-      mapping = aes(x = x_coords, y = y_coords, colour = NULL), fill = mdma_col, colour = "black"
-    ) +
-    geom_polygon(
-      data = diamond(
-        side_length = abs(models[[1]]$ci.lb-models[[1]]$ci.ub)[2],
-        center_x = models[[1]]$beta["drugTypepsychedelic", ],
+      diamond(
+        side_length = abs(model_res$ci_lb - model_res$ci_ub)[1],
+        center_x = model_res["drugTypepsychedelic", "estimate" ],
         center_y = 1
-      ),
-      mapping = aes(x = x_coords, y = y_coords, colour = NULL), fill = psych_col, colour = "black"
+      )
+      )) %>%
+        mutate(drugType = c(rep("MDMA", 4), rep("Psychedelic", 4))
+               ),
+      mapping = aes(x = x_coords, y = y_coords, fill = drugType),
+      colour = "black"
     ) +
     annotate("text",
-             x = round(models[[1]]$beta["drugTypemdma", ], 2),
+             x = model_res["drugTypemdma", "estimate"],
              y = 2.5,
-             label = format(round(models[[1]]$beta["drugTypemdma", ], 2), nsmall = 2),
+             label = format(round(model_res["drugTypemdma", "estimate"], 2), nsmall = 2),
              size = 3.5) +
     annotate("text",
-             x = round(models[[1]]$beta["drugTypepsychedelic", ], 2),
+             x = model_res["drugTypepsychedelic", "estimate"],
              y = 1.5,
-             label = format(round(models[[1]]$beta["drugTypepsychedelic", ], 2), nsmall = 2),
+             label = format(round(model_res["drugTypepsychedelic", "estimate"], 2), nsmall = 2),
              size = 3.5) +
+    # annotate("text",
+    #          x = round(models[[1]]$beta["drugTypepsychedelic", ], 2),
+    #          y = 1.5,
+    #          label = format(round(models[[1]]$beta["drugTypepsychedelic", ], 2), nsmall = 2),
+    #          size = 3.5) +
     ## Set scales, remove padding around some plot borders -------------
   scale_colour_manual(values = c(mdma_col, psych_col)) +
+    scale_fill_manual(values = c(mdma_col, psych_col)) +
     scale_x_continuous(breaks = seq(x_min, x_max, 1), expand = c(0, 0.2)) +
     scale_y_continuous(expand = c(0, 0)) +
     scale_size_continuous(range = c(1, 3)) +
