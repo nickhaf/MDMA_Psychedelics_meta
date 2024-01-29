@@ -1,40 +1,36 @@
-fit_rma.mv <- function(df, ...){
-  rma.mv(yi = es,
-         V = var_es, # Squared standard error of the effect size
-         data = df, # data set
-         random = ~1|Study/es.id, #Nesting the effect size within the Studys
-         test = "t", # similar to Knapp-Hartung method, recommended
-         dfs = "contain",
-         method = "REML", # Restricted maximum-likelihood, recommended
-         ...
-         )
+fit_rma.mv <- function(df, ...) {
+  rma.mv(
+    yi = es,
+    V = var_es, # Squared standard error of the effect size
+    data = df, # data set
+    random = ~ 1 | Study / es.id, # Nesting the effect size within the Studys
+    test = "t", # similar to Knapp-Hartung method, recommended
+    dfs = "contain",
+    method = "REML", # Restricted maximum-likelihood, recommended
+    ...
+  )
 }
 
-fit_contrasts <- function(models){
-
-  lapply(models, function(model){
-
+fit_contrasts <- function(models) {
+  lapply(models, function(model) {
     contrast <- anova(model, X = rbind(c(-1, 1)))
 
     contrast_df <- as.data.frame(contrast)
     ## KI
-    contrast_df$ci.lb <- contrast$Xb + qt(p = 0.025, df = contrast$ddf)*contrast$se
-    contrast_df$ci.ub <- contrast$Xb - qt(p = 0.025, df = contrast$ddf)*contrast$se
+    contrast_df$ci.lb <- contrast$Xb + qt(p = 0.025, df = contrast$ddf) * contrast$se
+    contrast_df$ci.ub <- contrast$Xb - qt(p = 0.025, df = contrast$ddf) * contrast$se
 
     return(contrast_df)
-
   })
 }
 
-fit_sensitivity <- function(df, ...){
-
+fit_sensitivity <- function(df, ...) {
   sensitivity_cols <- colnames(df)[grep("sensitivity", colnames(df))]
 
-  fitted_models <- lapply(sensitivity_cols, function(subset_col){
-
+  fitted_models <- lapply(sensitivity_cols, function(subset_col) {
     subset_model <- fit_rma.mv(df,
-                               subset = as.logical(df[, subset_col]),
-                               ...
+      subset = as.logical(df[, subset_col]),
+      ...
     )
     return(subset_model)
   })
@@ -42,11 +38,39 @@ fit_sensitivity <- function(df, ...){
   names(fitted_models) <- sensitivity_cols
 
   return(fitted_models)
-
 }
 
-plot_forestplot <- function(plot_dat, model_res, scale_min, scale_max){
+prep_dat <- function(dat, background_stripes) {
+  my_dat <- dat %>%
+    ## Wald-type CIs, often sufficient, as not the main gist.
+    mutate(ci_lb = es - 1.96 * se_es) %>%
+    mutate(ci_ub = es + 1.96 * se_es) %>%
+    arrange(desc(drugType), desc(Study), desc(Test), ) %>%
+    mutate(es.id = 1:nrow(.) + 4) %>% # the +3 makes some place so i can plot the total effect size there
+    mutate(background_colour = background_stripes) %>%
+    mutate(drugType = fct_recode(
+      drugType,
+      "Psychedelic" = "psychedelic",
+      "MDMA" = "mdma"
+    )) %>%
+    dplyr::select(Study, Test, drugType, N, es, es.id, ci_lb, ci_ub, background_colour) %>%
+    mutate(N_label = as.character(N)) %>%
+    add_row(es.id = 3, drugType = "MDMA") %>%
+    add_row(es.id = 2, drugType = "Psychedelic") %>%
+    add_row(es.id = 1, drugType = "MDMA") %>%
+    ## Column Headers
+    add_row(
+      es.id = max(.$es.id) + 1,
+      Study = "**Study**",
+      Test = "**Test**",
+      N_label = "**N**",
+      drugType = "MDMA"
+    ) %>%
+    dplyr::arrange(es.id)
+}
 
+
+plot_forestplot <- function(plot_dat, model_obj, contrast = NULL, i2, scale_min, scale_max) {
   x_min <- floor(scale_min)
   x_max <- ceiling(scale_max)
 
@@ -60,25 +84,25 @@ plot_forestplot <- function(plot_dat, model_res, scale_min, scale_max){
     )
   ) +
     ## background stripes --------------------
-  ggplot2::geom_tile(
-    ggplot2::aes(
-      width = Inf,
-      height = 1
-    ),
-    colour = NA,
-    fill = plot_dat$background_colour
-  ) +
-    geom_vline(xintercept = 0, colour = "black", linetype = "dotted") +
+    ggplot2::geom_tile(
+      ggplot2::aes(
+        width = Inf,
+        height = 1
+      ),
+      colour = NA,
+      fill = plot_dat$background_colour
+    ) +
+    annotate("segment", x = 0, xend = 0, y = 0, yend = max(plot_dat$es.id)-0.5,  colour = "darkgrey", linetype = "dotted") +
     ## Confidence intervals ------------------
-  geom_segment(
-    aes(
-      x = ci_lb,
-      xend = ci_ub,
-      y = es.id,
-      yend = es.id
-    ),
-    colour = linecolour
-  ) +
+    geom_segment(
+      aes(
+        x = ci_lb,
+        xend = ci_ub,
+        y = es.id,
+        yend = es.id
+      ),
+      colour = linecolour
+    ) +
     geom_segment(
       aes(
         x = ci_lb,
@@ -98,41 +122,53 @@ plot_forestplot <- function(plot_dat, model_res, scale_min, scale_max){
       colour = linecolour
     ) +
     # Points ------------------
-  geom_point(aes(size = N)) + # , shape = drug
+    geom_point(aes(size = N)) + # , shape = drug
     # Point (and CI) labels --------------------
-  geom_text(aes(label = round(es, 2)),
-            size = 3,
-            colour = "black",
-            nudge_y = 0.3
-  ) +
-    geom_text(aes(x = ci_lb, label = round(ci_lb, 2)),
-              size = 2.5,
-              nudge_x = - 0.45) +
-    geom_text(aes(x = ci_ub, label = round(ci_ub, 2)),
-              size = 2.5,
-              nudge_x =  0.45) +
+    geom_text(aes(label = round(es, 2)),
+      size = 3,
+      colour = "black",
+      nudge_y = 0.3
+    ) +
+    # geom_text(aes(x = ci_lb, label = round(ci_lb, 2)),
+    #   size = 2.5,
+    #   colour = "black",
+    #   nudge_x = -0.45
+    # ) +
+    # geom_text(aes(x = ci_ub, label = round(ci_ub, 2)),
+    #   size = 2.5,
+    #   colour = "black",
+    #   nudge_x = 0.45
+    #) +
     # Column text -----------------
-  geom_richtext(aes(label = Study,
-                    x = (x_min - 13)),
-                colour = "black",
-                hjust = 0,
-                size = 3.5,
-                fill = NA,
-                label.color = NA,
-                label.padding = grid::unit(rep(0, 4), "pt") # remove padding
-  ) +
-    geom_richtext(aes(label = Test,
-                      x = (x_min - 6)),
-                  colour = "black",
-                  hjust = 0.5,
-                  size = 3.5,
-                  fill = NA,
-                  label.color = NA,
-                  label.padding = grid::unit(rep(0, 4), "pt") # remove padding
+    geom_richtext(
+      aes(
+        label = Study,
+        x = (x_min - 13)
+      ),
+      colour = "black",
+      hjust = 0,
+      size = 3.5,
+      fill = NA,
+      label.color = NA,
+      label.padding = grid::unit(rep(0, 4), "pt") # remove padding
     ) +
     geom_richtext(
-      aes(label = N_label,
-          x = (x_min - 3)),
+      aes(
+        label = Test,
+        x = (x_min - 6)
+      ),
+      colour = "black",
+      hjust = 0.5,
+      size = 3.5,
+      fill = NA,
+      label.color = NA,
+      label.padding = grid::unit(rep(0, 4), "pt") # remove padding
+    ) +
+    geom_richtext(
+      aes(
+        label = N_label,
+        x = (x_min - 3)
+      ),
       colour = "black",
       hjust = 0.5,
       size = 3.5,
@@ -141,72 +177,105 @@ plot_forestplot <- function(plot_dat, model_res, scale_min, scale_max){
       label.padding = grid::unit(rep(0, 4), "pt") # remove padding
     ) +
     ## Header box --------------------------
-  ggplot2::annotate("segment",
-                    x = -Inf,
-                    xend = Inf,
-                    y = max(plot_dat$es.id) + 0.5,
-                    yend = max(plot_dat$es.id) + 0.5,
-                    linewidth = 0.1
-  ) +
     ggplot2::annotate("segment",
-                      x = -Inf,
-                      xend = Inf,
-                      y = max(plot_dat$es.id) - 0.5,
-                      yend = max(plot_dat$es.id) - 0.5,
-                      linewidth = 0.1
+      x = -Inf,
+      xend = Inf,
+      y = max(plot_dat$es.id) + 0.5,
+      yend = max(plot_dat$es.id) + 0.5,
+      linewidth = 0.1
+    ) +
+    ggplot2::annotate("segment",
+      x = -Inf,
+      xend = Inf,
+      y = max(plot_dat$es.id) - 0.5,
+      yend = max(plot_dat$es.id) - 0.5,
+      linewidth = 0.1
     ) +
     ## x axis line ---------
-  annotate("segment", x = x_min, xend = x_max, y = 0, yend = 0) +
+    annotate("segment", x = x_min, xend = x_max, y = 0, yend = 0) +
     # Meta Analysis results ------------
-  annotate("text",
-           x = (x_min - 13),
-           y = 1.75,
-           label = "Three-Level-Meta-Analysis- Model",
-           size = 4,
-           fontface = 2,
-           hjust = 0) +
+    annotate("text",
+      x = (x_min - 13),
+      y = 4,
+      label = "Three-Level-Meta-Analysis- Model",
+      size = 4,
+      fontface = 2,
+      hjust = 0
+    ) +
+    geom_richtext(
+      x = x_min - 12,
+      y = 3,
+      label = paste0(
+        "I<sup>2</sup><sub>Level 3</sub> = ", i2$results["Level 3", "I2"], "%<br>",
+        "I<sup>2</sup><sub>Level 2</sub> = ", i2$results["Level 2", "I2"], "%"
+      ),
+      label.color = NA,
+      label.padding = grid::unit(rep(0, 4), "pt"), # remove padding
+      colour = "black",
+      hjust = 0
+    ) +
+    geom_brace(
+      aes(
+        c(
+          model_res["drugTypemdma", "estimate"],
+          model_res["drugTypepsychedelic", "estimate"]
+        ),
+        c(1, 1.5)
+      ),
+      inherit.data = F,
+      rotate = 180
+    ) +
+    geom_richtext(
+      x = model_res["drugTypepsychedelic", "estimate"] - (model_res["drugTypemdma", "estimate"]) / 2,
+      y = 0.7,
+      colour = "black",
+      label = paste0(
+        round(contrast$estimate, 2),
+        " , *t*(", contrast$df, ") = ", round(contrast$tval, 2),
+        "; *p* = ", p_format(contrast$pval, leading.zero = FALSE)
+      ),
+      size = 3,
+      label.color = NA,
+      label.padding = grid::unit(rep(0, 4), "pt") # remove padding
+    ) +
     geom_polygon(
       data =
         as.data.frame(rbind(
-        diamond(
-        side_length = abs(model_res$ci_lb - model_res$ci_ub)[1],
-        center_x = model_res["drugTypemdma", "estimate" ],
-        center_y = 2
-      ),
-      diamond(
-        side_length = abs(model_res$ci_lb - model_res$ci_ub)[1],
-        center_x = model_res["drugTypepsychedelic", "estimate" ],
-        center_y = 1
-      )
-      )) %>%
-        mutate(drugType = c(rep("MDMA", 4), rep("Psychedelic", 4))
-               ),
+          diamond(
+            side_length = abs(model_res$ci_lb - model_res$ci_ub)[1],
+            center_x = model_res["drugTypemdma", "estimate"],
+            center_y = 3
+          ),
+          diamond(
+            side_length = abs(model_res$ci_lb - model_res$ci_ub)[1],
+            center_x = model_res["drugTypepsychedelic", "estimate"],
+            center_y = 2
+          )
+        )) %>%
+          mutate(drugType = c(rep("MDMA", 4), rep("Psychedelic", 4))),
       mapping = aes(x = x_coords, y = y_coords, fill = drugType),
       colour = "black"
     ) +
     annotate("text",
-             x = model_res["drugTypemdma", "estimate"],
-             y = 2.5,
-             label = format(round(model_res["drugTypemdma", "estimate"], 2), nsmall = 2),
-             size = 3.5) +
+      x = model_res["drugTypemdma", "estimate"],
+      y = 3.5,
+      label = format(round(model_res["drugTypemdma", "estimate"], 2), nsmall = 2),
+      size = 3.5
+    ) +
     annotate("text",
-             x = model_res["drugTypepsychedelic", "estimate"],
-             y = 1.5,
-             label = format(round(model_res["drugTypepsychedelic", "estimate"], 2), nsmall = 2),
-             size = 3.5) +
-    # annotate("text",
-    #          x = round(models[[1]]$beta["drugTypepsychedelic", ], 2),
-    #          y = 1.5,
-    #          label = format(round(models[[1]]$beta["drugTypepsychedelic", ], 2), nsmall = 2),
-    #          size = 3.5) +
+      x = model_res["drugTypepsychedelic", "estimate"],
+      y = 2.5,
+      label = format(round(model_res["drugTypepsychedelic", "estimate"], 2), nsmall = 2),
+      size = 3.5
+    ) +
     ## Set scales, remove padding around some plot borders -------------
-  scale_colour_manual(values = c(mdma_col, psych_col)) +
+    scale_colour_manual(values = c(mdma_col, psych_col)) +
     scale_fill_manual(values = c(mdma_col, psych_col)) +
     scale_x_continuous(breaks = seq(x_min, x_max, 1), expand = c(0, 0.2)) +
     scale_y_continuous(expand = c(0, 0)) +
     scale_size_continuous(range = c(1, 3)) +
     ## Set themes -------------------
-  theme_classic() +
+    theme_classic() +
     theme(
       # text = element_text(family="serif"),
       axis.line = element_blank(),
@@ -215,4 +284,18 @@ plot_forestplot <- function(plot_dat, model_res, scale_min, scale_max){
       axis.text.y = element_blank()
     ) +
     NULL
+}
+
+save_plot <- function(p, filename, width = 160*2, height = 240,scaling = 1, ...) {
+  width_inch <- width / 25.4
+  height_inch <- height / 25.4
+
+  grDevices::cairo_pdf(
+    file = filename,
+    width = width_inch * scaling,
+    height = height_inch * scaling,
+    ...
+  )
+  plot(p)
+  grDevices::dev.off()
 }
