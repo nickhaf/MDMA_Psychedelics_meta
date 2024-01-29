@@ -383,11 +383,11 @@ range(c(
   min(plot_dat_3$ci_lb, na.rm = TRUE), max(plot_dat_3$ci_ub, na.rm = TRUE)
 ))
 
-p1 <- plot_forestplot(plot_dat_1,
+p_attention <- plot_forestplot(plot_dat_1,
   scale_min = -8.123048,
   scale_max = 3.263000,
   model_obj = models[[1]],
-  contrast = drugType_contrasts[[1]], 
+  contrast = drugType_contrasts[[1]],
   i2 = i2[[1]],
   model_res = data.frame(
     estimate = models[[1]]$beta,
@@ -397,15 +397,11 @@ p1 <- plot_forestplot(plot_dat_1,
   )
 )
 
-save_plot(p1, "p1.pdf")
-p1
-ggsave("p1_tiff.tiff", units = "cm", width = 32, height = 24)
-dev.off()
-
-plot_forestplot(plot_dat_2,
+p_executive <- plot_forestplot(plot_dat_2,
   scale_min = -8.123048, scale_max = 3.263000,
   model_obj = models[[2]],
-  contrast = drugType_contrasts[[2]], 
+  contrast = drugType_contrasts[[2]],
+  i2 = i2[[2]],
   model_res = data.frame(
     estimate = models[[2]]$beta,
     ci_lb = models[[2]]$ci.lb,
@@ -413,10 +409,11 @@ plot_forestplot(plot_dat_2,
     drugType = c("MDMA", "Psychedelic")
   )
 )
-plot_forestplot(plot_dat_3,
+p_memory <- plot_forestplot(plot_dat_3,
   scale_min = -8.123048, scale_max = 3.263000,
   model_obj = models[[3]],
-  contrast = drugType_contrasts[[3]], 
+  contrast = drugType_contrasts[[3]],
+  i2 = i2[[3]],
   model_res = data.frame(
     estimate = models[[3]]$beta,
     ci_lb = models[[3]]$ci.lb,
@@ -425,7 +422,33 @@ plot_forestplot(plot_dat_3,
   )
 )
 
-plot_forestplot(plot_dat_4)
+p_microdosing <- plot_forestplot(plot_dat_4,
+  scale_min = -8.123048, scale_max = 3.263000,
+  model_obj = models[[4]],
+  i2 = i2[[4]],
+  model_res = data.frame(
+    estimate = models[[4]]$beta,
+    ci_lb = models[[4]]$ci.lb,
+    ci_ub = models[[4]]$ci.ub,
+    drugType = c("MDMA", "Psychedelic")
+  )
+)
+
+save_plot(p_memory, "p_memory.pdf")
+save_plot(p_attention, "p_attention.pdf", height = 255 * (nrow(my_dat[["20240115_MABerlin_attention.csv"]])) / 
+            (nrow(my_dat[["20240115_MABerlin_memory.csv"]])) + 40)
+save_plot(p_executive, "p_executive.pdf", height = 255 * (nrow(my_dat[["20240115_MABerlin_executive.csv"]])) / 
+            (nrow(my_dat[["20240115_MABerlin_memory.csv"]])) + 40)
+save_plot(p_microdosing, "p_microdosing.pdf", 
+          height = 255 * (nrow(my_dat[["20240115_MABerlin_microdosing.csv"]])) / 
+            (nrow(my_dat[["20240115_MABerlin_memory.csv"]])) + 40
+          )
+
+
+#ggsave("p1_tiff.tiff", units = "cm", width = 32, height = 24)
+#dev.off()
+
+
 ```
 
 

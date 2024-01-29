@@ -55,22 +55,22 @@ prep_dat <- function(dat, background_stripes) {
     )) %>%
     dplyr::select(Study, Test, drugType, N, es, es.id, ci_lb, ci_ub, background_colour) %>%
     mutate(N_label = as.character(N)) %>%
-    add_row(es.id = 3, drugType = "MDMA") %>%
+    add_row(es.id = 3, drugType = "Psychedelic") %>%
     add_row(es.id = 2, drugType = "Psychedelic") %>%
-    add_row(es.id = 1, drugType = "MDMA") %>%
+    add_row(es.id = 1, drugType = "Psychedelic") %>%
     ## Column Headers
     add_row(
       es.id = max(.$es.id) + 1,
       Study = "**Study**",
       Test = "**Test**",
       N_label = "**N**",
-      drugType = "MDMA"
+      drugType = "Psychedelic"
     ) %>%
     dplyr::arrange(es.id)
 }
 
 
-plot_forestplot <- function(plot_dat, model_obj, contrast = NULL, i2, scale_min, scale_max) {
+plot_forestplot <- function(plot_dat, model_res, model_obj, contrast = NULL, i2, scale_min, scale_max) {
   x_min <- floor(scale_min)
   x_max <- ceiling(scale_max)
 
@@ -92,7 +92,7 @@ plot_forestplot <- function(plot_dat, model_obj, contrast = NULL, i2, scale_min,
       colour = NA,
       fill = plot_dat$background_colour
     ) +
-    annotate("segment", x = 0, xend = 0, y = 0, yend = max(plot_dat$es.id)-0.5,  colour = "darkgrey", linetype = "dotted") +
+    annotate("segment", x = 0, xend = 0, y = 0, yend = max(plot_dat$es.id) - 0.5, colour = "darkgrey", linetype = "dotted") +
     ## Confidence intervals ------------------
     geom_segment(
       aes(
@@ -125,7 +125,7 @@ plot_forestplot <- function(plot_dat, model_obj, contrast = NULL, i2, scale_min,
     geom_point(aes(size = N)) + # , shape = drug
     # Point (and CI) labels --------------------
     geom_text(aes(label = round(es, 2)),
-      size = 3,
+      size = 2.5,
       colour = "black",
       nudge_y = 0.3
     ) +
@@ -138,12 +138,12 @@ plot_forestplot <- function(plot_dat, model_obj, contrast = NULL, i2, scale_min,
     #   size = 2.5,
     #   colour = "black",
     #   nudge_x = 0.45
-    #) +
+    # ) +
     # Column text -----------------
     geom_richtext(
       aes(
         label = Study,
-        x = (x_min - 13)
+        x = (x_min - 12)
       ),
       colour = "black",
       hjust = 0,
@@ -155,7 +155,7 @@ plot_forestplot <- function(plot_dat, model_obj, contrast = NULL, i2, scale_min,
     geom_richtext(
       aes(
         label = Test,
-        x = (x_min - 6)
+        x = (x_min - 4)
       ),
       colour = "black",
       hjust = 0.5,
@@ -167,7 +167,7 @@ plot_forestplot <- function(plot_dat, model_obj, contrast = NULL, i2, scale_min,
     geom_richtext(
       aes(
         label = N_label,
-        x = (x_min - 3)
+        x = (x_min - 1)
       ),
       colour = "black",
       hjust = 0.5,
@@ -195,16 +195,16 @@ plot_forestplot <- function(plot_dat, model_obj, contrast = NULL, i2, scale_min,
     annotate("segment", x = x_min, xend = x_max, y = 0, yend = 0) +
     # Meta Analysis results ------------
     annotate("text",
-      x = (x_min - 13),
-      y = 4,
+      x = (x_min - 12),
+      y = 3.5,
       label = "Three-Level-Meta-Analysis- Model",
       size = 4,
       fontface = 2,
       hjust = 0
     ) +
     geom_richtext(
-      x = x_min - 12,
-      y = 3,
+      x = x_min - 11,
+      y = 2,
       label = paste0(
         "I<sup>2</sup><sub>Level 3</sub> = ", i2$results["Level 3", "I2"], "%<br>",
         "I<sup>2</sup><sub>Level 2</sub> = ", i2$results["Level 2", "I2"], "%"
@@ -214,66 +214,13 @@ plot_forestplot <- function(plot_dat, model_obj, contrast = NULL, i2, scale_min,
       colour = "black",
       hjust = 0
     ) +
-    geom_brace(
-      aes(
-        c(
-          model_res["drugTypemdma", "estimate"],
-          model_res["drugTypepsychedelic", "estimate"]
-        ),
-        c(1, 1.5)
-      ),
-      inherit.data = F,
-      rotate = 180
-    ) +
-    geom_richtext(
-      x = model_res["drugTypepsychedelic", "estimate"] - (model_res["drugTypemdma", "estimate"]) / 2,
-      y = 0.7,
-      colour = "black",
-      label = paste0(
-        round(contrast$estimate, 2),
-        " , *t*(", contrast$df, ") = ", round(contrast$tval, 2),
-        "; *p* = ", p_format(contrast$pval, leading.zero = FALSE)
-      ),
-      size = 3,
-      label.color = NA,
-      label.padding = grid::unit(rep(0, 4), "pt") # remove padding
-    ) +
-    geom_polygon(
-      data =
-        as.data.frame(rbind(
-          diamond(
-            side_length = abs(model_res$ci_lb - model_res$ci_ub)[1],
-            center_x = model_res["drugTypemdma", "estimate"],
-            center_y = 3
-          ),
-          diamond(
-            side_length = abs(model_res$ci_lb - model_res$ci_ub)[1],
-            center_x = model_res["drugTypepsychedelic", "estimate"],
-            center_y = 2
-          )
-        )) %>%
-          mutate(drugType = c(rep("MDMA", 4), rep("Psychedelic", 4))),
-      mapping = aes(x = x_coords, y = y_coords, fill = drugType),
-      colour = "black"
-    ) +
-    annotate("text",
-      x = model_res["drugTypemdma", "estimate"],
-      y = 3.5,
-      label = format(round(model_res["drugTypemdma", "estimate"], 2), nsmall = 2),
-      size = 3.5
-    ) +
-    annotate("text",
-      x = model_res["drugTypepsychedelic", "estimate"],
-      y = 2.5,
-      label = format(round(model_res["drugTypepsychedelic", "estimate"], 2), nsmall = 2),
-      size = 3.5
-    ) +
+    add_model_res(model_res, contrast, i2, x_min, x_max) +
     ## Set scales, remove padding around some plot borders -------------
-    scale_colour_manual(values = c(mdma_col, psych_col)) +
-    scale_fill_manual(values = c(mdma_col, psych_col)) +
+    scale_colour_manual(values = c("MDMA" = mdma_col, "Psychedelic" = psych_col)) +
+    scale_fill_manual(values = c("MDMA" = mdma_col, "Psychedelic" = psych_col)) +
     scale_x_continuous(breaks = seq(x_min, x_max, 1), expand = c(0, 0.2)) +
     scale_y_continuous(expand = c(0, 0)) +
-    scale_size_continuous(range = c(1, 3)) +
+    scale_size_continuous(range = c(1, 2.5)) +
     ## Set themes -------------------
     theme_classic() +
     theme(
@@ -283,10 +230,100 @@ plot_forestplot <- function(plot_dat, model_obj, contrast = NULL, i2, scale_min,
       axis.title = element_blank(),
       axis.text.y = element_blank()
     ) +
+    guides(fill=guide_legend(title="Drug Type")) +
+    guides(
+      color = guide_legend(
+        title = "Drug Type")
+) +
     NULL
 }
 
-save_plot <- function(p, filename, width = 160*2, height = 240,scaling = 1, ...) {
+add_model_res <- function(model_res, contrast, i2,  x_min, x_max) {
+  if (!is.null(contrast)) {
+    list(
+      geom_brace(
+        aes(
+          c(
+            model_res["drugTypemdma", "estimate"],
+            model_res["drugTypepsychedelic", "estimate"]
+          ),
+          c(1, 1.5)
+        ),
+        inherit.data = F,
+        rotate = 180
+      ),
+      geom_richtext(
+        x = model_res["drugTypepsychedelic", "estimate"] - (model_res["drugTypemdma", "estimate"]) / 2,
+        y = 0.7,
+        colour = "black",
+        label = paste0(
+          round(contrast$estimate, 2),
+          " , *t*(", contrast$df, ") = ", round(contrast$tval, 2),
+          "; *p* = ", p_format(contrast$pval, leading.zero = FALSE)
+        ),
+        size = 3,
+        hjust = 0.3,
+        label.color = NA,
+        label.padding = grid::unit(rep(0, 4), "pt") # remove padding
+      ),
+      geom_polygon(
+        data =
+          as.data.frame(rbind(
+            diamond(
+              side_length = abs(model_res$ci_lb - model_res$ci_ub)[1],
+              center_x = model_res["drugTypemdma", "estimate"],
+              center_y = 3
+            ),
+            diamond(
+              side_length = abs(model_res$ci_lb - model_res$ci_ub)[1],
+              center_x = model_res["drugTypepsychedelic", "estimate"],
+              center_y = 2
+            )
+          )) %>%
+            mutate(drugType = c(rep("MDMA", 4), rep("Psychedelic", 4))),
+        mapping = aes(x = x_coords, y = y_coords, fill = drugType),
+        colour = "black"
+      ),
+      annotate("text",
+        x = model_res["drugTypemdma", "estimate"],
+        y = 3.5,
+        label = format(round(model_res["drugTypemdma", "estimate"], 2), nsmall = 2),
+        size = 3.5
+      ),
+      annotate("text",
+        x = model_res["drugTypepsychedelic", "estimate"],
+        y = 2.5,
+        label = format(round(model_res["drugTypepsychedelic", "estimate"], 2), nsmall = 2),
+        size = 3.5
+      )
+    )
+  } else {
+    list(
+      geom_polygon(
+        data =
+          as.data.frame(rbind(
+            diamond(
+              side_length = abs(model_res$ci_lb - model_res$ci_ub)[1],
+              center_x = model_res[model_res$drugType == "Psychedelic", "estimate"],
+              center_y = 3
+            )
+          )) %>%
+            mutate(drugType = c(rep("Psychedelic", 4))),
+        mapping = aes(x = x_coords, y = y_coords, fill = drugType),
+        colour = "black"
+      ),
+      annotate("text",
+        x = model_res[model_res$drugType == "Psychedelic", "estimate"],
+        y = 3.5,
+        label = format(round(model_res[model_res$drugType == "Psychedelic", "estimate"], 2), nsmall = 2),
+        size = 3.5
+      )
+    )
+  }
+}
+
+
+save_plot <- function(p, filename, width = 300, height = 255, scaling = 1, ...) {
   width_inch <- width / 25.4
   height_inch <- height / 25.4
 
