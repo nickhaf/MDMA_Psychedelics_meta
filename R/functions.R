@@ -270,14 +270,16 @@ add_model_res <- function(model_res, contrast, i2,  x_min, x_max) {
         data =
           as.data.frame(rbind(
             diamond(
-              side_length = abs(model_res$ci_lb - model_res$ci_ub)[1],
               center_x = model_res["drugTypemdma", "estimate"],
-              center_y = 3
+              center_y = 3,
+              ci_ub = model_res["drugTypemdma", "ci_ub"],
+              ci_lb = model_res["drugTypemdma", "ci_lb"]
             ),
             diamond(
-              side_length = abs(model_res$ci_lb - model_res$ci_ub)[1],
               center_x = model_res["drugTypepsychedelic", "estimate"],
-              center_y = 2
+              center_y = 2,
+              ci_ub = model_res["drugTypepsychedelic", "ci_ub"],
+              ci_lb = model_res["drugTypepsychedelic", "ci_lb"]
             )
           )) %>%
             mutate(drugType = c(rep("MDMA", 4), rep("Psychedelic", 4))),
@@ -301,12 +303,12 @@ add_model_res <- function(model_res, contrast, i2,  x_min, x_max) {
     list(
       geom_polygon(
         data =
-          as.data.frame(rbind(
+          as.data.frame(
             diamond(
-              side_length = abs(model_res$ci_lb - model_res$ci_ub)[1],
               center_x = model_res[model_res$drugType == "Psychedelic", "estimate"],
-              center_y = 3
-            )
+              center_y = 3,
+              ci_ub = model_res$ci_ub[1],
+              ci_lb = model_res$ci_lb[1]
           )) %>%
             mutate(drugType = c(rep("Psychedelic", 4))),
         mapping = aes(x = x_coords, y = y_coords, fill = drugType),
