@@ -69,7 +69,6 @@ prep_dat <- function(dat, background_stripes) {
     dplyr::arrange(es.id)
 }
 
-
 plot_forestplot <- function(plot_dat, model_res, model_obj, contrast = NULL, i2, scale_min, scale_max) {
   x_min <- floor(scale_min)
   x_max <- ceiling(scale_max)
@@ -323,7 +322,6 @@ add_model_res <- function(model_res, contrast, i2,  x_min, x_max) {
     )
   }
 }
-
 
 save_plot <- function(p, filename, width = 300, height = 255, scaling = 1, ...) {
   width_inch <- width / 25.4

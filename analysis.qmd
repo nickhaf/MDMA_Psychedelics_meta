@@ -102,7 +102,6 @@ How much heterogeneity is due to differences within studies (level 2), and how m
 i2 <- lapply(models, var.comp)
 ```
 
-
 ## Results
 ### Attention
 #### Descriptives
@@ -377,7 +376,7 @@ diamond <- function(side_length, center_x, center_y, ci_ub, ci_lb) {
   return(base)
 }
 
-range(c(
+max_range <- range(c(
   min(plot_dat_1$ci_lb, na.rm = TRUE), max(plot_dat_1$ci_ub, na.rm = TRUE),
   min(plot_dat_2$ci_lb, na.rm = TRUE), max(plot_dat_2$ci_ub, na.rm = TRUE),
   min(plot_dat_3$ci_lb, na.rm = TRUE), max(plot_dat_3$ci_ub, na.rm = TRUE)
@@ -434,21 +433,20 @@ p_microdosing <- plot_forestplot(plot_dat_4,
   )
 )
 
+# ggsave("p1_tiff.tiff", units = "cm", width = 32, height = 24)
+# dev.off()
+```
+
+```{r eval = FALSE}
 save_plot(p_memory, "p_memory.pdf")
-save_plot(p_attention, "p_attention.pdf", height = 255 * (nrow(my_dat[["20240115_MABerlin_attention.csv"]])) / 
-            (nrow(my_dat[["20240115_MABerlin_memory.csv"]])) + 40)
-save_plot(p_executive, "p_executive.pdf", height = 255 * (nrow(my_dat[["20240115_MABerlin_executive.csv"]])) / 
-            (nrow(my_dat[["20240115_MABerlin_memory.csv"]])) + 40)
-save_plot(p_microdosing, "p_microdosing.pdf", 
-          height = 255 * (nrow(my_dat[["20240115_MABerlin_microdosing.csv"]])) / 
-            (nrow(my_dat[["20240115_MABerlin_memory.csv"]])) + 40
-          )
-
-
-#ggsave("p1_tiff.tiff", units = "cm", width = 32, height = 24)
-#dev.off()
-
-
+save_plot(p_attention, "p_attention.pdf", height = 255 * (nrow(my_dat[["20240115_MABerlin_attention.csv"]])) /
+  (nrow(my_dat[["20240115_MABerlin_memory.csv"]])) + 40)
+save_plot(p_executive, "p_executive.pdf", height = 255 * (nrow(my_dat[["20240115_MABerlin_executive.csv"]])) /
+  (nrow(my_dat[["20240115_MABerlin_memory.csv"]])) + 40)
+save_plot(p_microdosing, "p_microdosing.pdf",
+  height = 255 * (nrow(my_dat[["20240115_MABerlin_microdosing.csv"]])) /
+    (nrow(my_dat[["20240115_MABerlin_memory.csv"]])) + 40
+)
 ```
 
 
