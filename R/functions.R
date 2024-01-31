@@ -220,13 +220,15 @@ plot_forestplot <- function(plot_dat, model_res, model_obj, contrast = NULL, i2,
     scale_x_continuous(breaks = seq(x_min, x_max, 1), expand = c(0, 0.2)) +
     scale_y_continuous(expand = c(0, 0)) +
     scale_size_continuous(range = c(1, 2.5)) +
+    xlab("Standardized Mean Difference") +
     ## Set themes -------------------
     theme_classic() +
     theme(
       # text = element_text(family="serif"),
       axis.line = element_blank(),
       axis.ticks.y = element_blank(),
-      axis.title = element_blank(),
+      axis.title.x = element_text(hjust = .795),
+      axis.title.y = element_blank(),
       axis.text.y = element_blank()
     ) +
     guides(fill=guide_legend(title="Drug Type")) +
