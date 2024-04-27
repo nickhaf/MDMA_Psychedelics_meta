@@ -1,0 +1,455 @@
+---
+title: "MDMA/Psychadelics multi-level meta analysis"
+author: Nicklas Hafiz
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+format: 
+  html:
+    toc: true
+    toc-depth: 4
+    theme: sandstone
+    embed-resources: true
+    fig-width: 10
+    fig-height: 8
+bibliography:
+  - grateful-refs.bib
+  - references.bib
+---
+
+```{r load packages}
+#| warning: false
+#| message: false
+#| echo: false
+
+## restore the library from the LOCK-file:
+renv::restore()
+
+library(here)
+library(metafor)
+library(dmetar)
+library(psych)
+library(grateful)
+library(ggtext)
+library(tidyverse)
+library(extrafont)
+library(rstatix)
+library(ggbrace)
+
+file_sources <- list.files(
+  path = here::here("R"),
+  pattern = "*.R"
+)
+source(here::here("R", file_sources[1]))
+source(here::here("R", file_sources[2]))
+```
+
+CAUTION: I added the moderator variable last minute and didn't have a chance to check everything properly. 
+
+# Introduction
+The analysis follows the chapter [Fitting Three-Level Meta-Analysis Models in R](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/multilevel-ma.html#multilevel-R) from the book [Doing Meta-Analysis in R](https://bookdown.org/MathiasHarrer/Doing_Meta_Analysis_in_R/), @harrer2021doing. 
+
+```{r}
+#| echo: false
+cite_packages(output = "paragraph", out.dir = ".")
+```
+
+```{r results='asis'}
+#| echo: false
+summary_tables <- lapply(my_dat[1:3], function(x) {
+  describeBy(x[, c("N", "es", "se_es")], skew = FALSE, group = x$drugType)
+})
+
+summary_tables[[4]] <- describe(my_dat[[4]][, c("N", "es", "se_es")], skew = FALSE)
+names(summary_tables) <- file_sources
+```
+
+# Main analysis
+Because some studies provide multiple values we use a three-level Meta-Analysis Model. The nested random effect gets assigned to the grouping variable "study". This means we allow the random intercept to vary across different studys. 
+To obtain the estimated effect sizes for our two `drugType` levels I removed the intercept, as described in the documentation of the [metafor Package](https://www.metafor-project.org/doku.php/tips:models_with_or_without_intercept). 
+Test statistics and confidence intervals for the fixed effects use a t-distribution.
+The test of moderators checks the assumption that $\mu_{mdma} = \mu_{psych} = 0$, so we get a test for an overall effect of the variable `drugType`. 
+
+```{r}
+models <- lapply(my_dat[1:3], fit_rma.mv, mods = ~ drugType - 1)
+```
+
+To compare both `drugType` levels I defined a contrasts, testing if $\mu_{mdma} - \mu{psych} = 0$ (Wald-Type Test), see `?anova.rma`.
+```{r}
+drugType_contrasts <- fit_contrasts(models[1:3])
+```
+
+This is the same test done in a model with intercept for the regression weight of `drugTypepsychedelic`.  
+
+```{r}
+models_with_intercept <- lapply(my_dat[1:3], fit_rma.mv, mods = ~drugType)
+# compare:
+drugType_contrasts[[3]]
+models_with_intercept[[3]]
+```
+
+Finally, we have one data set without the moderator variable: 
+```{r}
+## Without moderator for the last data set:
+models[[4]] <- fit_rma.mv(df = my_dat[[4]])
+
+names(models) <- names(my_dat)
+
+## Get the summaries of all 4 models:
+models_summary <- lapply(models, summary)
+```
+
+## $I^2$
+How much heterogeneity is due to differences within studies (level 2), and how much due to between study-differences (level 3)? So are the effect sizes from the same study more similar than effect sizes from multiple studies?
+
+```{r}
+i2 <- lapply(models, var.comp)
+```
+
+## Results
+### Attention
+#### Descriptives
+```{r}
+#| echo: false
+
+summary_tables[["20240115_MABerlin_attention.csv"]]
+```
+
+#### Model
+```{r}
+#| echo: false
+
+models_summary[["20240115_MABerlin_attention.csv"]]
+
+drugType_contrasts[["20240115_MABerlin_attention.csv"]]
+```
+
+#### $I^2$
+```{r}
+#| echo: false
+
+i2[["20240115_MABerlin_attention.csv"]]
+```
+
+### Executive
+#### Descriptives
+```{r}
+#| echo: false
+
+summary_tables[["20240115_MABerlin_executive.csv"]]
+```
+
+#### Model
+```{r}
+#| echo: false
+
+models_summary[["20240115_MABerlin_executive.csv"]]
+drugType_contrasts[["20240115_MABerlin_executive.csv"]]
+```
+
+#### $I^2$
+```{r}
+#| echo: false
+
+i2[["20240115_MABerlin_executive.csv"]]
+```
+
+### Memory
+#### Descriptives
+```{r}
+#| echo: false
+
+summary_tables[["20240115_MABerlin_memory.csv"]]
+```
+
+#### Model
+```{r}
+#| echo: false
+
+models_summary[["20240115_MABerlin_memory.csv"]]
+drugType_contrasts[["20240115_MABerlin_memory.csv"]]
+```
+
+#### $I^2$
+```{r}
+#| echo: false
+
+i2[["20240115_MABerlin_memory.csv"]]
+```
+
+### Microdosing
+#### Descriptives
+```{r}
+#| echo: false
+
+summary_tables[["20240115_MABerlin_microdosing.csv"]]
+```
+
+#### Model
+```{r}
+#| echo: false
+
+models_summary[["20240115_MABerlin_microdosing.csv"]]
+```
+
+#### $I^2$
+```{r}
+#| echo: false
+
+i2[["20240115_MABerlin_microdosing.csv"]]
+```
+
+# Sensitivity analyses
+In some cases reduntent predictors get dropped because there are not enogh cases with one of the predictors (e.g., sensitivity_psilocybin only inlcudes psychedelics).
+
+```{r}
+# Nonconvergence for this analysis, see: http://www.metafor-project.org/doku.php/tips:convergence_problems_rma_mv
+my_dat[[3]] <- my_dat[[3]] %>% dplyr::select(-sensitivity_lsd)
+
+sensitivity_analyses <- lapply(my_dat[1:3], fit_sensitivity, mods = ~ drugType - 1)
+sensitivity_contrasts <- list()
+sensitivity_contrasts[[1]] <- fit_contrasts(sensitivity_analyses[[1]][c("sensitivity_speed", "sensitivity_accuracy", "sensitivity_highestWeight", "sensitivity_highQuality")])
+sensitivity_contrasts[[2]] <- fit_contrasts(sensitivity_analyses[[2]][c("sensitivity_speed", "sensitivity_accuracy", "sensitivity_highestWeight", "sensitivity_highQuality")])
+sensitivity_contrasts[[3]] <- fit_contrasts(sensitivity_analyses[[3]][c("sensitivity_accuracy", "sensitivity_highestWeight", "sensitivity_highQuality")])
+
+names(sensitivity_contrasts) <- names(sensitivity_analyses[1:3])
+
+sensitivity_analyses[[4]] <- fit_sensitivity(my_dat[[4]])
+names(sensitivity_analyses) <- names(my_dat)
+
+sensitivity_summary <- lapply(sensitivity_analyses, function(domain) {
+  lapply(domain, summary)
+})
+```
+
+
+## Results
+
+### Attention
+
+#### Speed
+```{r}
+sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_speed"]
+sensitivity_contrasts[["20240115_MABerlin_attention.csv"]]["sensitivity_speed"]
+```
+
+#### Accuracy
+```{r}
+sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_accuracy"]
+sensitivity_contrasts[["20240115_MABerlin_attention.csv"]]["sensitivity_accuracy"]
+```
+
+#### Highest Weight
+```{r}
+sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_highestWeight"]
+sensitivity_contrasts[["20240115_MABerlin_attention.csv"]]["sensitivity_highestWeight"]
+```
+
+#### Psilocybin
+```{r}
+sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_psilocybin"]
+```
+
+#### High Quality
+```{r}
+sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_highQuality"]
+sensitivity_contrasts[["20240115_MABerlin_attention.csv"]]["sensitivity_highQuality"]
+```
+
+### Executive
+
+#### Speed
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_speed"]
+sensitivity_contrasts[["20240115_MABerlin_executive.csv"]]["sensitivity_speed"]
+```
+
+#### Accuracy
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_accuracy"]
+sensitivity_contrasts[["20240115_MABerlin_executive.csv"]]["sensitivity_accuracy"]
+```
+
+#### Highest Weight
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_highestWeight"]
+sensitivity_contrasts[["20240115_MABerlin_executive.csv"]]["sensitivity_highestWeight"]
+```
+
+#### Psilocybin
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_psilocybin"]
+```
+
+#### LSD
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_lsd"]
+```
+
+#### High Quality
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_highQuality"]
+sensitivity_contrasts[["20240115_MABerlin_executive.csv"]]["sensitivity_highQuality"]
+```
+
+### Memory
+
+#### Speed
+```{r}
+sensitivity_summary[["20240115_MABerlin_memory.csv"]]["sensitivity_speed"]
+```
+
+#### Accuracy
+```{r}
+sensitivity_summary[["20240115_MABerlin_memory.csv"]]["sensitivity_accuracy"]
+sensitivity_contrasts[["20240115_MABerlin_memory.csv"]]["sensitivity_accuracy"]
+```
+
+#### Highest Weight
+```{r}
+sensitivity_summary[["20240115_MABerlin_memory.csv"]]["sensitivity_highestWeight"]
+sensitivity_contrasts[["20240115_MABerlin_memory.csv"]]["sensitivity_highestWeight"]
+```
+
+#### Psilocybin
+```{r}
+sensitivity_summary[["20240115_MABerlin_memory.csv"]]["sensitivity_psilocybin"]
+```
+
+#### LSD
+Did not converge.
+```{r, eval = FALSE}
+sensitivity_summary[["20240115_MABerlin_memory.csv"]]["sensitivity_lsd"]
+```
+
+#### High Quality
+```{r}
+sensitivity_summary[["20240115_MABerlin_memory.csv"]]["sensitivity_highQuality"]
+sensitivity_contrasts[["20240115_MABerlin_memory.csv"]]["sensitivity_highQuality"]
+```
+
+### Microdosing
+#### Highest Weight
+```{r}
+sensitivity_summary[["20240115_MABerlin_microdosing"]]["sensitivity_highestWeight"]
+```
+
+#### Psilocybin
+```{r}
+sensitivity_summary[["20240115_MABerlin_microdosing.csv"]]["sensitivity_psilocybin"]
+```
+
+
+# Interpretation
+
+- `Variance Components`:
+    * sigma^2.1 contains the level 3 between-cluster variance.
+    * sigma^2.2 shows the variance within clusters (level 2).
+- `Test of Moderators`: Indicates differences between the subgroups mdma & psychadelics.  
+- `Model Results`
+    * `estimate` is our estimated pooled effect. 
+- `$I^2$`: 
+    * $I^2$ quantifies the amount of variation not attributable to sampling error. In three level models, it is split into a part attributable to true effect size differences within clusters (level 2) and between cluster variation (level 3). 
+We have 2 $I^2$ values per model quantifying the percentage of total variation associated with either level 2 or level 3. 
+
+# Forest plots
+```{r}
+#| warning: false
+#| message: false
+#| echo: false
+
+loadfonts(device = "win")
+
+linecolour <- "black"
+mdma_col <- "orange3"
+psych_col <- "forestgreen"
+
+my_dat[[4]]$drugType <- rep("psychedelic", nrow(my_dat[[4]]))
+
+plot_dat_1 <- prep_dat(my_dat[[1]], background_stripes = c(rep(c("grey90", "white"), 8), "grey90"))
+plot_dat_2 <- prep_dat(my_dat[[2]], background_stripes = c(rep(c("grey90", "white"), 9), "grey90"))
+plot_dat_3 <- prep_dat(my_dat[[3]], background_stripes = rep(c("grey90", "white"), 14))
+plot_dat_4 <- prep_dat(my_dat[[4]], background_stripes = rep(c("grey90", "white"), 3))
+
+
+diamond <- function(side_length, center_x, center_y, ci_ub, ci_lb) {
+  base <- data.frame(
+    x_coords = c(ci_ub, center_x, ci_lb, center_x),
+    y_coords = c(0, 0.25, 0, -0.25) + center_y
+  )
+  return(base)
+}
+
+max_range <- range(c(
+  min(plot_dat_1$ci_lb, na.rm = TRUE), max(plot_dat_1$ci_ub, na.rm = TRUE),
+  min(plot_dat_2$ci_lb, na.rm = TRUE), max(plot_dat_2$ci_ub, na.rm = TRUE),
+  min(plot_dat_3$ci_lb, na.rm = TRUE), max(plot_dat_3$ci_ub, na.rm = TRUE)
+))
+
+p_attention <- plot_forestplot(plot_dat_1,
+  scale_min = -8.123048,
+  scale_max = 3.263000,
+  model_obj = models[[1]],
+  contrast = drugType_contrasts[[1]],
+  i2 = i2[[1]],
+  model_res = data.frame(
+    estimate = models[[1]]$beta,
+    ci_lb = models[[1]]$ci.lb,
+    ci_ub = models[[1]]$ci.ub,
+    drugType = c("MDMA", "Psychedelic")
+  )
+)
+
+p_executive <- plot_forestplot(plot_dat_2,
+  scale_min = -8.123048, scale_max = 3.263000,
+  model_obj = models[[2]],
+  contrast = drugType_contrasts[[2]],
+  i2 = i2[[2]],
+  model_res = data.frame(
+    estimate = models[[2]]$beta,
+    ci_lb = models[[2]]$ci.lb,
+    ci_ub = models[[2]]$ci.ub,
+    drugType = c("MDMA", "Psychedelic")
+  )
+)
+p_memory <- plot_forestplot(plot_dat_3,
+  scale_min = -8.123048, scale_max = 3.263000,
+  model_obj = models[[3]],
+  contrast = drugType_contrasts[[3]],
+  i2 = i2[[3]],
+  model_res = data.frame(
+    estimate = models[[3]]$beta,
+    ci_lb = models[[3]]$ci.lb,
+    ci_ub = models[[3]]$ci.ub,
+    drugType = c("MDMA", "Psychedelic")
+  )
+)
+
+p_microdosing <- plot_forestplot(plot_dat_4,
+  scale_min = -8.123048, scale_max = 3.263000,
+  model_obj = models[[4]],
+  i2 = i2[[4]],
+  model_res = data.frame(
+    estimate = models[[4]]$beta,
+    ci_lb = models[[4]]$ci.lb,
+    ci_ub = models[[4]]$ci.ub,
+    drugType = c("MDMA", "Psychedelic")
+  )
+)
+
+# ggsave("p1_tiff.tiff", units = "cm", width = 32, height = 24)
+# dev.off()
+```
+
+```{r eval = FALSE}
+save_plot(p_memory, "p_memory.pdf")
+save_plot(p_attention, "p_attention.pdf", height = 255 * (nrow(my_dat[["20240115_MABerlin_attention.csv"]])) /
+  (nrow(my_dat[["20240115_MABerlin_memory.csv"]])) + 40)
+save_plot(p_executive, "p_executive.pdf", height = 255 * (nrow(my_dat[["20240115_MABerlin_executive.csv"]])) /
+  (nrow(my_dat[["20240115_MABerlin_memory.csv"]])) + 40)
+save_plot(p_microdosing, "p_microdosing.pdf",
+  height = 255 * (nrow(my_dat[["20240115_MABerlin_microdosing.csv"]])) /
+    (nrow(my_dat[["20240115_MABerlin_memory.csv"]])) + 40
+)
+```
+
+
+# References
