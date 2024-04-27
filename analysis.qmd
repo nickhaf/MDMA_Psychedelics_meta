@@ -6,9 +6,9 @@ format:
   html:
     toc: true
     toc-depth: 4
-    theme: sandstone
+    theme: flatly
     embed-resources: true
-    fig-width: 12
+    fig-width: 11
     fig-height: 12
 bibliography:
   - grateful-refs.bib
@@ -40,7 +40,10 @@ file_sources <- list.files(
   pattern = "*.R"
 )
 source(here::here("R", file_sources[1]))
-source(here::here("R", file_sources[2]))
+# source(here::here("R", file_sources[2])) ## This reads and prepares the data
+
+dat_maBerlin <- readRDS(here::here("data", "dat_maBerlin.RDS"))
+
 ```
 
 # Introduction
@@ -55,12 +58,12 @@ cite_packages(output = "paragraph", out.dir = ".")
 #| echo: false
 
 # Build tables for summary
-summary_tables <- lapply(my_dat[1:3], function(x) {
+summary_tables <- lapply(dat_maBerlin[1:3], function(x) {
   describeBy(x[, c("N", "es", "se_es")], skew = FALSE, group = x$drugType)
 })
 
 # No description by drugType necessary:
-summary_tables[[4]] <- describe(my_dat[[4]][, c("N", "es", "se_es")], skew = FALSE)
+summary_tables[[4]] <- describe(dat_maBerlin[[4]][, c("N", "es", "se_es")], skew = FALSE)
 names(summary_tables) <- file_sources
 ```
 
@@ -73,17 +76,18 @@ The test of moderators checks the assumption that $\mu_{mdma} = \mu_{psych} = 0$
 ```{r}
 #| echo: false
 
-models <- lapply(my_dat[1:3], fit_rma.mv, mods = ~ drugType - 1)
+models <- lapply(dat_maBerlin[1:3], fit_rma.mv, mods = ~ drugType - 1)
 ```
 
 To compare both `drugType` levels we defined a contrast, testing if $\mu_{mdma} - \mu_{psych} = 0$ (Wald-Type Test), see `?anova.rma`.
 ```{r}
 #| echo: false
+#| results: false
 
 drugType_contrasts <- fit_contrasts(models[1:3])
 
 # This is the same test done in a model with intercept for the regression weight of `drugTypepsychedelic`.  
-models_with_intercept <- lapply(my_dat[1:3], fit_rma.mv, mods = ~drugType)
+models_with_intercept <- lapply(dat_maBerlin[1:3], fit_rma.mv, mods = ~drugType)
 # compare:
 drugType_contrasts[[3]]
 models_with_intercept[[3]]
@@ -94,9 +98,9 @@ models_with_intercept[[3]]
 
 # Finally, we have one data set without the moderator variable: 
 # Without moderator for the last data set:
-models[[4]] <- fit_rma.mv(df = my_dat[[4]])
+models[[4]] <- fit_rma.mv(df = dat_maBerlin[[4]])
 
-names(models) <- names(my_dat)
+names(models) <- names(dat_maBerlin)
 
 # Get the summaries of all 4 models:
 models_summary <- lapply(models, summary)
@@ -124,12 +128,12 @@ linecolour <- "black"
 mdma_col <- "orange3"
 psych_col <- "forestgreen"
 
-my_dat[[4]]$drugType <- rep("psychedelic", nrow(my_dat[[4]]))
+dat_maBerlin[[4]]$drugType <- rep("psychedelic", nrow(dat_maBerlin[[4]]))
 
-plot_dat_1 <- prep_dat(my_dat[[1]], background_stripes = c(rep(c("grey90", "white"), 8), "grey90"))
-plot_dat_2 <- prep_dat(my_dat[[2]], background_stripes = c(rep(c("grey90", "white"), 9), "grey90"))
-plot_dat_3 <- prep_dat(my_dat[[3]], background_stripes = rep(c("grey90", "white"), 14))
-plot_dat_4 <- prep_dat(my_dat[[4]], background_stripes = rep(c("grey90", "white"), 3))
+plot_dat_1 <- prep_dat(dat_maBerlin[[1]], background_stripes = c(rep(c("grey90", "white"), 8), "grey90"))
+plot_dat_2 <- prep_dat(dat_maBerlin[[2]], background_stripes = c(rep(c("grey90", "white"), 9), "grey90"))
+plot_dat_3 <- prep_dat(dat_maBerlin[[3]], background_stripes = rep(c("grey90", "white"), 14))
+plot_dat_4 <- prep_dat(dat_maBerlin[[4]], background_stripes = rep(c("grey90", "white"), 3))
 
 
 max_range <- range(c(
@@ -187,7 +191,6 @@ p_memory <- plot_forestplot(plot_dat_3,
   labs(title = "Effects of MDMA and Psychedelics on Memory",
     caption = "95% Confidence Intervals",
   )
-p_memory
 
 p_microdosing <- plot_forestplot(plot_dat_4,
   scale_min = -8.123048, scale_max = 3.263000,
@@ -203,7 +206,6 @@ p_microdosing <- plot_forestplot(plot_dat_4,
   labs(title = "Microdosing",
     caption = "95% Confidence Intervals",
   )
-p_microdosing
 
 # ggsave("p1_tiff.tiff", units = "cm", width = 32, height = 24)
 # dev.off()
@@ -225,6 +227,10 @@ summary_tables[["20240115_MABerlin_attention.csv"]]$psychedelic %>%
 
 ### Model
 ```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
 p_attention
 ```
 
@@ -270,6 +276,10 @@ summary_tables[["20240115_MABerlin_executive.csv"]]$psychedelic %>%
 ### Model
 
 ```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
 p_executive
 ```
 
@@ -305,6 +315,10 @@ summary_tables[["20240115_MABerlin_memory.csv"]]$psychedelic %>%
 
 ### Model
 ```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
 p_memory
 ```
 
@@ -339,6 +353,10 @@ summary_tables[["20240115_MABerlin_microdosing.csv"]] %>%
 
 ### Model
 ```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
 p_microdosing
 ```
 
@@ -373,13 +391,13 @@ We have 2 $I^2$ values per model quantifying the percentage of total variation a
 
 ## Save for publication
 save_plot(p_memory, "p_memory.pdf")
-save_plot(p_attention, "p_attention.pdf", height = 255 * (nrow(my_dat[["20240115_MABerlin_attention.csv"]])) /
-  (nrow(my_dat[["20240115_MABerlin_memory.csv"]])) + 40)
-save_plot(p_executive, "p_executive.pdf", height = 255 * (nrow(my_dat[["20240115_MABerlin_executive.csv"]])) /
-  (nrow(my_dat[["20240115_MABerlin_memory.csv"]])) + 40)
+save_plot(p_attention, "p_attention.pdf", height = 255 * (nrow(dat_maBerlin[["20240115_MABerlin_attention.csv"]])) /
+  (nrow(dat_maBerlin[["20240115_MABerlin_memory.csv"]])) + 40)
+save_plot(p_executive, "p_executive.pdf", height = 255 * (nrow(dat_maBerlin[["20240115_MABerlin_executive.csv"]])) /
+  (nrow(dat_maBerlin[["20240115_MABerlin_memory.csv"]])) + 40)
 save_plot(p_microdosing, "p_microdosing.pdf",
-  height = 255 * (nrow(my_dat[["20240115_MABerlin_microdosing.csv"]])) /
-    (nrow(my_dat[["20240115_MABerlin_memory.csv"]])) + 40
+  height = 255 * (nrow(dat_maBerlin[["20240115_MABerlin_microdosing.csv"]])) /
+    (nrow(dat_maBerlin[["20240115_MABerlin_memory.csv"]])) + 40
 )
 ```
 

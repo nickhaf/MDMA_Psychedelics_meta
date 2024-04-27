@@ -41,8 +41,9 @@ fit_sensitivity <- function(df, ...) {
   return(fitted_models)
 }
 
+## Prepare data for plotting
 prep_dat <- function(dat, background_stripes) {
-  my_dat <- dat %>%
+  dat_maBerlin <- dat %>%
     ## Wald-type CIs, often sufficient, as not the main gist.
     mutate(ci_lb = es - 1.96 * se_es) %>%
     mutate(ci_ub = es + 1.96 * se_es) %>%

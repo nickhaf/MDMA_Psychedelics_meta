@@ -3,11 +3,14 @@ file_sources <- list.files(
   pattern = "*.csv"
 )
 
-my_dat <- lapply(here::here("data", file_sources), read.csv)
-my_dat <- lapply(my_dat, function(x){
+dat_maBerlin <- lapply(here::here("data", file_sources), read.csv)
+dat_maBerlin <- lapply(dat_maBerlin, function(x){
   x %>%
     mutate(var_es = se_es^2)
 })
-names(my_dat) <- file_sources
+names(dat_maBerlin) <- file_sources
 
-my_dat[["20240115_MABerlin_attention.csv"]][my_dat[["20240115_MABerlin_attention.csv"]]$Study == "Kuypers & Samyn & Ramaekers (2006)", "Study"] <- "Kuypers, Samyn & Ramaekers (2006)"
+dat_maBerlin[["20240115_MABerlin_attention.csv"]][dat_maBerlin[["20240115_MABerlin_attention.csv"]]$Study == "Kuypers & Samyn & Ramaekers (2006)", "Study"] <- "Kuypers, Samyn & Ramaekers (2006)"
+
+
+saveRDS(dat_maBerlin, file = here::here("data", "dat_maBerlin.RDS"))
