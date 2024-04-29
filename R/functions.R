@@ -1,3 +1,4 @@
+## Wrapper for rma.mv with predefined settings
 fit_rma.mv <- function(df, ...) {
   rma.mv(
     yi = es,
@@ -40,8 +41,9 @@ fit_sensitivity <- function(df, ...) {
   return(fitted_models)
 }
 
+## Prepare data for plotting
 prep_dat <- function(dat, background_stripes) {
-  my_dat <- dat %>%
+  dat_maBerlin <- dat %>%
     ## Wald-type CIs, often sufficient, as not the main gist.
     mutate(ci_lb = es - 1.96 * se_es) %>%
     mutate(ci_ub = es + 1.96 * se_es) %>%
@@ -67,6 +69,15 @@ prep_dat <- function(dat, background_stripes) {
       drugType = "Psychedelic"
     ) %>%
     dplyr::arrange(es.id)
+}
+
+## Diamond shape for the forest plot
+diamond <- function(side_length, center_x, center_y, ci_ub, ci_lb) {
+  base <- data.frame(
+    x_coords = c(ci_ub, center_x, ci_lb, center_x),
+    y_coords = c(0, 0.25, 0, -0.25) + center_y
+  )
+  return(base)
 }
 
 plot_forestplot <- function(plot_dat, model_res, model_obj, contrast = NULL, i2, scale_min, scale_max) {
