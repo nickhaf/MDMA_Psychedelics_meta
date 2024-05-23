@@ -1,7 +1,7 @@
 ---
 title: "MDMA/Psychadelics multi-level meta analysis"
 author: Nicklas Hafiz
-date: "`r format(Sys.time(), '%d %B, %Y')`"
+date: now
 format: 
   html:
     toc: true
@@ -10,6 +10,7 @@ format:
     embed-resources: true
     fig-width: 11
     fig-height: 12
+    fig-pos: H
 bibliography:
   - grateful-refs.bib
   - references.bib
@@ -64,10 +65,10 @@ summary_tables <- lapply(dat_maBerlin[1:3], function(x) {
 
 # No description by drugType necessary:
 summary_tables[[4]] <- describe(dat_maBerlin[[4]][, c("N", "es", "se_es")], skew = FALSE)
-names(summary_tables) <- file_sources
+names(summary_tables)[4] <- "20240115_MABerlin_microdosing.csv"
 ```
 
-# Main analysis
+# Main analysis 
 Because some studies provide multiple values we use a three-level Meta-Analysis Model. The nested random effect gets assigned to the grouping variable "study". This means we allow the random intercept to vary across different studys. 
 To obtain the estimated effect sizes for our two `drugType` levels we removed the intercept, as described in the documentation of the [metafor Package](https://www.metafor-project.org/doku.php/tips:models_with_or_without_intercept). 
 Test statistics and confidence intervals for the fixed effects use a t-distribution.
@@ -212,8 +213,16 @@ p_microdosing <- plot_forestplot(plot_dat_4,
 ```
 
 
-# Results
-## Attention
+
+
+# Results 
+
+::: {.panel-tabset}
+
+## Attention 
+
+::: {.panel-tabset}
+
 ### Descriptives
 ```{r}
 #| echo: false
@@ -226,13 +235,6 @@ summary_tables[["20240115_MABerlin_attention.csv"]]$psychedelic %>%
 ```
 
 ### Model
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-
-p_attention
-```
 
 ```{r}
 #| echo: false
@@ -257,11 +259,18 @@ i2[["20240115_MABerlin_attention.csv"]]
 ### Plot
 ```{r}
 #| echo: false
+#| warning: false
+#| message: false
 
+p_attention
 ```
 
-
+:::
+ 
 ## Executive
+
+::: {.panel-tabset}
+
 ### Descriptives
 ```{r}
 #| echo: false
@@ -277,20 +286,13 @@ summary_tables[["20240115_MABerlin_executive.csv"]]$psychedelic %>%
 
 ```{r}
 #| echo: false
-#| warning: false
-#| message: false
-
-p_executive
-```
-
-```{r}
-#| echo: false
 
 models_summary[["20240115_MABerlin_executive.csv"]]
 ```
 
 ### Contrast
 ```{r}
+#| echo: false
 drugType_contrasts[["20240115_MABerlin_executive.csv"]]
 ```
 
@@ -301,7 +303,21 @@ drugType_contrasts[["20240115_MABerlin_executive.csv"]]
 i2[["20240115_MABerlin_executive.csv"]]
 ```
 
+### Plot
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+p_executive
+```
+
+:::
+
 ## Memory
+
+::: {.panel-tabset}
+
 ### Descriptives
 ```{r}
 #| echo: false
@@ -314,13 +330,6 @@ summary_tables[["20240115_MABerlin_memory.csv"]]$psychedelic %>%
 ```
 
 ### Model
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-
-p_memory
-```
 
 ```{r}
 #| echo: false
@@ -342,7 +351,21 @@ drugType_contrasts[["20240115_MABerlin_memory.csv"]]
 i2[["20240115_MABerlin_memory.csv"]]
 ```
 
+### Plot
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+p_memory
+```
+
+:::
+
 ## Microdosing
+
+::: {.panel-tabset}
+
 ### Descriptives
 ```{r}
 #| echo: false
@@ -352,14 +375,6 @@ summary_tables[["20240115_MABerlin_microdosing.csv"]] %>%
 ```
 
 ### Model
-```{r}
-#| echo: false
-#| warning: false
-#| message: false
-
-p_microdosing
-```
-
 ```{r}
 #| echo: false
 
@@ -372,6 +387,19 @@ models_summary[["20240115_MABerlin_microdosing.csv"]]
 
 i2[["20240115_MABerlin_microdosing.csv"]]
 ```
+
+### Plot 
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+
+p_microdosing
+```
+
+:::
+
+:::
 
 # Interpretation
 
