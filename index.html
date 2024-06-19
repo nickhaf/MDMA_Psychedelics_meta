@@ -3264,7 +3264,7 @@ window.Quarto = {
 <h1>Main analysis</h1>
 <p>Because some studies provide multiple values we use a three-level Meta-Analysis Model. The nested random effect gets assigned to the grouping variable “study”. This means we allow the random intercept to vary across different studys. To obtain the estimated effect sizes for our two <code>drugType</code> levels we removed the intercept, as described in the documentation of the <a href="https://www.metafor-project.org/doku.php/tips:models_with_or_without_intercept">metafor Package</a>. Test statistics and confidence intervals for the fixed effects use a t-distribution. The test of moderators checks the assumption that <span class="math inline">\(\mu_{mdma} = \mu_{psych} = 0\)</span>, so we get a test for an overall effect of the variable <code>drugType</code>.</p>
 <p>To compare both <code>drugType</code> levels we defined a contrast, testing if <span class="math inline">\(\mu_{mdma} - \mu_{psych} = 0\)</span> (Wald-Type Test), see <code>?anova.rma</code>.</p>
-<p><span class="math inline">\(I^2\)</span> telss us how much heterogeneity is due to differences within studies (level 2), and how much is due to between study-differences (level 3). So it answers the question if the effect sizes from the same study are more similar than effect sizes from multiple studies.</p>
+<p><span class="math inline">\(I^2\)</span> tells us how much heterogeneity is due to differences within studies (level 2), and how much is due to between study-differences (level 3). So it answers the question if the effect sizes from the same study are more similar than effect sizes from multiple studies.</p>
 </section>
 <section id="results" class="level1">
 <h1>Results</h1>
