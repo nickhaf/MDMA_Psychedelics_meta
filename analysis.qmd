@@ -111,8 +111,7 @@ names(models) <- names(dat_maBerlin)
 models_summary <- lapply(models, summary)
 ```
 
-## $I^2$
-How much heterogeneity is due to differences within studies (level 2), and how much due to between study-differences (level 3)? So are the effect sizes from the same study more similar than effect sizes from multiple studies?
+$I^2$ telss us how much heterogeneity is due to differences within studies (level 2), and how much is due to between study-differences (level 3). So it answers the question if the effect sizes from the same study are more similar than effect sizes from multiple studies. 
 
 ```{r}
 #| echo: false
