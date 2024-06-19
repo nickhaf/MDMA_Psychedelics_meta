@@ -2,6 +2,10 @@
 title: "MDMA/Psychadelics multi-level meta analysis"
 author: Nicklas Hafiz
 date: now
+execute: 
+  echo: false
+  warning: false
+  message: false
 format: 
   html:
     toc: true
@@ -430,4 +434,182 @@ save_plot(p_microdosing, "p_microdosing.pdf",
 ```
 
 
-# References
+
+# Sensitivity Analyses
+
+
+
+```{r results='asis'}
+#| echo: false
+summary_tables <- lapply(dat_maBerlin[1:3], function(x) {
+  describeBy(x[, c("N", "es", "se_es")], skew = FALSE, group = x$drugType)
+})
+
+summary_tables[[4]] <- describe(dat_maBerlin[[4]][, c("N", "es", "se_es")], skew = FALSE)
+names(summary_tables) <- file_sources
+```
+
+In some cases redundant predictors get dropped because there are not enough cases with one of the predictors (e.g., sensitivity_psilocybin only inlcudes psychedelics).
+
+```{r}
+# Nonconvergence for this analysis, see: http://www.metafor-project.org/doku.php/tips:convergence_problems_rma_mv
+dat_maBerlin[[3]] <- dat_maBerlin[[3]] %>% dplyr::select(-sensitivity_lsd)
+
+sensitivity_analyses <- lapply(dat_maBerlin[1:3], fit_sensitivity, mods = ~ drugType - 1)
+sensitivity_contrasts <- list()
+sensitivity_contrasts[[1]] <- fit_contrasts(sensitivity_analyses[[1]][c("sensitivity_speed", "sensitivity_accuracy", "sensitivity_highestWeight", "sensitivity_highQuality")])
+sensitivity_contrasts[[2]] <- fit_contrasts(sensitivity_analyses[[2]][c("sensitivity_speed", "sensitivity_accuracy", "sensitivity_highestWeight", "sensitivity_highQuality")])
+sensitivity_contrasts[[3]] <- fit_contrasts(sensitivity_analyses[[3]][c("sensitivity_accuracy", "sensitivity_highestWeight", "sensitivity_highQuality")])
+
+names(sensitivity_contrasts) <- names(sensitivity_analyses[1:3])
+
+sensitivity_analyses[[4]] <- fit_sensitivity(dat_maBerlin[[4]])
+names(sensitivity_analyses) <- names(dat_maBerlin)
+
+sensitivity_summary <- lapply(sensitivity_analyses, function(domain) {
+  lapply(domain, summary)
+})
+```
+
+
+## Results
+
+::: {.panel-tabset}
+
+
+### Attention
+
+::: {.panel-tabset}
+
+#### Speed
+```{r}
+sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_speed"]
+sensitivity_contrasts[["20240115_MABerlin_attention.csv"]]["sensitivity_speed"]
+```
+
+#### Accuracy
+```{r}
+sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_accuracy"]
+sensitivity_contrasts[["20240115_MABerlin_attention.csv"]]["sensitivity_accuracy"]
+```
+
+#### Highest Weight
+```{r}
+sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_highestWeight"]
+sensitivity_contrasts[["20240115_MABerlin_attention.csv"]]["sensitivity_highestWeight"]
+```
+
+#### Psilocybin
+```{r}
+sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_psilocybin"]
+```
+
+#### High Quality
+```{r}
+sensitivity_summary[["20240115_MABerlin_attention.csv"]]["sensitivity_highQuality"]
+sensitivity_contrasts[["20240115_MABerlin_attention.csv"]]["sensitivity_highQuality"]
+```
+
+
+:::
+
+### Executive
+
+::: {.panel-tabset}
+
+#### Speed
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_speed"]
+sensitivity_contrasts[["20240115_MABerlin_executive.csv"]]["sensitivity_speed"]
+```
+
+#### Accuracy
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_accuracy"]
+sensitivity_contrasts[["20240115_MABerlin_executive.csv"]]["sensitivity_accuracy"]
+```
+
+#### Highest Weight
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_highestWeight"]
+sensitivity_contrasts[["20240115_MABerlin_executive.csv"]]["sensitivity_highestWeight"]
+```
+
+#### Psilocybin
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_psilocybin"]
+```
+
+#### LSD
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_lsd"]
+```
+
+#### High Quality
+```{r}
+sensitivity_summary[["20240115_MABerlin_executive.csv"]]["sensitivity_highQuality"]
+sensitivity_contrasts[["20240115_MABerlin_executive.csv"]]["sensitivity_highQuality"]
+```
+
+
+:::
+
+### Memory
+
+::: {.panel-tabset}
+
+#### Speed
+```{r}
+sensitivity_summary[["20240115_MABerlin_memory.csv"]]["sensitivity_speed"]
+```
+
+#### Accuracy
+```{r}
+sensitivity_summary[["20240115_MABerlin_memory.csv"]]["sensitivity_accuracy"]
+sensitivity_contrasts[["20240115_MABerlin_memory.csv"]]["sensitivity_accuracy"]
+```
+
+#### Highest Weight
+```{r}
+sensitivity_summary[["20240115_MABerlin_memory.csv"]]["sensitivity_highestWeight"]
+sensitivity_contrasts[["20240115_MABerlin_memory.csv"]]["sensitivity_highestWeight"]
+```
+
+#### Psilocybin
+```{r}
+sensitivity_summary[["20240115_MABerlin_memory.csv"]]["sensitivity_psilocybin"]
+```
+
+#### LSD
+Did not converge.
+```{r, eval = FALSE}
+sensitivity_summary[["20240115_MABerlin_memory.csv"]]["sensitivity_lsd"]
+```
+
+#### High Quality
+```{r}
+sensitivity_summary[["20240115_MABerlin_memory.csv"]]["sensitivity_highQuality"]
+sensitivity_contrasts[["20240115_MABerlin_memory.csv"]]["sensitivity_highQuality"]
+```
+
+
+:::
+
+### Microdosing
+::: {.panel-tabset}
+
+#### Highest Weight
+```{r}
+sensitivity_summary[["20240115_MABerlin_microdosing"]]["sensitivity_highestWeight"]
+```
+
+#### Psilocybin
+```{r}
+sensitivity_summary[["20240115_MABerlin_microdosing.csv"]]["sensitivity_psilocybin"]
+```
+
+
+
+:::
+
+:::

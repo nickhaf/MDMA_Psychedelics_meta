@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Nicklas Hafiz">
-<meta name="dcterms.date" content="2024-05-23">
+<meta name="dcterms.date" content="2024-06-19">
 
 <title>MDMA/Psychadelics multi-level meta analysis</title>
 <style>
@@ -3129,7 +3129,10 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
   </ul></li>
   <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
   <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
+  <li><a href="#sensitivity-analyses" id="toc-sensitivity-analyses" class="nav-link" data-scroll-target="#sensitivity-analyses">Sensitivity Analyses</a>
+  <ul>
+  <li><a href="#results-1" id="toc-results-1" class="nav-link" data-scroll-target="#results-1">Results</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -3154,7 +3157,7 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 23, 2024</p>
+      <p class="date">June 19, 2024</p>
     </div>
   </div>
   
@@ -3865,9 +3868,682 @@ Total I2: 95.88% </code></pre>
 </ul></li>
 </ul>
 </section>
-<section id="references" class="level1 unnumbered">
+<section id="sensitivity-analyses" class="level1">
+<h1>Sensitivity Analyses</h1>
+<p>In some cases redundant predictors get dropped because there are not enough cases with one of the predictors (e.g., sensitivity_psilocybin only inlcudes psychedelics).</p>
+<section id="results-1" class="level2">
+<h2 class="anchored" data-anchor-id="results-1">Results</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-10-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-1" role="tab" aria-controls="tabset-10-1" aria-selected="true" href>Attention</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-2" role="tab" aria-controls="tabset-10-2" aria-selected="false" href>Executive</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-3" role="tab" aria-controls="tabset-10-3" aria-selected="false" href>Memory</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-4" role="tab" aria-controls="tabset-10-4" aria-selected="false" href>Microdosing</a></li></ul>
+<div class="tab-content">
+<div id="tabset-10-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-10-1-tab">
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true" href>Speed</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false" href>Accuracy</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" role="tab" aria-controls="tabset-6-3" aria-selected="false" href>Highest Weight</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-4" role="tab" aria-controls="tabset-6-4" aria-selected="false" href>Psilocybin</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-5" role="tab" aria-controls="tabset-6-5" aria-selected="false" href>High Quality</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_speed
 
+Multivariate Meta-Analysis Model (k = 8; method: REML)
 
+  logLik  Deviance       AIC       BIC      AICc   
+ -5.8971   11.7942   19.7942   18.9612   59.7942   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  1.7442  1.3207      5     no        Study 
+sigma^2.2  0.0000  0.0000      8     no  Study/es.id 
+
+Test for Residual Heterogeneity:
+QE(df = 6) = 25.5765, p-val = 0.0003
+
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 3) = 3.6428, p-val = 0.1575
+
+Model Results:
+
+                     estimate      se     tval  df    pval    ci.lb   ci.ub    
+drugTypemdma          -1.1125  0.9544  -1.1657   3  0.3280  -4.1496  1.9247    
+drugTypepsychedelic   -1.9874  0.8164  -2.4345   3  0.0930  -4.5855  0.6106  . 
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_speed
+                                       hyp   estimate       se       tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -0.8749798 1.255886 -0.6967029  3
+        pval     ci.lb    ci.ub
+1: 0.5361202 -4.871771 3.121811</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_accuracy
+
+Multivariate Meta-Analysis Model (k = 5; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+ -6.6550   13.3099   21.3099   17.7044   61.3099   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  0.0000  0.0001      4     no        Study 
+sigma^2.2  4.3607  2.0882      5     no  Study/es.id 
+
+Test for Residual Heterogeneity:
+QE(df = 3) = 37.8558, p-val &lt; .0001
+
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 2) = 2.3089, p-val = 0.3022
+
+Model Results:
+
+                     estimate      se     tval  df    pval     ci.lb   ci.ub    
+drugTypemdma          -0.4333  1.2433  -0.3485   2  0.7607   -5.7829  4.9162    
+drugTypepsychedelic   -3.3953  1.6012  -2.1205   2  0.1681  -10.2847  3.4941    
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_accuracy
+                                       hyp  estimate       se     tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -2.961936 2.027223 -1.46108  2
+        pval     ci.lb    ci.ub
+1: 0.2814629 -11.68437 5.760502</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highestWeight
+
+Multivariate Meta-Analysis Model (k = 11; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+-15.9295   31.8589   39.8589   40.6478   49.8589   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  0.0000  0.0001      8     no        Study 
+sigma^2.2  1.4912  1.2211     11     no  Study/es.id 
+
+Test for Residual Heterogeneity:
+QE(df = 9) = 54.2723, p-val &lt; .0001
+
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 6) = 9.8530, p-val = 0.0127
+
+Model Results:
+
+                     estimate      se     tval  df    pval    ci.lb    ci.ub 
+drugTypemdma          -0.8335  0.4920  -1.6943   6  0.1412  -2.0373   0.3703 
+drugTypepsychedelic   -2.9158  0.7106  -4.1031   6  0.0063  -4.6547  -1.1769 
+                        
+drugTypemdma            
+drugTypepsychedelic  ** 
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highestWeight
+                                       hyp  estimate       se     tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -2.082302 0.864302 -2.40923  6
+         pval     ci.lb      ci.ub
+1: 0.05262907 -4.197173 0.03256891</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-6-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-4-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_psilocybin
+
+Multivariate Meta-Analysis Model (k = 4; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+ -6.6538   13.3076   19.3076   16.6035   43.3076   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  1.9374  1.3919      4     no        Study 
+sigma^2.2  1.9374  1.3919      4     no  Study/es.id 
+
+Test for Heterogeneity:
+Q(df = 3) = 18.2863, p-val = 0.0004
+
+Model Results:
+
+estimate      se     tval  df    pval    ci.lb   ci.ub    
+ -2.1757  1.0415  -2.0890   3  0.1279  -5.4903  1.1389    
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-6-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-5-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highQuality
+
+Multivariate Meta-Analysis Model (k = 13; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+-10.5031   21.0062   29.0062   30.5978   35.6729   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  1.9085  1.3815      7     no        Study 
+sigma^2.2  0.0032  0.0567     13     no  Study/es.id 
+
+Test for Residual Heterogeneity:
+QE(df = 11) = 48.8065, p-val &lt; .0001
+
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 5) = 3.4069, p-val = 0.1165
+
+Model Results:
+
+                     estimate      se     tval  df    pval    ci.lb   ci.ub    
+drugTypemdma          -0.5958  0.7160  -0.8321   5  0.4432  -2.4363  1.2447    
+drugTypepsychedelic   -2.1950  0.8872  -2.4742   5  0.0562  -4.4755  0.0855  . 
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highQuality
+                                       hyp estimate       se      tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -1.59919 1.140041 -1.402747  5
+        pval    ci.lb    ci.ub
+1: 0.2196318 -4.52976 1.331379</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-10-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-2-tab">
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true" href>Speed</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false" href>Accuracy</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-3" role="tab" aria-controls="tabset-7-3" aria-selected="false" href>Highest Weight</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-4" role="tab" aria-controls="tabset-7-4" aria-selected="false" href>Psilocybin</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-5" role="tab" aria-controls="tabset-7-5" aria-selected="false" href>LSD</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-6" role="tab" aria-controls="tabset-7-6" aria-selected="false" href>High Quality</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_speed
+
+Multivariate Meta-Analysis Model (k = 9; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+ -7.3055   14.6110   22.6110   22.3946   42.6110   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  1.5585  1.2484      5     no        Study 
+sigma^2.2  0.0000  0.0000      9     no  Study/es.id 
+
+Test for Residual Heterogeneity:
+QE(df = 7) = 35.0644, p-val &lt; .0001
+
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 3) = 2.7850, p-val = 0.2071
+
+Model Results:
+
+                     estimate      se     tval  df    pval    ci.lb   ci.ub    
+drugTypemdma          -0.3457  1.2617  -0.2740   3  0.8019  -4.3609  3.6695    
+drugTypepsychedelic   -1.5381  0.6562  -2.3441   3  0.1008  -3.6264  0.5501    
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_speed
+                                       hyp  estimate       se       tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -1.192437 1.422102 -0.8385032  3
+        pval     ci.lb    ci.ub
+1: 0.4632981 -5.718199 3.333325</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_accuracy
+
+Multivariate Meta-Analysis Model (k = 16; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+-10.0020   20.0039   28.0039   30.5602   32.4484   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  0.1018  0.3191      9     no        Study 
+sigma^2.2  0.0458  0.2139     16     no  Study/es.id 
+
+Test for Residual Heterogeneity:
+QE(df = 14) = 28.9555, p-val = 0.0106
+
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 7) = 5.1937, p-val = 0.0414
+
+Model Results:
+
+                     estimate      se     tval  df    pval    ci.lb    ci.ub    
+drugTypemdma          -0.0612  0.1977  -0.3093   7  0.7661  -0.5287   0.4064    
+drugTypepsychedelic   -0.7989  0.2490  -3.2081   7  0.0149  -1.3877  -0.2100  * 
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_accuracy
+                                       hyp   estimate        se      tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -0.7377131 0.3179592 -2.320151  7
+         pval     ci.lb      ci.ub
+1: 0.05338262 -1.489567 0.01414083</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-7-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-3-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highestWeight
+
+Multivariate Meta-Analysis Model (k = 16; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+-14.7310   29.4620   37.4620   40.0182   41.9064   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  0.1898  0.4357     10     no        Study 
+sigma^2.2  0.1538  0.3921     16     no  Study/es.id 
+
+Test for Residual Heterogeneity:
+QE(df = 14) = 37.8845, p-val = 0.0005
+
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 8) = 9.7790, p-val = 0.0071
+
+Model Results:
+
+                     estimate      se     tval  df    pval    ci.lb    ci.ub 
+drugTypemdma          -0.0601  0.2595  -0.2316   8  0.8227  -0.6585   0.5383 
+drugTypepsychedelic   -1.4842  0.3361  -4.4164   8  0.0022  -2.2592  -0.7092 
+                        
+drugTypemdma            
+drugTypepsychedelic  ** 
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highestWeight
+                                       hyp  estimate        se      tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -1.424119 0.4246084 -3.353957  8
+         pval     ci.lb      ci.ub
+1: 0.01002125 -2.403267 -0.4449698</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-7-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-4-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_psilocybin
+
+Multivariate Meta-Analysis Model (k = 4; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+ -3.9415    7.8831   13.8831   11.1789   37.8831   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  1.2416  1.1143      3     no        Study 
+sigma^2.2  0.0000  0.0000      4     no  Study/es.id 
+
+Test for Heterogeneity:
+Q(df = 3) = 11.0263, p-val = 0.0116
+
+Model Results:
+
+estimate      se     tval  df    pval    ci.lb   ci.ub    
+ -2.1064  0.7010  -3.0049   2  0.0952  -5.1225  0.9097  . 
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-7-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-5-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_lsd
+
+Multivariate Meta-Analysis Model (k = 3; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+  0.4336   -0.8671    5.1329    1.2123   29.1329   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  0.0000  0.0000      2     no        Study 
+sigma^2.2  0.0000  0.0000      3     no  Study/es.id 
+
+Test for Heterogeneity:
+Q(df = 2) = 0.2269, p-val = 0.8927
+
+Model Results:
+
+estimate      se     tval  df    pval    ci.lb   ci.ub    
+ -0.4278  0.1735  -2.4653   1  0.2453  -2.6325  1.7770    
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-7-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-6-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highQuality
+
+Multivariate Meta-Analysis Model (k = 15; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+-13.8144   27.6287   35.6287   37.8885   40.6287   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  0.6476  0.8047      8     no        Study 
+sigma^2.2  0.0690  0.2628     15     no  Study/es.id 
+
+Test for Residual Heterogeneity:
+QE(df = 13) = 50.5409, p-val &lt; .0001
+
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 6) = 4.5594, p-val = 0.0625
+
+Model Results:
+
+                     estimate      se     tval  df    pval    ci.lb    ci.ub    
+drugTypemdma          -0.0703  0.3948  -0.1782   6  0.8644  -1.0363   0.8956    
+drugTypepsychedelic   -1.5566  0.5164  -3.0145   6  0.0236  -2.8201  -0.2931  * 
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highQuality
+                                       hyp  estimate        se      tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -1.486233 0.6499794 -2.286585  6
+         pval     ci.lb    ci.ub
+1: 0.06223487 -3.076676 0.104209</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-10-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-3-tab">
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true" href>Speed</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false" href>Accuracy</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-3" role="tab" aria-controls="tabset-8-3" aria-selected="false" href>Highest Weight</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-4" role="tab" aria-controls="tabset-8-4" aria-selected="false" href>Psilocybin</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-5" role="tab" aria-controls="tabset-8-5" aria-selected="false" href>LSD</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-6" role="tab" aria-controls="tabset-8-6" aria-selected="false" href>High Quality</a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_speed
+
+Multivariate Meta-Analysis Model (k = 4; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+ -4.8771    9.7541   15.7541   13.0500   39.7541   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  1.0225  1.0112      2     no        Study 
+sigma^2.2  0.8216  0.9064      4     no  Study/es.id 
+
+Test for Heterogeneity:
+Q(df = 3) = 21.5494, p-val &lt; .0001
+
+Model Results:
+
+estimate      se     tval  df    pval     ci.lb    ci.ub    
+ -1.4262  0.9003  -1.5841   1  0.3585  -12.8660  10.0135    
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_accuracy
+
+Multivariate Meta-Analysis Model (k = 27; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+-39.0183   78.0366   86.0366   90.9121   88.0366   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  0.0380  0.1950     15     no        Study 
+sigma^2.2  1.1032  1.0503     27     no  Study/es.id 
+
+Test for Residual Heterogeneity:
+QE(df = 25) = 228.4955, p-val &lt; .0001
+
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 13) = 10.7508, p-val = 0.0018
+
+Model Results:
+
+                     estimate      se     tval  df    pval    ci.lb    ci.ub 
+drugTypemdma          -1.1005  0.2562  -4.2952  13  0.0009  -1.6540  -0.5470 
+drugTypepsychedelic   -0.8073  0.4620  -1.7472  13  0.1042  -1.8054   0.1909 
+                         
+drugTypemdma         *** 
+drugTypepsychedelic      
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_accuracy
+                                       hyp estimate        se      tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 0.293234 0.5283209 0.5550301 13
+        pval      ci.lb    ci.ub
+1: 0.5882974 -0.8481339 1.434602</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-8-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-3-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highestWeight
+
+Multivariate Meta-Analysis Model (k = 25; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+-36.7506   73.5012   81.5012   86.0432   83.7234   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  0.0360  0.1897     14     no        Study 
+sigma^2.2  1.2028  1.0967     25     no  Study/es.id 
+
+Test for Residual Heterogeneity:
+QE(df = 23) = 204.9906, p-val &lt; .0001
+
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 12) = 10.0217, p-val = 0.0028
+
+Model Results:
+
+                     estimate      se     tval  df    pval    ci.lb    ci.ub 
+drugTypemdma          -1.1424  0.2726  -4.1913  12  0.0013  -1.7362  -0.5485 
+drugTypepsychedelic   -0.8295  0.5271  -1.5736  12  0.1416  -1.9780   0.3190 
+                        
+drugTypemdma         ** 
+drugTypepsychedelic     
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highestWeight
+                                       hyp  estimate       se    tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 0.3128743 0.593408 0.52725 12
+        pval      ci.lb    ci.ub
+1: 0.6076303 -0.9800506 1.605799</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-8-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-4-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_psilocybin
+
+Multivariate Meta-Analysis Model (k = 3; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+ -2.4270    4.8540   10.8540    6.9334   34.8540   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  0.2648  0.5146      3     no        Study 
+sigma^2.2  0.2648  0.5146      3     no  Study/es.id 
+
+Test for Heterogeneity:
+Q(df = 2) = 9.6852, p-val = 0.0079
+
+Model Results:
+
+estimate      se     tval  df    pval    ci.lb   ci.ub    
+ -0.7259  0.4766  -1.5230   2  0.2672  -2.7765  1.3248    
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-8-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-5-tab">
+<p>Did not converge.</p>
+</div>
+<div id="tabset-8-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-6-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highQuality
+
+Multivariate Meta-Analysis Model (k = 15; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+-20.6012   41.2024   49.2024   51.4622   54.2024   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  0.0000  0.0001     10     no        Study 
+sigma^2.2  1.2260  1.1073     15     no  Study/es.id 
+
+Test for Residual Heterogeneity:
+QE(df = 13) = 144.0556, p-val &lt; .0001
+
+Test of Moderators (coefficients 1:2):
+F(df1 = 2, df2 = 8) = 4.9654, p-val = 0.0396
+
+Model Results:
+
+                     estimate      se     tval  df    pval    ci.lb    ci.ub    
+drugTypemdma          -0.9167  0.3681  -2.4905   8  0.0375  -1.7655  -0.0679  * 
+drugTypepsychedelic   -1.0054  0.5207  -1.9309   8  0.0896  -2.2060   0.1953  . 
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_highQuality
+                                       hyp    estimate        se       tval df
+1: -drugTypemdma + drugTypepsychedelic = 0 -0.08867988 0.6376321 -0.1390769  8
+        pval     ci.lb    ci.ub
+1: 0.8928267 -1.559062 1.381702</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-10-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-4-tab">
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true" href>Highest Weight</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" role="tab" aria-controls="tabset-9-2" aria-selected="false" href>Psilocybin</a></li></ul>
+<div class="tab-content">
+<div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>NULL</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>$sensitivity_psilocybin
+
+Multivariate Meta-Analysis Model (k = 5; method: REML)
+
+  logLik  Deviance       AIC       BIC      AICc   
+ -6.6481   13.2961   19.2961   17.4550   43.2961   
+
+Variance Components:
+
+            estim    sqrt  nlvls  fixed       factor 
+sigma^2.1  1.6113  1.2694      2     no        Study 
+sigma^2.2  1.0415  1.0205      5     no  Study/es.id 
+
+Test for Heterogeneity:
+Q(df = 4) = 101.8526, p-val &lt; .0001
+
+Model Results:
+
+estimate      se    tval  df    pval     ci.lb    ci.ub    
+  0.4420  1.0178  0.4343   1  0.7392  -12.4908  13.3748    
+
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</section>
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
