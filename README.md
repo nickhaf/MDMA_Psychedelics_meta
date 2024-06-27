@@ -1,6 +1,6 @@
 # Cognitive functioning associated with acute and subacute effects of classical psychedelics and MDMA - a systematic review and meta-analysis
 
-This repository contains the analysis scripts and data for the publication "Cognitive functioning associated with acute and subacute effects of classical psychedelics and MDMA - a systematic review and meta-analysis"
+This repository contains the analysis scripts and data for the publication "Cognitive functioning associated with acute and subacute effects of classical psychedelics and MDMA - a systematic review and meta-analysis" (10.1038/s41598-024-65391-9).
 It is structured as follows:
 - The folder `./R` contains the data preparation and the functions used for the analysis.
 - This is all put together in the `analysis.qmd` file. It is automatically rendered and available [here](https://nickhaf.github.io/MDMA_Psychedelics_meta/).
